@@ -1,0 +1,154 @@
+﻿# Copyright (c) Citrix Systems Inc.  
+# All rights reserved.
+# 
+# Redistribution and use in source and binary forms,
+# with or without modification, are permitted provided
+# that the following conditions are met:
+# 
+# *   Redistributions of source code must retain the above
+#     copyright notice, this list of conditions and the
+#     following disclaimer.
+# *   Redistributions in binary form must reproduce the above
+#     copyright notice, this list of conditions and the
+#     following disclaimer in the documentation and/or other
+#     materials provided with the distribution.
+# 
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+# CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+# INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+# NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+# SUCH DAMAGE.
+
+diff -u -r src/Tar/TarHeader.cs src/Tar/TarHeader.cs
+--- src/Tar/TarHeader.cs	2007-09-07 12:18:42.000000000 +0100
++++ src/Tar/TarHeader.cs	2011-06-17 10:24:26.046499600 +0100
+@@ -268,6 +268,11 @@
+ 		/// </summary>
+ 		public const string	GNU_TMAGIC	= "ustar  ";
+ 
++        /// <summary>
++        /// The starting offset of Size field in US tar header. This field is used to parse file size call.
++        /// </summary>
++        public const int SIZE_OFFSET = 0x7c;
++
+ 		const long     timeConversionFactor = 10000000L;           // 1 tick == 100 nanoseconds
+ 		readonly static DateTime dateTime1970 = new DateTime(1970, 1, 1, 0, 0, 0, 0); 
+ 		#endregion
+@@ -753,9 +758,19 @@
+ 
+ 			long result = 0;
+ 			bool stillPadding = true;
++            bool longEntry = false;
+ 			
+ 			int end = offset + length;
++            if (header[offset] >> 7 == 1 && offset == SIZE_OFFSET) //make sure offset refer size.
++            { // size is > 8GB //KHALID changes 
++                longEntry = true;
++            }
+ 			for (int i = offset; i < end ; ++i) {
++                if (longEntry)
++                {
++                    result = (result << 8) + header[i];
++                    continue;
++                }
+ 				if (header[i] == 0) {
+ 					break;
+ 				}
+@@ -775,7 +790,7 @@
+ 				result = (result << 3) + (header[i] - '0');
+ 			}
+ 			
+-			return result;
++			return result & 0x7FFFFFFFFFFFFFFF; //make sure MSB is not set;
+ 		}
+ 		
+ 		/// <summary>
+@@ -822,14 +837,17 @@
+ 			}
+ 
+ 			StringBuilder result = new StringBuilder(length);
++			System.Collections.Generic.List<byte> temp = new System.Collections.Generic.List<byte>();
+ 			
+ 			for (int i = offset; i < offset + length; ++i) {
+ 				if (header[i] == 0) {
+ 					break;
+ 				}
+-				result.Append((char)header[i]);
++				temp.Add(header[i]);
+ 			}
+ 			
++			string tempString = Encoding.UTF8.GetString(temp.ToArray());
++			result.Append(tempString);
+ 			return result;
+ 		}
+ 		
+@@ -876,10 +894,11 @@
+ 				throw new ArgumentNullException("buffer");
+ 			}
+ 
++			byte[] temp = Encoding.UTF8.GetBytes(name);
+ 			int i;
+ 			
+-			for (i = 0 ; i < length - 1 && nameOffset + i < name.Length; ++i) {
+-				buffer[bufferOffset + i] = (byte)name[nameOffset + i];
++			for (i = 0 ; i < length && nameOffset + i < temp.Length; ++i) {
++				buffer[bufferOffset + i] = temp[nameOffset + i];
+ 			}
+ 			
+ 			for (; i < length ; ++i) {
+@@ -999,17 +1018,40 @@
+ 			// Either a space or null is valid here.  We use NULL as per GNUTar
+ 			buffer[offset + localIndex] = 0;
+ 			--localIndex;
++            for (int i = 0; i < length; i++)
++            {
++                buffer[offset + i] = 0;
++            }
++
++            bool largeEntries = (value >= 0x200000000); //> 8GB
+ 
+ 			if (value > 0) {
++
+ 				for ( long v = value; (localIndex >= 0) && (v > 0); --localIndex ) {
+-					buffer[offset + localIndex] = (byte)((byte)'0' + (byte)(v & 7));
+-					v >>= 3;
++                    if (largeEntries)
++                    {
++                        buffer[offset + localIndex+1] =  (byte)(v & 0xFF);
++                        v >>= 8;
++                    }
++                    else
++                    {
++                        buffer[offset + localIndex] = (byte)((byte)'0' + (byte)(v & 7));
++                        v >>= 3;
++                    }
+ 				}
+ 			}
+-				
+-			for ( ; localIndex >= 0; --localIndex ) {
+-				buffer[offset + localIndex] = (byte)'0';
+-			}
++
++            if (largeEntries)
++            {
++                buffer[offset] = (byte)(buffer[offset] | 0x80); //set the MSB
++            }
++            else
++            {
++                for (; localIndex >= 0; --localIndex)
++                {
++                    buffer[offset + localIndex] = (byte)'0';
++                }
++            }
+ 			
+ 			return offset + length;
+ 		}

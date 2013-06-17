@@ -1,0 +1,8 @@
+DiscUtilsSrc-0.7.zip contains version 0.7 of DiscUtils, a .NET library to read
+and write ISO files and Virtual Machine disk files (VHD, VDI, XVA, VMDK, etc).
+
+This library is used by the XenCenter OVF plugin.
+
+Copyright (c) 2008 Kenneth Bell.
+
+http://discutils.codeplex.com/
