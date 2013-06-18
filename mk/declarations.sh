@@ -66,17 +66,19 @@ then
     echo "Warning: BUILD_URL env var not set, we will use 'n/a'"
 fi
 
-if [ -z "${GIT_REVISION+xxx}" ]
+get_GIT_REVISION=${GIT_COMMIT}
+
+if [ -z "${get_GIT_REVISION+xxx}" ]
 then
-    GIT_REVISION="none"
-    echo "Warning: GIT_REVISION env var not set, we will use $GIT_REVISION"
+    get_GIT_REVISION="none"
+    echo "Warning: GIT_COMMIT env var not set, we will use $get_GIT_REVISION"
 fi
 
 #rename Jenkins environment variables to distinguish them from ours; remember to use them as get only
 get_JOB_NAME=${JOB_NAME}
 get_BUILD_ID=${BUILD_ID}
 get_BUILD_URL=${BUILD_URL}
-get_GIT_REVISION=${GIT_REVISION}
+
 
 #do everything in place as jenkins runs a clean build, i.e. will delete previous artifacts on starting
 if [ -z "${WORKSPACE+xxx}" ]
