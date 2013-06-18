@@ -162,7 +162,7 @@ echo "${MANIFEST_COMPONENT} mit local" ${DISCUTILS_DIST_FILE} >> ${MANIFEST}
 
 #create manifest and build location
 echo "@branch=${XS_BRANCH}" >> ${OUTPUT_DIR}/manifest
-echo "dotnet-packages dotnet-packages.hg" ${get_MERCURIAL_REVISION:0:12} >> ${OUTPUT_DIR}/manifest
+echo "dotnet-packages dotnet-packages.git" ${get_GIT_REVISION:0:12} >> ${OUTPUT_DIR}/manifest
 echo ${get_BUILD_URL} >> ${OUTPUT_DIR}/latest-successful-build
 
 set +u

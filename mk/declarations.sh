@@ -40,7 +40,7 @@ do
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-XS_BRANCH=`cd $DIR;hg showconfig paths.default|sed -e 's@.*carbon/\(.*\)/dotnet-packages.hg.*@\1@'`
+XS_BRANCH=`cd $DIR;git config --get remote.origin.url|sed -e 's@.*carbon/\(.*\)/dotnet-packages.git.*@\1@'`
 
 if [ -z "${JOB_NAME+xxx}" ]
 then
@@ -66,17 +66,17 @@ then
     echo "Warning: BUILD_URL env var not set, we will use 'n/a'"
 fi
 
-if [ -z "${MERCURIAL_REVISION+xxx}" ]
+if [ -z "${GIT_REVISION+xxx}" ]
 then
-    MERCURIAL_REVISION="none"
-    echo "Warning: MERCURIAL_REVISION env var not set, we will use $MERCURIAL_REVISION"
+    GIT_REVISION="none"
+    echo "Warning: GIT_REVISION env var not set, we will use $GIT_REVISION"
 fi
 
 #rename Jenkins environment variables to distinguish them from ours; remember to use them as get only
 get_JOB_NAME=${JOB_NAME}
 get_BUILD_ID=${BUILD_ID}
 get_BUILD_URL=${BUILD_URL}
-get_MERCURIAL_REVISION=${MERCURIAL_REVISION}
+get_GIT_REVISION=${GIT_REVISION}
 
 #do everything in place as jenkins runs a clean build, i.e. will delete previous artifacts on starting
 if [ -z "${WORKSPACE+xxx}" ]
@@ -91,7 +91,7 @@ ROOT=$(cygpath -u "${WORKSPACE}")
 SCRATCH_DIR=${ROOT}/scratch
 OUTPUT_DIR=${ROOT}/output
 OUTPUT_SRC_DIR=${OUTPUT_DIR}/SOURCES
-REPO=${ROOT}/dotnet-packages.hg
+REPO=${ROOT}/dotnet-packages.git
 FILES=${REPO}/mk/files
 PATCHES=${REPO}/mk/patches
 BUILD_ARCHIVE=/cygdrive/c/Jenkins/jobs/${get_JOB_NAME}/builds/${get_BUILD_ID}/archive

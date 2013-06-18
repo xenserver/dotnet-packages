@@ -49,7 +49,7 @@ set -e
 ROOT_DIR="$( cd -P "$( dirname "${BASH_SOURCE[0]}" )/../.." && pwd )"
 cd ${ROOT_DIR}
 
-source ${ROOT_DIR}/dotnet-packages.hg/mk/declarations.sh
+source ${ROOT_DIR}/dotnet-packages.git/mk/declarations.sh
 
 if [ -d "dotnet-packages-ref.hg" ]
 then
@@ -58,5 +58,5 @@ else
   hg clone ssh://xenhg@hg.uk.xensource.com/carbon/${XS_BRANCH}/dotnet-packages-ref.hg/
 fi
 
-source ${ROOT_DIR}/dotnet-packages.hg/mk/dotnet-packages-build.sh
-source ${ROOT_DIR}/dotnet-packages.hg/mk/archive-push.sh
+source ${ROOT_DIR}/dotnet-packages.git/mk/dotnet-packages-build.sh
+source ${ROOT_DIR}/dotnet-packages.git/mk/archive-push.sh
