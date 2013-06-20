@@ -13,5 +13,5 @@ libraries:
 
 How to build dotnet-packages
 ============================
-The libraries can by built (and patches applied) by executing the script 
+The libraries can be built (and patches applied) by executing the script 
 dotnet-packages-build.sh at the command line.
