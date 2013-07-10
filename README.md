@@ -1,3 +1,6 @@
+DotNet Libraries 
+================
+
 This repository contains the source code and patches for the third-party 
 libraries:
 
@@ -11,7 +14,21 @@ libraries:
  *  log4net (v1.2.10) - a library providing logging services for purposes 
     of application debugging and auditing.
 
+Contributions
+-------------
+
+The preferable way to contribute is to submit your patches to the 
+xs-devel@lists.xenserver.org mailing list rather than submitting pull requests. 
+Please see the CONTRIB file for some general guidelines on submitting changes.
+
+License
+-------
+
+This code is licensed under the BSD 2-Clause license. The individual libraries 
+are subject to their own licenses, which can be found in the corresponding 
+directories. Please see the LICENSE file for more information.
+
 How to build dotnet-packages
-============================
+----------------------------
 The libraries can be built (and patches applied) by executing the script 
 dotnet-packages-build.sh at the command line.
