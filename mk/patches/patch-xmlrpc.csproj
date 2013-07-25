@@ -66,7 +66,7 @@ diff -u -r scratch/src/xmlrpc.csproj scratch1/src/xmlrpc.csproj
      <AssemblyKeyContainerName>
      </AssemblyKeyContainerName>
      <AssemblyName>CookComputing.XmlRpcV2</AssemblyName>
-+    <AssemblyOriginatorKeyFile>XenServer.NET.snk</AssemblyOriginatorKeyFile>
++    <SignAssembly>true</SignAssembly>
      <DefaultClientScript>JScript</DefaultClientScript>
      <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
      <DefaultTargetSchema>IE50</DefaultTargetSchema>

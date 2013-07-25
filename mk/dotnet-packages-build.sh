@@ -66,7 +66,7 @@ mkdir_clean ${XMLRPC_SRC_DIR}
 unzip -q -d ${XMLRPC_SRC_DIR} ${SCRATCH_DIR}/xml-rpc.net.2.1.0.zip
 cp ${PATCHES}/patch-xmlrpc* ${OUTPUT_SRC_DIR}
 apply_patches "${PATCHES}/patch-xmlrpc*" ${XMLRPC_SRC_DIR}
-cp ${REPO}/mk/XenServer.NET.snk ${SCRATCH_DIR}/xml-rpc.net/src
+sed -i "/SignAssembly/ i <AssemblyOriginatorKeyFile>${SNK}</AssemblyOriginatorKeyFile>" ${XMLRPC_SRC_DIR}/src/xmlrpc.csproj
 
 #prepare log4net
 

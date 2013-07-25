@@ -97,6 +97,8 @@ REPO=${ROOT}/dotnet-packages.git
 FILES=${REPO}/mk/files
 PATCHES=${REPO}/mk/patches
 BUILD_ARCHIVE=/cygdrive/c/Jenkins/jobs/${get_JOB_NAME}/builds/${get_BUILD_ID}/archive
+SNK_ORIG=${HOMEDRIVE}${HOMEPATH}"\.ssh\xs.net.snk"
+SNK=${SNK_ORIG//\\/\\\\\\}
 
 XML_RPC_DIST_FILE="libraries-src/XML-RPC.NET/xml-rpc.net.2.1.0.zip"
 LOG4NET_DIST_FILE="libraries-src/Log4Net/incubating-log4net-1.2.10.zip"
