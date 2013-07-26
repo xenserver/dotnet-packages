@@ -53,9 +53,7 @@ apply_patches()
   for i in ${1}
   do
     # keep it quiet by default, if you want enable if DEBUG is defined.
-    dos2unix -q -n ${i} ${i}.dos2unix
-    patch -d ${2} -p0 <${i}.dos2unix
-    rm -f ${i}.dos2unix
+    patch -d ${2} -p0 <${i}
   done
 }
     
