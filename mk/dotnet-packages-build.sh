@@ -93,6 +93,8 @@ apply_patches "${PATCHES}/patch-sharpziplib*" ${SHARPZIPLIB_SRC_DIR}
 DOTNETZIP_SRC_DIR=${SCRATCH_DIR}/dotnetzip
 mkdir_clean ${DOTNETZIP_SRC_DIR}
 unzip -q -d ${DOTNETZIP_SRC_DIR} ${SCRATCH_DIR}/DotNetZip-src-v1.9.1.8.zip
+cp ${PATCHES}/patch-dotnetzip* ${OUTPUT_SRC_DIR}
+apply_patches "${PATCHES}/patch-dotnetzip*" ${DOTNETZIP_SRC_DIR}
 
 #prepare discutils
 
@@ -100,6 +102,8 @@ DISCUTILS_SRC_DIR=${SCRATCH_DIR}/DiscUtils
 mkdir_clean ${DISCUTILS_SRC_DIR}
 unzip -q -d ${DISCUTILS_SRC_DIR} ${SCRATCH_DIR}/DiscUtils-204669b416f9.zip
 mv ${DISCUTILS_SRC_DIR}/DiscUtils_204669b416f9/* ${DISCUTILS_SRC_DIR}
+cp ${PATCHES}/patch-discutils* ${OUTPUT_SRC_DIR}
+apply_patches "${PATCHES}/patch-discutils*" ${DISCUTILS_SRC_DIR}
 
 #build
 
