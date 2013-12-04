@@ -109,7 +109,7 @@ apply_patches "${PATCHES}/patch-discutils*" ${DISCUTILS_SRC_DIR}
 
 run_msbuild()
 {
-  /cygdrive/c/WINDOWS/Microsoft.NET/Framework/v3.5/MSBuild.exe /p:Configuration=Release /p:TargetFrameworkVersion=v2.0
+  /cygdrive/c/WINDOWS/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe /p:Configuration=Release /p:TargetFrameworkVersion=v4.0
 }
 
 cd ${SCRATCH_DIR}/xml-rpc.net/src && run_msbuild
