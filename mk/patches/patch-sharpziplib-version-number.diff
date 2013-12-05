@@ -36,7 +36,7 @@ diff -r -u src/AssemblyInfo.cs src/AssemblyInfo.cs
  [assembly: AssemblyTrademark("Copyright 2001-2007 Mike Krueger, John Reilly")]
  
 -[assembly: AssemblyVersion("0.85.4.369")]
-+[assembly: AssemblyVersion("0.85.4.403")]
++[assembly: AssemblyVersion("0.85.4.404")]
  [assembly: AssemblyInformationalVersionAttribute("0.85.4")]
  
  
@@ -48,7 +48,7 @@ diff -r -u tests/AssemblyInfo.cs tests/AssemblyInfo.cs
  // numbers with the '*' character (the default):
  
 -[assembly: AssemblyVersion("0.85.4.369")]
-+[assembly: AssemblyVersion("0.85.4.403")]
++[assembly: AssemblyVersion("0.85.4.404")]
  
  // The following attributes specify the key for the sign of your assembly. See the
  // .NET Framework documentation for more information about signing.

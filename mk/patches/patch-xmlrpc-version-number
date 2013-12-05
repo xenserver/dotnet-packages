@@ -36,7 +36,7 @@ diff -r -u src/AssemblyBuildNumber.cs src/AssemblyBuildNumber.cs
  using System.Runtime.InteropServices;
  
 -[assembly: AssemblyVersion("2.1.0.3")]
-+[assembly: AssemblyVersion("2.1.0.6")]
++[assembly: AssemblyVersion("2.1.0.7")]
  
  
 diff -r -u XML-RPC.NET/xml-rpc.net.proj XML-RPC.NET-tmp//xml-rpc.net.proj
@@ -47,7 +47,7 @@ diff -r -u XML-RPC.NET/xml-rpc.net.proj XML-RPC.NET-tmp//xml-rpc.net.proj
      <Minor>1</Minor>
      <Build>0</Build>
 -    <Revision>3</Revision>
-+    <Revision>6</Revision>
++    <Revision>7</Revision>
    </PropertyGroup>
  
    <PropertyGroup>
