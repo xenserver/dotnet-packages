@@ -66,6 +66,17 @@ cp ${PATCHES}/patch-xmlrpc* ${OUTPUT_SRC_DIR}
 apply_patches "${PATCHES}/patch-xmlrpc*" ${XMLRPC_SRC_DIR}
 sed -i "/SignAssembly/ i <AssemblyOriginatorKeyFile>${SNK}</AssemblyOriginatorKeyFile>" ${XMLRPC_SRC_DIR}/src/xmlrpc.csproj
 
+#prepare xml-rpc dotnet 2.0
+
+XMLRPC_SRC_DIR=${SCRATCH_DIR}/xml-rpc_v2.net
+mkdir_clean ${XMLRPC_SRC_DIR}
+unzip -q -d ${XMLRPC_SRC_DIR} ${SCRATCH_DIR}/xml-rpc.net.2.1.0.zip
+#cp ${PATCHES}/patch-xmlrpc* ${OUTPUT_SRC_DIR}
+shopt -s extglob
+apply_patches "${PATCHES}/patch-xmlrpc!(*dotnet4*)" ${XMLRPC_SRC_DIR}
+shopt -u extglob
+sed -i "/SignAssembly/ i <AssemblyOriginatorKeyFile>${SNK}</AssemblyOriginatorKeyFile>" ${XMLRPC_SRC_DIR}/src/xmlrpc.csproj
+
 #prepare log4net
 
 LOG4NET_SRC_DIR=${SCRATCH_DIR}/log4net
@@ -113,6 +124,7 @@ run_msbuild()
 }
 
 cd ${SCRATCH_DIR}/xml-rpc.net/src && run_msbuild
+cd ${SCRATCH_DIR}/xml-rpc_v2.net/src && run_msbuild && mv ../bin/CookComputing.XmlRpcV2.dll ../bin/CookComputing.XmlRpcV2_dotnet2.dll && mv ../bin/CookComputing.XmlRpcV2.pdb ../bin/CookComputing.XmlRpcV2_dotnet2.pdb #building for dotnet2
 cd ${SCRATCH_DIR}/log4net/src     && run_msbuild
 cd ${SCRATCH_DIR}/sharpziplib/src && run_msbuild
 cd ${SCRATCH_DIR}/dotnetzip/DotNetZip-src/DotNetZip/Zip && run_msbuild
@@ -121,6 +133,7 @@ cd ${SCRATCH_DIR}/DiscUtils/src   && run_msbuild
 #collect extra files in the output directory
 cp ${REPO}/mk/sign.bat ${OUTPUT_DIR}
 cp ${SCRATCH_DIR}/xml-rpc.net/bin/CookComputing.XmlRpcV2.{dll,pdb} \
+   ${SCRATCH_DIR}/xml-rpc_v2.net/bin/CookComputing.XmlRpcV2_dotnet2.{dll,pdb} \
    ${SCRATCH_DIR}/log4net/build/bin/net/2.0/release/log4net.{dll,pdb} \
    ${SCRATCH_DIR}/sharpziplib/bin/ICSharpCode.SharpZipLib.{dll,pdb} \
    ${SCRATCH_DIR}/dotnetzip/DotNetZip-src/DotNetZip/Zip/bin/Release/Ionic.Zip.{dll,pdb} \
@@ -130,6 +143,7 @@ cp ${SCRATCH_DIR}/xml-rpc.net/bin/CookComputing.XmlRpcV2.{dll,pdb} \
 #sign those necessary
 chmod a+x ${OUTPUT_DIR}/sign.bat
 cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat CookComputing.XmlRpcV2.dll "XML-RPC.NET by Charles Cook, signed by Citrix"
+cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat CookComputing.XmlRpcV2_dotnet2.dll "XML-RPC.NET by Charles Cook, signed by Citrix"
 cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat log4net.dll  "Log4Net by The Apache Software Foundation, signed by Citrix"
 cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat ICSharpCode.SharpZipLib.dll "SharpZipLib by IC#Code, signed by Citrix"
 cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat DiscUtils.dll "DiscUtils by Kenneth Bell, signed by Citrix"
