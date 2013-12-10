@@ -101,7 +101,7 @@ SNK_ORIG=${HOMEDRIVE}${HOMEPATH}"\.ssh\xs.net.snk"
 SNK=${SNK_ORIG//\\/\\\\\\}
 
 XML_RPC_DIST_FILE="libraries-src/XML-RPC.NET/xml-rpc.net.2.1.0.zip"
-LOG4NET_DIST_FILE="libraries-src/Log4Net/incubating-log4net-1.2.10.zip"
+LOG4NET_DIST_FILE="libraries-src/Log4Net/log4net-1.2.13-src.zip"
 SHARP_ZIP_LIB_DIST_FILE="libraries-src/SharpZipLib/SharpZipLib_0854_SourceSamples.zip"
 DISCUTILS_DIST_FILE="libraries-src/DiscUtils/DiscUtils-204669b416f9.zip"
 DOT_NET_ZIP_FILE="libraries-src/DotNetZip/DotNetZip-src-v1.9.1.8.zip"
