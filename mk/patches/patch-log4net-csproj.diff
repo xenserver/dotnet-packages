@@ -1,0 +1,26 @@
+--- src/log4net.vs2010.csproj	2013-11-17 10:44:36.000000000 +0000
++++ src/log4net.vs2010.csproj	2013-12-10 15:28:12.791905600 +0000
+@@ -94,14 +94,14 @@
+     </ConfigurationOverrideFile>
+     <DefineConstants>TRACE;STRONG;NET;NET_2_0;NET_4_0</DefineConstants>
+     <DocumentationFile>log4net.xml</DocumentationFile>
+-    <DebugSymbols>false</DebugSymbols>
++    <DebugSymbols>true</DebugSymbols>
+     <FileAlignment>4096</FileAlignment>
+     <Optimize>true</Optimize>
+     <RegisterForComInterop>false</RegisterForComInterop>
+     <RemoveIntegerChecks>false</RemoveIntegerChecks>
+     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+     <WarningLevel>4</WarningLevel>
+-    <DebugType>none</DebugType>
++    <DebugType>pdbonly</DebugType>
+     <ErrorReport>prompt</ErrorReport>
+     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+   </PropertyGroup>
+@@ -793,4 +793,4 @@
+     <PostBuildEvent>
+     </PostBuildEvent>
+   </PropertyGroup>
+-</Project>
++</Project>
+\ No newline at end of file

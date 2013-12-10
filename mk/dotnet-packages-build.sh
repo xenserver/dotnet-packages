@@ -80,16 +80,15 @@ sed -i "/SignAssembly/ i <AssemblyOriginatorKeyFile>${SNK}</AssemblyOriginatorKe
 #prepare log4net
 
 LOG4NET_SRC_DIR=${SCRATCH_DIR}/log4net
-LOG4NET_DIST_DIR=${SCRATCH_DIR}/log4net-1.2.10
+LOG4NET_DIST_DIR=${SCRATCH_DIR}/log4net-1.2.13
 rm -rf ${LOG4NET_SRC_DIR}
 rm -rf ${LOG4NET_DIST_DIR}
-unzip -q -d ${SCRATCH_DIR} ${SCRATCH_DIR}/incubating-log4net-1.2.10.zip
+unzip -q -d ${SCRATCH_DIR} ${SCRATCH_DIR}/log4net-1.2.13-src.zip
 mv ${LOG4NET_DIST_DIR} ${LOG4NET_SRC_DIR}
 rm -rf ${LOG4NET_SRC_DIR}/{examples,doc}
-cp ${FILES}/log4net.sln ${FILES}/log4net.csproj ${LOG4NET_SRC_DIR}/src
-cp ${FILES}/log4net.sln ${FILES}/log4net.csproj ${OUTPUT_SRC_DIR}
-cp ${FILES}/log4net.Tests.csproj ${LOG4NET_SRC_DIR}/tests/src/log4net.Tests.csproj
-cp ${FILES}/log4net.Tests.csproj ${OUTPUT_SRC_DIR}
+rm -f ${SCRATCH_DIR}/log4net-1.2.13/src/*2008.csproj
+rm -f ${SCRATCH_DIR}/log4net-1.2.13/src/*2008.sln
+apply_patches "${PATCHES}/patch-log4net*" ${LOG4NET_SRC_DIR}
 
 #prepare sharpziplib
 
