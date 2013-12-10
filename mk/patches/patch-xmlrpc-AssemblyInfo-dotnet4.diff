@@ -1,0 +1,10 @@
+--- src/AssemblyInfo.cs	2006-07-30 17:11:00.000000000 +0100
++++ src/AssemblyInfo.cs	2013-12-10 18:01:55.150049200 +0000
+@@ -34,6 +34,7 @@
+ [assembly: AssemblyCopyright("Charles Cook (c) 2001-2005")]
+ [assembly: AssemblyTrademark("")]
+ [assembly: AssemblyCulture("")]
++[assembly: System.Security.SecurityRules(System.Security.SecurityRuleSet.Level1)]
+ 
+ #if (FX1_0)
+ [assembly: AssemblyDelaySign(false)]
