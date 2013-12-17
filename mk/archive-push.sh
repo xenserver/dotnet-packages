@@ -30,7 +30,7 @@
 
 set -eu
 
-DISABLE_PUSH=0
+#DISABLE_PUSH=1
 source "$( cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/declarations.sh"
 
 if [ ${XS_BRANCH} = "trunk" ]
@@ -39,7 +39,8 @@ then
   TRUNK_COLOUR_L=$(echo ${TRUNK_COLOUR} | tr [:upper:] [:lower:])
   if [ ${TRUNK_COLOUR_L} != "green" ]
   then
-    DISABLE_PUSH=1
+	echo "trunk is not green, disabling push"
+	DISABLE_PUSH=1
   fi
 fi
 
@@ -50,11 +51,11 @@ cp -R ${OUTPUT_DIR}/* ${BUILD_ARCHIVE}
 cp ${OUTPUT_DIR}/{manifest,latest-successful-build} ${ROOT}/dotnet-packages-ref.hg
 cd ${ROOT}/dotnet-packages-ref.hg && hg commit -m "Latest successful build ${get_BUILD_ID}"
 
-#if [ -z "${DISABLE_PUSH+xxx}" ]
-#then
-#  cd ${ROOT}/dotnet-packages-ref.hg && hg push
-#else
+if [ -z "${DISABLE_PUSH+xxx}" ]
+then
+  cd ${ROOT}/dotnet-packages-ref.hg && hg push
+else
   echo "pushing to ssh://hg has been disabled"
-#fi
+fi
 
 set +u
