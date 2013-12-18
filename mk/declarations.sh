@@ -40,12 +40,8 @@ do
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-XS_BRANCH=`cd $DIR;git branch | grep '*' | sed -e 's@* @@'`
-
-if [ "${XS_BRANCH}" = master ]
-then
-  XS_BRANCH=trunk
-fi
+#XS_BRANCH=`cd $DIR;git config --get remote.origin.url|sed -e 's@.*carbon/\(.*\)/dotnet-packages.git.*@\1@'`
+XS_BRANCH='car-100'
 
 if [ -z "${JOB_NAME+xxx}" ]
 then
