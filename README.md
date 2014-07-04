@@ -1,5 +1,5 @@
-DotNet Libraries 
-================
+Third-Party Components 
+======================
 
 This repository contains the source code and patches for the third-party 
 libraries:
@@ -13,6 +13,11 @@ libraries:
     and clients in the .NET environment;
  *  log4net (v1.2.10) - a library providing logging services for purposes 
     of application debugging and auditing.
+
+This repository also contains this redistributable package:
+
+ *  Microsoft .NET Framework 4 (Web Installer) - Downloads and installs 
+    the Microsoft .NET Framework 4 components
 
 Contributions
 -------------
