@@ -113,3 +113,7 @@ DISTFILES=(${REPO}/${XML_RPC_DIST_FILE} \
            ${REPO}/${DISCUTILS_DIST_FILE} \
            ${REPO}/${MICROSOFT_DOTNET_FRAMEWORK_INSTALLER_FILE} \
            ${REPO}/${DOT_NET_ZIP_FILE})
+
+BUILD_TOOLS_REPO=git://admin/git/closed/windows/buildtools.git
+BUILD_TOOLS=${SCRATCH_DIR}/buildtools.git
+STORE_FILES=${BUILD_TOOLS}/scripts/storefiles.py
