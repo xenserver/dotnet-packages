@@ -30,7 +30,7 @@
 
 set -eu
 
-DISABLE_PUSH=1
+#DISABLE_PUSH=1
 source "$( cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/declarations.sh"
 
 if [ ${XS_BRANCH} = "trunk" ]
@@ -46,9 +46,13 @@ fi
 
 #archive build artifacts manually
 cp -R ${OUTPUT_DIR}/* ${BUILD_ARCHIVE}
+if [ "${BUILD_KIND:+$BUILD_KIND}" = production ]
+then
+     $STORE_FILES remotestore xensb.uk.xensource.com xenbuild /usr/groups/build/windowsbuilds buildtools.git /usr/groups/build/windowsbuilds/WindowsBuilds $get_JOB_NAME $BUILD_NUMBER $OUTPUT_DIR
+fi
 
 #update local dotnet-packages-ref.hg repository
-cp ${OUTPUT_DIR}/{manifest,latest-successful-build} ${ROOT}/dotnet-packages-ref.hg
+cp ${OUTPUT_DIR}/{manifest,latest-*-build} ${ROOT}/dotnet-packages-ref.hg
 cd ${ROOT}/dotnet-packages-ref.hg && hg commit -m "Latest successful build ${get_BUILD_ID}"
 
 if [ -z "${DISABLE_PUSH+xxx}" ]
