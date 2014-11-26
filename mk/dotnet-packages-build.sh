@@ -42,6 +42,12 @@ mkdir_clean ${OUTPUT_DIR}
 mkdir_clean ${OUTPUT_SRC_DIR}
 mkdir_clean ${BUILD_ARCHIVE}
 
+if [ "${BUILD_KIND:+$BUILD_KIND}" = production ]
+then
+    git clone ${BUILD_TOOLS_REPO} ${BUILD_TOOLS}
+    chmod +x ${BUILD_TOOLS}/scripts/storefiles.py
+fi
+
 #bring_distfiles
 for file in ${DISTFILES[@]}
 do
@@ -179,6 +185,11 @@ echo "${MANIFEST_COMPONENT} mit local" ${DISCUTILS_DIST_FILE} >> ${MANIFEST}
 #create manifest and build location
 echo "@branch=${XS_BRANCH}" >> ${OUTPUT_DIR}/manifest
 echo "dotnet-packages dotnet-packages.git" ${get_GIT_REVISION:0:12} >> ${OUTPUT_DIR}/manifest
-echo ${get_BUILD_URL} >> ${OUTPUT_DIR}/latest-successful-build
+if [ "${BUILD_KIND:+$BUILD_KIND}" = production ]
+then
+    echo ${get_BUILD_URL} >> ${OUTPUT_DIR}/latest-secure-build
+else
+    echo ${get_BUILD_URL} >> ${OUTPUT_DIR}/latest-successful-build
+fi
 
 set +u
