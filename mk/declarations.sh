@@ -97,6 +97,7 @@ REPO=${ROOT}/dotnet-packages.git
 FILES=${REPO}/mk/files
 PATCHES=${REPO}/mk/patches
 BUILD_ARCHIVE=/cygdrive/c/Jenkins/jobs/${get_JOB_NAME}/builds/${get_BUILD_ID}/archive
+SECURE_BUILD_ARCHIVE_UNC=//10.80.13.10/distfiles/distfiles/WindowsBuilds/
 SNK_ORIG=${HOMEDRIVE}${HOMEPATH}"\.ssh\xs.net.snk"
 SNK=${SNK_ORIG//\\/\\\\\\}
 

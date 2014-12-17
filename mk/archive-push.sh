@@ -46,9 +46,14 @@ fi
 
 #archive build artifacts manually
 cp -R ${OUTPUT_DIR}/* ${BUILD_ARCHIVE}
+
+# Secure build: update buildtools, copy output to local disk, then to remote.
+cd ${OUTPUT_DIR}
 if [ "${BUILD_KIND:+$BUILD_KIND}" = production ]
 then
-     $STORE_FILES remotestore xensb.uk.xensource.com xenbuild /usr/groups/build/windowsbuilds buildtools.git /usr/groups/build/windowsbuilds/WindowsBuilds $get_JOB_NAME $BUILD_NUMBER $OUTPUT_DIR
+     $STORE_FILES remoteupdate xensb.uk.xensource.com xenbuild git://hg.uk.xensource.com/closed/windows buildtools.git /usr/groups/build/windowsbuilds
+     $STORE_FILES store $SECURE_BUILD_ARCHIVE_UNC $get_JOB_NAME $BUILD_NUMBER *
+     $STORE_FILES remotestore xensb.uk.xensource.com xenbuild /usr/groups/build/windowsbuilds buildtools.git /usr/groups/build/windowsbuilds/WindowsBuilds $SECURE_BUILD_ARCHIVE_UNC $get_JOB_NAME $BUILD_NUMBER *
 fi
 
 #update local dotnet-packages-ref.hg repository
