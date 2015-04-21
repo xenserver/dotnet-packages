@@ -113,5 +113,5 @@ DISTFILES=(${REPO}/${XML_RPC_DIST_FILE} \
            ${REPO}/${SHARP_ZIP_LIB_DIST_FILE} \
            ${REPO}/${DISCUTILS_DIST_FILE} \
            ${REPO}/${MICROSOFT_DOTNET_FRAMEWORK_INSTALLER_FILE} \
-           ${REPO}/${DOT_NET_ZIP_FILE}) \
+           ${REPO}/${DOT_NET_ZIP_FILE} \
 		   ${REPO}/${PUTTY_ZIP_FILE})
