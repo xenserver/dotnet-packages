@@ -105,6 +105,7 @@ LOG4NET_DIST_FILE="libraries-src/Log4Net/log4net-1.2.13-src.zip"
 SHARP_ZIP_LIB_DIST_FILE="libraries-src/SharpZipLib/SharpZipLib_0854_SourceSamples.zip"
 DISCUTILS_DIST_FILE="libraries-src/DiscUtils/DiscUtils-204669b416f9.zip"
 DOT_NET_ZIP_FILE="libraries-src/DotNetZip/DotNetZip-src-v1.9.1.8.zip"
+PUTTY_ZIP_FILE="libraries-src/PuTTY/putty-src.zip"
 MICROSOFT_DOTNET_FRAMEWORK_INSTALLER_FILE="libraries-redist/dotNetFx40_Full_setup/dotNetFx40_Full_setup.exe"
 
 DISTFILES=(${REPO}/${XML_RPC_DIST_FILE} \
@@ -112,4 +113,5 @@ DISTFILES=(${REPO}/${XML_RPC_DIST_FILE} \
            ${REPO}/${SHARP_ZIP_LIB_DIST_FILE} \
            ${REPO}/${DISCUTILS_DIST_FILE} \
            ${REPO}/${MICROSOFT_DOTNET_FRAMEWORK_INSTALLER_FILE} \
-           ${REPO}/${DOT_NET_ZIP_FILE})
+           ${REPO}/${DOT_NET_ZIP_FILE}) \
+		   ${REPO}/${PUTTY_ZIP_FILE})
