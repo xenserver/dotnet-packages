@@ -115,11 +115,24 @@ mv ${DISCUTILS_SRC_DIR}/DiscUtils_204669b416f9/* ${DISCUTILS_SRC_DIR}
 cp ${PATCHES}/patch-discutils* ${OUTPUT_SRC_DIR}
 apply_patches "${PATCHES}/patch-discutils*" ${DISCUTILS_SRC_DIR}
 
+#prepare PuTTY
+
+PUTTY_SRC_DIR=${SCRATCH_DIR}/PuTTY    
+mkdir_clean ${PUTTY_SRC_DIR}
+unzip -q -d ${PUTTY_SRC_DIR} ${SCRATCH_DIR}/putty-src.zip
+cp ${PUTTY_SRC_DIR}/version.h ${PUTTY_SRC_DIR}/windows/
+
+
 #build
 
 run_msbuild()
 {
   /cygdrive/c/WINDOWS/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe /p:Configuration=Release /p:TargetFrameworkVersion=v4.0
+}
+
+run_msbuild_nofw()
+{
+  /cygdrive/c/WINDOWS/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe /p:Configuration=Release
 }
 
 cd ${SCRATCH_DIR}/xml-rpc.net/src && run_msbuild
@@ -128,6 +141,7 @@ cd ${SCRATCH_DIR}/log4net/src     && run_msbuild
 cd ${SCRATCH_DIR}/sharpziplib/src && run_msbuild
 cd ${SCRATCH_DIR}/dotnetzip/DotNetZip-src/DotNetZip/Zip && run_msbuild
 cd ${SCRATCH_DIR}/DiscUtils/src   && run_msbuild
+cd ${SCRATCH_DIR}/PuTTY/windows/VS2010 && run_msbuild_nofw
 
 #collect extra files in the output directory
 cp ${REPO}/mk/sign.bat ${OUTPUT_DIR}
@@ -137,6 +151,7 @@ cp ${SCRATCH_DIR}/xml-rpc.net/bin/CookComputing.XmlRpcV2.{dll,pdb} \
    ${SCRATCH_DIR}/sharpziplib/bin/ICSharpCode.SharpZipLib.{dll,pdb} \
    ${SCRATCH_DIR}/dotnetzip/DotNetZip-src/DotNetZip/Zip/bin/Release/Ionic.Zip.{dll,pdb} \
    ${SCRATCH_DIR}/DiscUtils/src/bin/Release/DiscUtils.{dll,pdb} \
+   ${SCRATCH_DIR}/PuTTY/windows/VS2010/putty/Release/putty.exe \
    ${SCRATCH_DIR}/dotNetFx40_Full_setup.exe \
    ${OUTPUT_DIR}
 
@@ -148,6 +163,7 @@ cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat log4net.dll  "Log4Net by The Apache S
 cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat ICSharpCode.SharpZipLib.dll "SharpZipLib by IC#Code, signed by Citrix"
 cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat DiscUtils.dll "DiscUtils by Kenneth Bell, signed by Citrix"
 cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat Ionic.Zip.dll "OSS, signed by Citrix"
+cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat putty.exe "PuTTY by Simon Tatham, signed by Citrix"
 
 #create source manifest
 
