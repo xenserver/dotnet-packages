@@ -124,13 +124,13 @@ echo "INFO:	Performing main build tasks..."
 
 run_msbuild()
 {
-  MSBuild.exe /nologo /m /verbosity:minimal /p:Configuration=Release /p:TargetFrameworkVersion=v4.0 $*
+  MSBuild.exe /nologo /m /verbosity:minimal /p:Configuration=Release /p:TargetFrameworkVersion=v4.0 /property:PlatformToolset=v120 $*
   return $?
 }
 
 run_msbuild_nofw()
 {
-  MSBuild.exe /nologo /m /verbosity:minimal /p:Configuration=Release $*
+  MSBuild.exe /nologo /m /verbosity:minimal /p:Configuration=Release /property:PlatformToolset=v120 $*
   return $?
 }
 
