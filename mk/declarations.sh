@@ -110,7 +110,8 @@ fi
 
 BUILD_ARCHIVE=$(cygpath -u "${HUDSON_HOME}")/jobs/${get_JOB_NAME}/builds/${get_BUILD_ID}/archive
 SNK_ORIG=$(cygpath -w "${HOME}/.ssh/xs.net.snk")
-SNK=${SNK_ORIG//\\/\\\\\\}
+#SNK=${SNK_ORIG//\\/\\\\\\}
+SNK=${SNK_ORIG//\\/\\\\}
 
 XML_RPC_DIST_FILE="libraries-src/XML-RPC.NET/xml-rpc.net.2.1.0.zip"
 LOG4NET_DIST_FILE="libraries-src/Log4Net/log4net-1.2.13-src.zip"
