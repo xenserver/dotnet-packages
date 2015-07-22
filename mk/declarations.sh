@@ -41,29 +41,34 @@ done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 XS_BRANCH=`cd $DIR;git config --get remote.origin.url|sed -e 's@.*carbon/\(.*\)/dotnet-packages.git.*@\1@'`
-
+if [[ $XS_BRANCH == *"/"* ]]
+then
+    XS_BRANCH="trunk"
+    echo "WARN:	Failed to detect XS_BRANCH we will fallback to ${XS_BRANCH}"
+fi
+        
 if [ -z "${JOB_NAME+xxx}" ]
 then
     JOB_NAME="devbuild"
-    echo "Warning: JOB_NAME env var not set, we will use ${JOB_NAME}"
+    echo "WARN:	JOB_NAME env var not set, we will use ${JOB_NAME}"
 fi
 
 if [ -z "${BUILD_NUMBER+xxx}" ]
 then
     BUILD_NUMBER="0"
-    echo "Warning: BUILD_NUMBER env var not set, we will use ${BUILD_NUMBER}"
+    echo "WARN:	BUILD_NUMBER env var not set, we will use ${BUILD_NUMBER}"
 fi
 
 if [ -z "${BUILD_ID+xxx}" ]
 then
     BUILD_ID=$(date +"%Y-%m-%d_%H-%M-%S")
-    echo "Warning: BUILD_ID env var not set, we will use ${BUILD_ID}"
+    echo "WARN:	BUILD_ID env var not set, we will use ${BUILD_ID}"
 fi
 
 if [ -z "${BUILD_URL+xxx}" ]
 then
     BUILD_URL="n/a"
-    echo "Warning: BUILD_URL env var not set, we will use 'n/a'"
+    echo "WARN:	BUILD_URL env var not set, we will use 'n/a'"
 fi
 
 get_GIT_REVISION=${GIT_COMMIT}
@@ -71,7 +76,7 @@ get_GIT_REVISION=${GIT_COMMIT}
 if [ -z "${get_GIT_REVISION+xxx}" ]
 then
     get_GIT_REVISION="none"
-    echo "Warning: GIT_COMMIT env var not set, we will use $get_GIT_REVISION"
+    echo "WARN:	GIT_COMMIT env var not set, we will use $get_GIT_REVISION"
 fi
 
 #rename Jenkins environment variables to distinguish them from ours; remember to use them as get only
@@ -85,7 +90,7 @@ if [ -z "${WORKSPACE+xxx}" ]
 then
     DIR="$( cd -P "$( dirname "${BASH_SOURCE[0]}" )/../.." && pwd )"
     WORKSPACE="${DIR}"
-    echo "Warning: WORKSPACE env var not set, we will use ${WORKSPACE}"
+    echo "WARN:	WORKSPACE env var not set, we will use ${WORKSPACE}"
 fi
 
 
@@ -96,8 +101,15 @@ OUTPUT_SRC_DIR=${OUTPUT_DIR}/SOURCES
 REPO=${ROOT}/dotnet-packages.git
 FILES=${REPO}/mk/files
 PATCHES=${REPO}/mk/patches
-BUILD_ARCHIVE=/cygdrive/c/Jenkins/jobs/${get_JOB_NAME}/builds/${get_BUILD_ID}/archive
-SNK_ORIG=${HOMEDRIVE}${HOMEPATH}"\.ssh\xs.net.snk"
+
+if [ -z "${HUDSON_HOME+xxx}" ]
+then
+   echo "WARN:	Jenkins not found, assuming its home directory is ${HOME}"
+   HUDSON_HOME=${HOME}
+fi
+
+BUILD_ARCHIVE=$(cygpath -u "${HUDSON_HOME}")/jobs/${get_JOB_NAME}/builds/${get_BUILD_ID}/archive
+SNK_ORIG=$(cygpath -w "${HOME}/.ssh/xs.net.snk")
 SNK=${SNK_ORIG//\\/\\\\\\}
 
 XML_RPC_DIST_FILE="libraries-src/XML-RPC.NET/xml-rpc.net.2.1.0.zip"
