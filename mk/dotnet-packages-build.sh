@@ -85,9 +85,6 @@ rm -rf ${LOG4NET_SRC_DIR}
 rm -rf ${LOG4NET_DIST_DIR}
 unzip -q -d ${SCRATCH_DIR} ${SCRATCH_DIR}/log4net-1.2.13-src.zip
 mv ${LOG4NET_DIST_DIR} ${LOG4NET_SRC_DIR}
-rm -rf ${LOG4NET_SRC_DIR}/{examples,doc}
-rm -f ${LOG4NET_SRC_DIR}/src/*2008.csproj
-rm -f ${LOG4NET_SRC_DIR}/src/*2008.sln
 apply_patches "${PATCHES}/patch-log4net*" ${LOG4NET_SRC_DIR}
 
 #prepare sharpziplib
@@ -123,21 +120,23 @@ unzip -q -d ${PUTTY_SRC_DIR} ${SCRATCH_DIR}/putty-src.zip
 cp ${PUTTY_SRC_DIR}/version.h ${PUTTY_SRC_DIR}/windows/
 
 
-#build
+echo "INFO:	Performing main build tasks..."
 
 run_msbuild()
 {
-  /cygdrive/c/WINDOWS/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe /p:Configuration=Release /p:TargetFrameworkVersion=v4.0
+  MSBuild.exe /nologo /m /verbosity:minimal /p:Configuration=Release /p:TargetFrameworkVersion=v4.0 $*
+  return $?
 }
 
 run_msbuild_nofw()
 {
-  /cygdrive/c/WINDOWS/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe /p:Configuration=Release
+  MSBuild.exe /nologo /m /verbosity:minimal /p:Configuration=Release $*
+  return $?
 }
 
 cd ${SCRATCH_DIR}/xml-rpc.net/src && run_msbuild
 cd ${SCRATCH_DIR}/xml-rpc_v2.net/src && run_msbuild && mv ../bin/CookComputing.XmlRpcV2.dll ../bin/CookComputing.XmlRpcV2_dotnet2.dll && mv ../bin/CookComputing.XmlRpcV2.pdb ../bin/CookComputing.XmlRpcV2_dotnet2.pdb #building for dotnet2
-cd ${SCRATCH_DIR}/log4net/src     && run_msbuild
+cd ${SCRATCH_DIR}/log4net/src     && run_msbuild log4net.vs2010.csproj
 cd ${SCRATCH_DIR}/sharpziplib/src && run_msbuild
 cd ${SCRATCH_DIR}/dotnetzip/DotNetZip-src/DotNetZip/Zip && run_msbuild
 cd ${SCRATCH_DIR}/DiscUtils/src   && run_msbuild
