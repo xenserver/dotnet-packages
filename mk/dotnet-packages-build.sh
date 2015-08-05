@@ -151,7 +151,7 @@ cp ${SCRATCH_DIR}/xml-rpc.net/bin/CookComputing.XmlRpcV2.{dll,pdb} \
    ${SCRATCH_DIR}/dotnetzip/DotNetZip-src/DotNetZip/Zip/bin/Release/Ionic.Zip.{dll,pdb} \
    ${SCRATCH_DIR}/DiscUtils/src/bin/Release/DiscUtils.{dll,pdb} \
    ${SCRATCH_DIR}/PuTTY/windows/VS2010/putty/Release/putty.exe \
-   ${SCRATCH_DIR}/dotNetFx40_Full_setup.exe \
+   ${SCRATCH_DIR}/NDP452-KB2901954-Web.exe \
    ${OUTPUT_DIR}
 
 #sign those necessary
