@@ -1,6 +1,5 @@
-diff U3 C:/git/internal/dotnet-packages/libraries-src/XML-RPC.NET/xml-rpc.net.2.1.0_orig/src/XmlRpcFaultException.cs C:/git/internal/dotnet-packages/libraries-src/XML-RPC.NET/xml-rpc.net.2.1.0/src/XmlRpcFaultException.cs
---- XmlRpcFaultException.cs	Mon Aug 07 07:31:54 2006
-+++ XmlRpcFaultException.cs	Wed Sep 23 14:17:28 2015
+--- src/XmlRpcFaultException.cs	Mon Aug 07 07:31:54 2006
++++ src/XmlRpcFaultException.cs	Wed Sep 23 14:17:28 2015
 @@ -27,6 +27,7 @@
  {
    using System;
