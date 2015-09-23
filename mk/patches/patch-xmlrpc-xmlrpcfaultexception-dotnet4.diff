@@ -1,0 +1,19 @@
+diff U3 C:/git/internal/dotnet-packages/libraries-src/XML-RPC.NET/xml-rpc.net.2.1.0_orig/src/XmlRpcFaultException.cs C:/git/internal/dotnet-packages/libraries-src/XML-RPC.NET/xml-rpc.net.2.1.0/src/XmlRpcFaultException.cs
+--- XmlRpcFaultException.cs	Mon Aug 07 07:31:54 2006
++++ XmlRpcFaultException.cs	Wed Sep 23 14:17:28 2015
+@@ -27,6 +27,7 @@
+ {
+   using System;
+   using System.Runtime.Serialization;
++  using System.Security;
+ 
+   // used to return server-side errors to client code - also can be 
+   // thrown by Service implmentation code to return custom Fault Responses
+@@ -69,6 +70,7 @@
+ #if (!COMPACT_FRAMEWORK)
+     // public methods
+     //
++    [SecurityCritical]
+     public override void GetObjectData(
+       SerializationInfo info, 
+       StreamingContext context)
