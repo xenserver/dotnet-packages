@@ -29,8 +29,30 @@ rem NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 rem OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 rem SUCH DAMAGE.
 
+set ddk_path=noDDK
+if exist c:\winddk\6001.18001 set ddk_path=c:\winddk\6001.18001
+if exist c:\winddk\6000 set ddk_path=c:\winddk\6000
+signtool sign /? >nul 2>&1 && (set ddk_path=SigntoolInPath) || (echo "Unable to find signtool in the path.")
+
+if "%ddk_path%" == "noDDK" goto no_ddk
+goto found_ddk
+
+:no_ddk
+echo "Cannot find a DDK in either c:\winddk\6000 or c:\winddk\6001.18001"
+goto end
+
+:found_ddk
+rem do not display this because the tool is called too many times and it polutes the output.
+IF DEFINED DEBUG (echo ddk is %ddk_path%)
+
 set descr="Citrix XenCenter"
+set timestamp=http://timestamp.geotrust.com/tsa
 if not [%2]==[] set descr=%2
 
-:: certificate should be in the machine store (/sm) otherwise it will not work under build system run as as a service account
-signtool.exe sign /sm -a -s my -n "Citrix Systems, Inc" -d %descr% -t http://timestamp.verisign.com/scripts/timestamp.dll %1
+if /I NOT "%ddk_path%" == "SigntoolInPath" (
+    %ddk_path%\bin\catalog\signtool.exe sign -a -s my -n "Citrix Systems, Inc" -d %descr% -t http://timestamp.verisign.com/scripts/timestamp.dll %1
+) ELSE (
+    C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -Command "$c = Get-ChildItem -Path cert:\\CurrentUser\\My, cert:\\LocalMachine\\My | Where-Object { $_.Thumbprint -like \"9c0ac20110aaf4733fc0eae7ec3ec8d5cc74dbcc\" }; If ($c) { signtool sign -v -sm -as -sha1 9c0ac20110aaf4733fc0eae7ec3ec8d5cc74dbcc -d `\"%descr%`\" -tr %timestamp% -td sha256 %1; signtool sign -v -sm -as -sha1 3d502d724093ef56499e24ce9c664a3471382ea9 -d `\"%descr%`\" -tr %timestamp% -td sha1 %1 } else {signtool sign -v -s -as -sha1 0699c0e67181f87ecdf7a7a6ad6f4481ee6c76cf -d `\"%descr%`\" -tr %timestamp% -td sha1 %1 ; }" <NUL
+)
+
+:end
