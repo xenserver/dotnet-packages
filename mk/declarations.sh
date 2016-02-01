@@ -98,6 +98,7 @@ ROOT=$(cygpath -u "${WORKSPACE}")
 SCRATCH_DIR=${ROOT}/scratch
 OUTPUT_DIR=${ROOT}/output
 OUTPUT_SRC_DIR=${OUTPUT_DIR}/SOURCES
+OUTPUT_UNSIGNED_DIR=${OUTPUT_DIR}/UNSIGNED
 REPO=${ROOT}/dotnet-packages.git
 FILES=${REPO}/mk/files
 PATCHES=${REPO}/mk/patches
