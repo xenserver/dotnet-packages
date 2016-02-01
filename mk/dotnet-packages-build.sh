@@ -160,6 +160,17 @@ cp ${SCRATCH_DIR}/xml-rpc.net/bin/CookComputing.XmlRpcV2.{dll,pdb} \
    ${SCRATCH_DIR}/NDP452-KB2901954-Web.exe \
    ${OUTPUT_DIR}
 
+#copy unsigned files
+mkdir_clean ${OUTPUT_UNSIGNED_DIR}
+cp ${OUTPUT_DIR}/CookComputing.XmlRpcV2.dll \
+   ${OUTPUT_DIR}/CookComputing.XmlRpcV2_dotnet2.dll \
+   ${OUTPUT_DIR}/log4net.dll \
+   ${OUTPUT_DIR}/ICSharpCode.SharpZipLib.dll \
+   ${OUTPUT_DIR}/DiscUtils.dll \
+   ${OUTPUT_DIR}/Ionic.Zip.dll \
+   ${OUTPUT_DIR}/putty.exe \
+   ${OUTPUT_UNSIGNED_DIR}  
+   
 #sign those necessary
 chmod a+x ${OUTPUT_DIR}/sign.bat
 cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat CookComputing.XmlRpcV2.dll "XML-RPC.NET by Charles Cook, signed by Citrix"
