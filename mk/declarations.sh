@@ -110,6 +110,7 @@ then
 fi
 
 BUILD_ARCHIVE=$(cygpath -u "${HUDSON_HOME}")/jobs/${get_JOB_NAME}/builds/${get_BUILD_ID}/archive
+SECURE_BUILD_ARCHIVE_UNC=//10.80.13.10/distfiles/distfiles/WindowsBuilds/
 SNK_ORIG=$(cygpath -w "${HOME}/.ssh/xs.net.snk")
 #SNK=${SNK_ORIG//\\/\\\\\\}
 SNK=${SNK_ORIG//\\/\\\\}
@@ -129,3 +130,7 @@ DISTFILES=(${REPO}/${XML_RPC_DIST_FILE} \
            ${REPO}/${MICROSOFT_DOTNET_FRAMEWORK_INSTALLER_FILE} \
            ${REPO}/${DOT_NET_ZIP_FILE} \
 		   ${REPO}/${PUTTY_ZIP_FILE})
+
+BUILD_TOOLS_REPO=git://hg.uk.xensource.com/closed/windows/buildtools.git
+BUILD_TOOLS=${SCRATCH_DIR}/buildtools.git
+STORE_FILES=${BUILD_TOOLS}/scripts/storefiles.py
