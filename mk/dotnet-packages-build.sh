@@ -42,6 +42,12 @@ mkdir_clean ${OUTPUT_DIR}
 mkdir_clean ${OUTPUT_SRC_DIR}
 mkdir_clean ${BUILD_ARCHIVE}
 
+if [ "${BUILD_KIND:+$BUILD_KIND}" = production ]
+then
+    ( mkdir -p ${BUILD_TOOLS%/*} && cd ${BUILD_TOOLS%/*} && git clone ${BUILD_TOOLS_REPO} ${BUILD_TOOLS##*/} )
+    chmod +x ${BUILD_TOOLS}/scripts/storefiles.py
+fi
+
 #bring_distfiles
 for file in ${DISTFILES[@]}
 do
@@ -128,12 +134,6 @@ run_msbuild()
   return $?
 }
 
-run_msbuild_dotnet2()
-{
-  MSBuild.exe /nologo /m /verbosity:minimal /p:Configuration=Release /p:TargetFrameworkVersion=v2.0 $*
-  return $?
-}
-
 run_msbuild_nofw()
 {
   MSBuild.exe /nologo /m /verbosity:minimal /p:Configuration=Release /property:PlatformToolset=v120 $*
@@ -141,7 +141,6 @@ run_msbuild_nofw()
 }
 
 cd ${SCRATCH_DIR}/xml-rpc.net/src && run_msbuild
-cd ${SCRATCH_DIR}/xml-rpc_v2.net/src && run_msbuild_dotnet2 && mv ../bin/CookComputing.XmlRpcV2.dll ../bin/CookComputing.XmlRpcV2_dotnet2.dll && mv ../bin/CookComputing.XmlRpcV2.pdb ../bin/CookComputing.XmlRpcV2_dotnet2.pdb #building for dotnet2
 cd ${SCRATCH_DIR}/log4net/src     && run_msbuild log4net.vs2010.csproj
 cd ${SCRATCH_DIR}/sharpziplib/src && run_msbuild
 cd ${SCRATCH_DIR}/dotnetzip/DotNetZip-src/DotNetZip/Zip && run_msbuild
@@ -151,7 +150,6 @@ cd ${SCRATCH_DIR}/PuTTY/windows/VS2010 && run_msbuild_nofw
 #collect extra files in the output directory
 cp ${REPO}/mk/sign.bat ${OUTPUT_DIR}
 cp ${SCRATCH_DIR}/xml-rpc.net/bin/CookComputing.XmlRpcV2.{dll,pdb} \
-   ${SCRATCH_DIR}/xml-rpc_v2.net/bin/CookComputing.XmlRpcV2_dotnet2.{dll,pdb} \
    ${SCRATCH_DIR}/log4net/build/bin/net/2.0/release/log4net.{dll,pdb} \
    ${SCRATCH_DIR}/sharpziplib/bin/ICSharpCode.SharpZipLib.{dll,pdb} \
    ${SCRATCH_DIR}/dotnetzip/DotNetZip-src/DotNetZip/Zip/bin/Release/Ionic.Zip.{dll,pdb} \
@@ -163,7 +161,6 @@ cp ${SCRATCH_DIR}/xml-rpc.net/bin/CookComputing.XmlRpcV2.{dll,pdb} \
 #copy unsigned files
 mkdir_clean ${OUTPUT_UNSIGNED_DIR}
 cp ${OUTPUT_DIR}/CookComputing.XmlRpcV2.dll \
-   ${OUTPUT_DIR}/CookComputing.XmlRpcV2_dotnet2.dll \
    ${OUTPUT_DIR}/log4net.dll \
    ${OUTPUT_DIR}/ICSharpCode.SharpZipLib.dll \
    ${OUTPUT_DIR}/DiscUtils.dll \
@@ -174,7 +171,6 @@ cp ${OUTPUT_DIR}/CookComputing.XmlRpcV2.dll \
 #sign those necessary
 chmod a+x ${OUTPUT_DIR}/sign.bat
 cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat CookComputing.XmlRpcV2.dll "XML-RPC.NET by Charles Cook, signed by Citrix"
-cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat CookComputing.XmlRpcV2_dotnet2.dll "XML-RPC.NET by Charles Cook, signed by Citrix"
 cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat log4net.dll  "Log4Net by The Apache Software Foundation, signed by Citrix"
 cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat ICSharpCode.SharpZipLib.dll "SharpZipLib by IC#Code, signed by Citrix"
 cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat DiscUtils.dll "DiscUtils by Kenneth Bell, signed by Citrix"
