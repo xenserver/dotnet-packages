@@ -41,9 +41,7 @@ if not [%2]==[] set descr=%2
 
 if defined CTXSIGN (
     echo CTXSIGN is set
-    hostname>hostname
-    set /p hostname=<hostname
-    %CTXSIGN%  --authorise --workerID %hostname% --orchID %hostname% --jobID XenServerWindowsLegacyPVTools_signing --task XenServerDotnetPackages-%BUILD_NUMBER% --debug > out.txt
+    %CTXSIGN%  --authorise --workerID tizon-2 --orchID tizon-2 --jobID XenServerWindowsLegacyPVTools_signing --task XenServerDotnetPackages-%BUILD_NUMBER% --debug > out.txt
     echo OUTPUT FROM CTXSIGN --AUTHORISE:
     type out.txt
     echo OUTPUT ENDS
