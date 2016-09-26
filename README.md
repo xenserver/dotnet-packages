@@ -13,7 +13,7 @@ libraries:
     and clients in the .NET environment;
  *  log4net (v1.2.10) - a library providing logging services for purposes 
     of application debugging and auditing.
- *  PuTTY (v.0.64) - PuTTY is a free implementation of Telnet and SSH for 
+ *  PuTTY (v.0.67) - PuTTY is a free implementation of Telnet and SSH for 
     Windows and Unix platforms, along with an xterm terminal emulator.  
 
 This repository also contains this redistributable package:
