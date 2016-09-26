@@ -123,7 +123,7 @@ apply_patches "${PATCHES}/patch-discutils*" ${DISCUTILS_SRC_DIR}
 PUTTY_SRC_DIR=${SCRATCH_DIR}/PuTTY    
 mkdir_clean ${PUTTY_SRC_DIR}
 unzip -q -d ${PUTTY_SRC_DIR} ${SCRATCH_DIR}/putty-src.zip
-cp ${PUTTY_SRC_DIR}/version.h ${PUTTY_SRC_DIR}/windows/
+cp ${PUTTY_SRC_DIR}/version.h ${PUTTY_SRC_DIR}/licence.h ${PUTTY_SRC_DIR}/windows/
 
 
 echo "INFO:	Performing main build tasks..."
