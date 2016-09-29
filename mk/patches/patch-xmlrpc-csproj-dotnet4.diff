@@ -41,7 +41,7 @@
      <UpgradeBackupLocation>
      </UpgradeBackupLocation>
      <SignAssembly Condition="'$(BuildingInsideVisualStudio)' == ''">true</SignAssembly>
-+    <TargetFrameworkVersion>v12.0</TargetFrameworkVersion>
++    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
 +    <OldToolsVersion>2.0</OldToolsVersion>
 +    <TargetFrameworkProfile />
    </PropertyGroup>
