@@ -28,9 +28,9 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- src/XmlRpcClientProtocol.cs	2006-08-09 08:23:20.000000000 +0100
-+++ src/XmlRpcClientProtocol.cs	2007-05-28 11:49:36.000000000 +0100
-@@ -128,10 +128,10 @@
+--- src/XmlRpcClientProtocol.cs	2016-10-06 13:39:47.102997900 +0100
++++ src/XmlRpcClientProtocol.cs	2016-10-06 13:41:11.747068900 +0100
+@@ -142,10 +142,10 @@
          SetClientCertificates(_clientCertificates, webReq);
  #endif
          Stream serStream = null;
@@ -43,7 +43,7 @@
          else
            serStream = new MemoryStream(2000);
          try
-@@ -145,7 +145,6 @@
+@@ -162,7 +162,6 @@
            serializer.SerializeRequest(serStream, req);
            if (logging)
            {

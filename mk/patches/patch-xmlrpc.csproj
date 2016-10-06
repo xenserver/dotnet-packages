@@ -28,17 +28,18 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- src/xmlrpc.csproj	2007-04-26 09:22:10.000000000 -0400
-+++ src/xmlrpc.csproj	2007-04-26 09:22:16.000000000 -0400
-@@ -11,7 +11,6 @@
+--- src/xmlrpc.csproj	2016-10-06 10:51:37.165964500 +0100
++++ src/xmlrpc.csproj	2016-10-06 10:53:02.751848000 +0100
+@@ -11,7 +11,7 @@
      <AssemblyKeyContainerName>
      </AssemblyKeyContainerName>
      <AssemblyName>CookComputing.XmlRpcV2</AssemblyName>
--    <AssemblyOriginatorKeyFile Condition="'$(BuildingInsideVisualStudio)' == ''">..\..\..\CookComputing.key</AssemblyOriginatorKeyFile>
+-    <AssemblyOriginatorKeyFile Condition="'$(BuildingInsideVisualStudio)' == ''">$(KeyFile)</AssemblyOriginatorKeyFile>
++    <SignAssembly>true</SignAssembly>
      <DefaultClientScript>JScript</DefaultClientScript>
      <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
      <DefaultTargetSchema>IE50</DefaultTargetSchema>
-@@ -58,7 +58,7 @@
+@@ -60,16 +60,16 @@
      <DefineConstants>TRACE</DefineConstants>
      <DocumentationFile>
      </DocumentationFile>
@@ -47,7 +48,6 @@
      <FileAlignment>4096</FileAlignment>
      <NoStdLib>false</NoStdLib>
      <NoWarn>649</NoWarn>
-@@ -65,9 +65,9 @@
      <Optimize>true</Optimize>
      <RegisterForComInterop>false</RegisterForComInterop>
      <RemoveIntegerChecks>false</RemoveIntegerChecks>
@@ -59,14 +59,3 @@
      <ErrorReport>prompt</ErrorReport>
    </PropertyGroup>
    <ItemGroup>
-diff -u -r scratch/src/xmlrpc.csproj scratch1/src/xmlrpc.csproj
---- src/xmlrpc.csproj	2012-01-31 11:55:00.156508300 +0000
-+++ src/xmlrpc.csproj	2012-01-31 11:56:44.948462500 +0000
-@@ -11,6 +11,7 @@
-     <AssemblyKeyContainerName>
-     </AssemblyKeyContainerName>
-     <AssemblyName>CookComputing.XmlRpcV2</AssemblyName>
-+    <SignAssembly>true</SignAssembly>
-     <DefaultClientScript>JScript</DefaultClientScript>
-     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
-     <DefaultTargetSchema>IE50</DefaultTargetSchema>

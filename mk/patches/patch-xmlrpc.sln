@@ -28,10 +28,10 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- src/xmlrpc.sln	2007-05-03 04:27:07.000000000 -0400
-+++ src/xmlrpc.sln	2007-05-03 04:27:30.000000000 -0400
+--- src/xmlrpc.sln	2016-10-06 10:48:29.126370800 +0100
++++ src/xmlrpc.sln	2016-10-06 11:04:38.561419500 +0100
 @@ -2,11 +2,6 @@
- # Visual Studio 2005
+ # Visual Studio 2008
  Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xmlrpc", "xmlrpc.csproj", "{1B4B0A58-0AFB-4090-91DD-18912CC7DE65}"
  EndProject
 -Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ntest", "..\ntest\ntest.csproj", "{A03FD7C0-77B4-4731-8818-6E33A0A83E70}"
@@ -39,6 +39,6 @@
 -		{1B4B0A58-0AFB-4090-91DD-18912CC7DE65} = {1B4B0A58-0AFB-4090-91DD-18912CC7DE65}
 -	EndProjectSection
 -EndProject
- Global
- 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
- 		Debug|Any CPU = Debug|Any CPU
+ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{E51BCCED-94BB-4C92-98A0-3D1310E01FAE}"
+ EndProject
+ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncBettyApplication", "..\samples\AsyncBettyApplication\AsyncBettyApplication.csproj", "{47C8D059-8A35-42D2-8F63-559A788A5695}"

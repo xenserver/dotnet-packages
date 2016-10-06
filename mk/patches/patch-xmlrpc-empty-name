@@ -28,9 +28,9 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- src/XmlRpcSerializer.cs	2006-08-12 11:53:36.000000000 +0100
-+++ src/XmlRpcSerializer.cs	2007-08-08 10:49:14.000000000 +0100
-@@ -1314,7 +1314,7 @@
+--- src/XmlRpcSerializer.cs	2016-10-06 11:44:03.528236000 +0100
++++ src/XmlRpcSerializer.cs	2016-10-06 11:45:31.773063500 +0100
+@@ -1458,7 +1458,7 @@
              throw new XmlRpcInvalidXmlRpcException(parseStack.ParseType
                + " contains member with more than one name element"
                + " " + StackDump(parseStack));
@@ -39,7 +39,7 @@
            if (valueNode == null)
              throw new XmlRpcInvalidXmlRpcException(parseStack.ParseType
                + " contains struct member " + rpcName + " with missing value "
-@@ -1328,7 +1328,7 @@
+@@ -1472,7 +1472,7 @@
              if (!IgnoreDuplicateMembers)
                throw new XmlRpcInvalidXmlRpcException(parseStack.ParseType
                  + " contains struct value with duplicate member "

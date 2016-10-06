@@ -28,18 +28,18 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- src/XmlRpcSerializer.cs	2006-08-12 11:53:36.000000000 +0100
-+++ src/XmlRpcSerializer.cs	2007-06-14 11:39:36.000000000 +0100
-@@ -1582,7 +1582,11 @@
-               }
-             }
-           }
--          if (MapZerosDateTimeToMinValue && s.StartsWith("0000") 
+--- src/XmlRpcSerializer.cs	2016-10-06 13:28:03.419080400 +0100
++++ src/XmlRpcSerializer.cs	2016-10-06 13:30:33.234515800 +0100
+@@ -1760,7 +1760,11 @@
+         //   other yyyy-MM-ddThh:mm:ss
+         if (!DateTime8601.TryParseDateTime8601(s, out retVal))
+         {
+-          if (MapZerosDateTimeToMinValue && s.StartsWith("0000")
 +          if (s == "never")
 +          {
 +              retVal = DateTime.MinValue;
 +          }
-+          else if (MapZerosDateTimeToMinValue && s.StartsWith("0000") 
-             && (s == "00000000T00:00:00" || s == "0000-00-00T00:00:00Z" 
++          else if (MapZerosDateTimeToMinValue && s.StartsWith("0000")
+             && (s == "00000000T00:00:00" || s == "0000-00-00T00:00:00Z"
              || s == "00000000T00:00:00Z" || s == "0000-00-00T00:00:00"))
              retVal = DateTime.MinValue;

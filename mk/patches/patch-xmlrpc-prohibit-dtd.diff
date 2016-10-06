@@ -28,26 +28,41 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
-diff -r -u src/AssemblyBuildNumber.cs src/AssemblyBuildNumber.cs
---- src/AssemblyBuildNumber.cs	2006-08-13 13:33:06.000000000 +0100
-+++ src/AssemblyBuildNumber.cs	2011-01-17 10:43:17.453125000 +0000
-@@ -13,6 +13,6 @@
- using System.Runtime.CompilerServices;
- using System.Runtime.InteropServices;
- 
--[assembly: AssemblyVersion("2.1.0.3")]
-+[assembly: AssemblyVersion("2.1.0.7")]
- 
- 
-diff -r -u XML-RPC.NET/xml-rpc.net.proj XML-RPC.NET-tmp//xml-rpc.net.proj
---- xml-rpc.net.proj	2006-08-13 11:18:02.000000000 +0100
-+++ xml-rpc.net.proj	2011-01-17 10:42:53.031250000 +0000
-@@ -18,7 +18,7 @@
-     <Major>2</Major>
-     <Minor>1</Minor>
-     <Build>0</Build>
--    <Revision>3</Revision>
-+    <Revision>7</Revision>
-   </PropertyGroup>
- 
-   <PropertyGroup>
+--- src/XmlRpcSerializer.cs	2016-10-06 14:29:34.854212100 +0100
++++ src/XmlRpcSerializer.cs	2016-10-06 15:34:31.909820600 +0100
+@@ -251,7 +251,7 @@
+       {
+         using (XmlTextReader xmlRdr = new XmlTextReader(stm))
+         {
+-          xmlRdr.ProhibitDtd = true;
++          xmlRdr.DtdProcessing = DtdProcessing.Prohibit;
+           xdoc.Load(xmlRdr);
+         }
+       }
+@@ -274,7 +274,7 @@
+       {
+         using (XmlTextReader xmlRdr = new XmlTextReader(txtrdr))
+         {
+-          xmlRdr.ProhibitDtd = true;
++          xmlRdr.DtdProcessing = DtdProcessing.Prohibit;
+           xdoc.Load(xmlRdr);
+         }
+       }
+@@ -512,7 +512,7 @@
+         using (XmlTextReader xmlRdr = new XmlTextReader(stm))
+         {
+ #if (!COMPACT_FRAMEWORK)
+-          xmlRdr.ProhibitDtd = true;
++          xmlRdr.DtdProcessing = DtdProcessing.Prohibit;
+ #endif
+           xdoc.Load(xmlRdr);
+         }
+@@ -537,7 +537,7 @@
+         using (XmlTextReader xmlRdr = new XmlTextReader(txtrdr))
+         {
+ #if (!COMPACT_FRAMEWORK)
+-          xmlRdr.ProhibitDtd = true;
++          xmlRdr.DtdProcessing = DtdProcessing.Prohibit;
+ #endif
+           xdoc.Load(xmlRdr);
+         }

@@ -28,24 +28,24 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- src/XmlRpcSerializer.cs	2008-04-28 19:59:01.000000000 +0100
-+++ src/XmlRpcSerializer.cs	2008-04-28 20:02:28.000000000 +0100
-@@ -1503,8 +1503,16 @@
+--- src/XmlRpcSerializer.cs	2016-10-06 11:48:06.193402400 +0100
++++ src/XmlRpcSerializer.cs	2016-10-06 11:50:22.543519500 +0100
+@@ -1694,8 +1694,16 @@
        parseStack.Push("double");
        try
        {
--        retVal = Double.Parse(node.FirstChild.Value, 
+-        retVal = Double.Parse(node.FirstChild.Value,
 -          CultureInfo.InvariantCulture.NumberFormat);
 +        string s = node.FirstChild.Value;
-+	if (s.ToLowerInvariant() == "nan")
-+	{
-+	  retVal = Double.NaN;
-+	}
-+	else
-+	{
++        if(s.ToLowerInvariant() == "nan")
++        {
++          retVal = Double.NaN;
++        }
++    	 else
++        {
 +          retVal = Double.Parse(node.FirstChild.Value, 
 +            CultureInfo.InvariantCulture.NumberFormat);
-+	}
++	 }
        }
-       catch(Exception)
+       catch (Exception)
        {

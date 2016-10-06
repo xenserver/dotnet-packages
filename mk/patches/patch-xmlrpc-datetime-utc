@@ -28,22 +28,26 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- src/XmlRpcSerializer.cs	2006-08-12 11:53:36.000000000 +0100
-+++ src/XmlRpcSerializer.cs	2010-09-16 12:47:19.765625000 +0100
-@@ -1587,8 +1587,15 @@
-             || s == "00000000T00:00:00Z" || s == "0000-00-00T00:00:00"))
-             retVal = DateTime.MinValue;
-           else
-+          {
-+            DateTimeStyles flags;
-+            if (s.EndsWith("Z"))
-+              flags = DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal;
-+            else
-+              flags = DateTimeStyles.None;
-             retVal = DateTime.ParseExact(s, dateTimeFormat, 
--              DateTimeFormatInfo.InvariantInfo);
-+              DateTimeFormatInfo.InvariantInfo, flags);
-+          }
-         }
-         catch(Exception)
-         {
+--- src/DateTime8601.cs	2016-10-06 10:48:28.056965200 +0100
++++ src/DateTime8601.cs	2016-10-06 16:55:01.347917200 +0100
+@@ -30,11 +30,19 @@
+         "yyyyMMdd'T'HHmmsszzz", 
+         "yyyyMMdd'T'HHmmsszz", 
+       };
++      
++      DateTimeStyles flags;
++      if(m.Groups["tz"].Equals("Z")){
++          flags = DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal;
++      }else{
++          flags = DateTimeStyles.None;
++      }
++      
+       // Compact Framework doesn't support TryParseExact()
+       try
+       {
+         result = DateTime.ParseExact(normalized, formats, CultureInfo.InvariantCulture,
+-                System.Globalization.DateTimeStyles.AdjustToUniversal);
++                flags);
+         return true;
+       }
+       catch (Exception)
