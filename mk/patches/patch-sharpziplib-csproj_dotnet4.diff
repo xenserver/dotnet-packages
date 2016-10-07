@@ -41,7 +41,7 @@
      <PreBuildEvent />
      <PostBuildEvent />
      <DocumentationFile>..\bin\ICSharpCode.SharpZipLib.xml</DocumentationFile>
-+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
++    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
 +    <FileUpgradeFlags>
 +    </FileUpgradeFlags>
 +    <UpgradeBackupLocation>
