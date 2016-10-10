@@ -121,7 +121,7 @@ SHARP_ZIP_LIB_DIST_FILE="libraries-src/SharpZipLib/SharpZipLib_0854_SourceSample
 DISCUTILS_DIST_FILE="libraries-src/DiscUtils/DiscUtils-204669b416f9.zip"
 DOT_NET_ZIP_FILE="libraries-src/DotNetZip/DotNetZip-src-v1.9.1.8.zip"
 PUTTY_ZIP_FILE="libraries-src/PuTTY/putty-src.zip"
-MICROSOFT_DOTNET_FRAMEWORK_INSTALLER_FILE="libraries-redist/dotNetFx46_web_setup/NDP46-KB3045560-Web.exe"
+MICROSOFT_DOTNET_FRAMEWORK_INSTALLER_FILE="libraries-redist/dotNetFx452_web_setup/NDP452-KB2901954-Web.exe"
 
 DISTFILES=(${REPO}/${XML_RPC_DIST_FILE} \
            ${REPO}/${LOG4NET_DIST_FILE} \

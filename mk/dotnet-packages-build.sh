@@ -63,23 +63,23 @@ apply_patches()
   done
 }
     
-#prepare xml-rpc dotnet 4.6
+#prepare xml-rpc
 
 XMLRPC_SRC_DIR=${SCRATCH_DIR}/xml-rpc.net
 mkdir_clean ${XMLRPC_SRC_DIR}
 unzip -q -d ${XMLRPC_SRC_DIR} ${SCRATCH_DIR}/xml-rpc.net.2.1.0.zip
-shopt -s extglob
-apply_patches "${PATCHES}/patch-xmlrpc!(*dotnet45*)" ${XMLRPC_SRC_DIR} # Apply all except dotnet 4.5
-shopt -u extglob
+cp ${PATCHES}/patch-xmlrpc* ${OUTPUT_SRC_DIR}
+apply_patches "${PATCHES}/patch-xmlrpc*" ${XMLRPC_SRC_DIR}
 sed -i "/SignAssembly/ i <AssemblyOriginatorKeyFile>${SNK}</AssemblyOriginatorKeyFile>" ${XMLRPC_SRC_DIR}/src/xmlrpc.csproj
 
-#prepare xml-rpc dotnet 4.5
+#prepare xml-rpc dotnet 2.0
 
-XMLRPC_SRC_DIR=${SCRATCH_DIR}/xml-rpc_v45.net
+XMLRPC_SRC_DIR=${SCRATCH_DIR}/xml-rpc_v2.net
 mkdir_clean ${XMLRPC_SRC_DIR}
 unzip -q -d ${XMLRPC_SRC_DIR} ${SCRATCH_DIR}/xml-rpc.net.2.1.0.zip
+#cp ${PATCHES}/patch-xmlrpc* ${OUTPUT_SRC_DIR}
 shopt -s extglob
-apply_patches "${PATCHES}/patch-xmlrpc!(*dotnet46*)" ${XMLRPC_SRC_DIR} # Apply all except dotnet 4.6
+apply_patches "${PATCHES}/patch-xmlrpc!(*dotnet4*)" ${XMLRPC_SRC_DIR}
 shopt -u extglob
 sed -i "/SignAssembly/ i <AssemblyOriginatorKeyFile>${SNK}</AssemblyOriginatorKeyFile>" ${XMLRPC_SRC_DIR}/src/xmlrpc.csproj
 
@@ -130,12 +130,6 @@ echo "INFO:	Performing main build tasks..."
 
 run_msbuild()
 {
-  MSBuild.exe /nologo /m /verbosity:minimal /p:Configuration=Release /p:TargetFrameworkVersion=v4.6 /property:PlatformToolset=v120 $*
-  return $?
-}
-
-run_msbuild_dotnet45()
-{
   MSBuild.exe /nologo /m /verbosity:minimal /p:Configuration=Release /p:TargetFrameworkVersion=v4.5 /property:PlatformToolset=v120 $*
   return $?
 }
@@ -147,7 +141,6 @@ run_msbuild_nofw()
 }
 
 cd ${SCRATCH_DIR}/xml-rpc.net/src && run_msbuild
-cd ${SCRATCH_DIR}/xml-rpc_v45.net/src && run_msbuild_dotnet45 && mv ../bin/CookComputing.XmlRpcV2.dll ../bin/CookComputing.XmlRpcV2_dotnet45.dll && mv ../bin/CookComputing.XmlRpcV2.pdb ../bin/CookComputing.XmlRpcV2_dotnet45.pdb #building for dotnet4.5
 cd ${SCRATCH_DIR}/log4net/src     && run_msbuild log4net.vs2010.csproj
 cd ${SCRATCH_DIR}/sharpziplib/src && run_msbuild
 cd ${SCRATCH_DIR}/dotnetzip/DotNetZip-src/DotNetZip/Zip && run_msbuild
@@ -157,13 +150,12 @@ cd ${SCRATCH_DIR}/PuTTY/windows/VS2010 && run_msbuild_nofw
 #collect extra files in the output directory
 cp ${REPO}/mk/sign.bat ${OUTPUT_DIR}
 cp ${SCRATCH_DIR}/xml-rpc.net/bin/CookComputing.XmlRpcV2.{dll,pdb} \
-   ${SCRATCH_DIR}/xml-rpc_v45.net/bin/CookComputing.XmlRpcV2_dotnet45.{dll,pdb} \
    ${SCRATCH_DIR}/log4net/build/bin/net/2.0/release/log4net.{dll,pdb} \
    ${SCRATCH_DIR}/sharpziplib/bin/ICSharpCode.SharpZipLib.{dll,pdb} \
    ${SCRATCH_DIR}/dotnetzip/DotNetZip-src/DotNetZip/Zip/bin/Release/Ionic.Zip.{dll,pdb} \
    ${SCRATCH_DIR}/DiscUtils/src/bin/Release/DiscUtils.{dll,pdb} \
    ${SCRATCH_DIR}/PuTTY/windows/VS2010/putty/Release/putty.exe \
-   ${SCRATCH_DIR}/NDP46-KB3045560-Web.exe \
+   ${SCRATCH_DIR}/NDP452-KB2901954-Web.exe \
    ${OUTPUT_DIR}
 
 #copy unsigned files
@@ -179,7 +171,6 @@ cp ${OUTPUT_DIR}/CookComputing.XmlRpcV2.dll \
 #sign those necessary
 chmod a+x ${OUTPUT_DIR}/sign.bat
 cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat CookComputing.XmlRpcV2.dll "XML-RPC.NET by Charles Cook, signed by Citrix"
-cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat CookComputing.XmlRpcV2_dotnet45.dll "XML-RPC.NET by Charles Cook, signed by Citrix"
 cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat log4net.dll  "Log4Net by The Apache Software Foundation, signed by Citrix"
 cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat ICSharpCode.SharpZipLib.dll "SharpZipLib by IC#Code, signed by Citrix"
 cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat DiscUtils.dll "DiscUtils by Kenneth Bell, signed by Citrix"
