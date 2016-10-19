@@ -28,32 +28,22 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- src/DiscUtils.csproj	2010-04-07 00:14:36.000000000 +0100
-+++ src/DiscUtils.csproj	2013-12-04 14:21:51.329398600 +0000
-@@ -1,5 +1,5 @@
- ﻿<?xml version="1.0" encoding="utf-8"?>
--<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+--- src/xmlrpc.csproj	2013-12-04 11:14:53.912769100 +0000
++++ src/xmlrpc.csproj	2013-12-04 13:29:10.442341500 +0000
+@@ -1,4 +1,5 @@
+-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++﻿<?xml version="1.0" encoding="utf-8"?>
++<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
    <PropertyGroup>
-     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-@@ -10,12 +10,16 @@
-     <AppDesignerFolder>Properties</AppDesignerFolder>
-     <RootNamespace>DiscUtils</RootNamespace>
-     <AssemblyName>DiscUtils</AssemblyName>
--    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+     <ProjectType>Local</ProjectType>
+     <ProductVersion>8.0.50727</ProductVersion>
+@@ -26,6 +27,9 @@
+     <UpgradeBackupLocation>
+     </UpgradeBackupLocation>
+     <SignAssembly Condition="'$(BuildingInsideVisualStudio)' == ''">true</SignAssembly>
 +    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-     <FileAlignment>512</FileAlignment>
--    <TargetFrameworkSubset>
--    </TargetFrameworkSubset>
-     <SignAssembly>false</SignAssembly>
-     <AssemblyOriginatorKeyFile>..\DiscUtilsSigningKey.snk</AssemblyOriginatorKeyFile>
-+    <FileUpgradeFlags>
-+    </FileUpgradeFlags>
-+    <UpgradeBackupLocation>
-+    </UpgradeBackupLocation>
-+    <OldToolsVersion>3.5</OldToolsVersion>
++    <OldToolsVersion>2.0</OldToolsVersion>
 +    <TargetFrameworkProfile />
    </PropertyGroup>
    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-     <DebugSymbols>true</DebugSymbols>
+     <OutputPath>..\bin\</OutputPath>
