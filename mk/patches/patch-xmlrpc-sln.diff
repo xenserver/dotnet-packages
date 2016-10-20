@@ -28,17 +28,25 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- src/xmlrpc.sln	2016-10-06 13:49:11.548863900 +0100
-+++ src/xmlrpc.sln	2016-10-06 13:50:12.455719900 +0100
-@@ -1,5 +1,5 @@
+diff -ru src/xmlrpc.sln src/xmlrpc.sln
+--- src/xmlrpc.sln	2016-10-20 12:06:57.217106600 +0100
++++ src/xmlrpc.sln	2016-10-20 14:39:48.588597400 +0100
+@@ -1,12 +1,7 @@
 -Microsoft Visual Studio Solution File, Format Version 10.00
 -# Visual Studio 2008
-+Microsoft Visual Studio Solution File, Format Version 11.00
-+# Visual Studio 2010
++Microsoft Visual Studio Solution File, Format Version 12.00
++# Visual Studio 2013
  Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xmlrpc", "xmlrpc.csproj", "{1B4B0A58-0AFB-4090-91DD-18912CC7DE65}"
  EndProject
+-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ntest", "..\ntest\ntest.csproj", "{A03FD7C0-77B4-4731-8818-6E33A0A83E70}"
+-	ProjectSection(ProjectDependencies) = postProject
+-		{1B4B0A58-0AFB-4090-91DD-18912CC7DE65} = {1B4B0A58-0AFB-4090-91DD-18912CC7DE65}
+-	EndProjectSection
+-EndProject
  Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{E51BCCED-94BB-4C92-98A0-3D1310E01FAE}"
-@@ -60,10 +60,6 @@
+ EndProject
+ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncBettyApplication", "..\samples\AsyncBettyApplication\AsyncBettyApplication.csproj", "{47C8D059-8A35-42D2-8F63-559A788A5695}"
+@@ -65,10 +60,6 @@
  		{1B4B0A58-0AFB-4090-91DD-18912CC7DE65}.Debug|Any CPU.Build.0 = Debug|Any CPU
  		{1B4B0A58-0AFB-4090-91DD-18912CC7DE65}.Release|Any CPU.ActiveCfg = Release|Any CPU
  		{1B4B0A58-0AFB-4090-91DD-18912CC7DE65}.Release|Any CPU.Build.0 = Release|Any CPU
