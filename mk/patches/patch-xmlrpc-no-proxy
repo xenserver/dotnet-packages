@@ -28,9 +28,9 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- src/XmlRpcClientProtocol.cs	2008-06-14 11:37:53.000000000 +0100
-+++ src/XmlRpcClientProtocol.cs	2006-08-09 08:23:20.000000000 +0100
-@@ -338,8 +339,7 @@
+--- src/XmlRpcClientProtocol.cs	2016-10-06 10:48:28.362764700 +0100
++++ src/XmlRpcClientProtocol.cs	2016-10-06 13:34:10.625473700 +0100
+@@ -407,8 +407,7 @@
  
      public void SetProperties(WebRequest webReq)
      {

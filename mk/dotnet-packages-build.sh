@@ -67,7 +67,7 @@ apply_patches()
 
 XMLRPC_SRC_DIR=${SCRATCH_DIR}/xml-rpc.net
 mkdir_clean ${XMLRPC_SRC_DIR}
-unzip -q -d ${XMLRPC_SRC_DIR} ${SCRATCH_DIR}/xml-rpc.net.2.1.0.zip
+unzip -q -d ${XMLRPC_SRC_DIR} ${SCRATCH_DIR}/xml-rpc.net.2.5.0.zip
 shopt -s extglob
 apply_patches "${PATCHES}/patch-xmlrpc!(*dotnet45*)" ${XMLRPC_SRC_DIR} # Apply all except dotnet 4.5
 shopt -u extglob
@@ -77,7 +77,7 @@ sed -i "/SignAssembly/ i <AssemblyOriginatorKeyFile>${SNK}</AssemblyOriginatorKe
 
 XMLRPC_SRC_DIR=${SCRATCH_DIR}/xml-rpc_v45.net
 mkdir_clean ${XMLRPC_SRC_DIR}
-unzip -q -d ${XMLRPC_SRC_DIR} ${SCRATCH_DIR}/xml-rpc.net.2.1.0.zip
+unzip -q -d ${XMLRPC_SRC_DIR} ${SCRATCH_DIR}/xml-rpc.net.2.5.0.zip
 shopt -s extglob
 apply_patches "${PATCHES}/patch-xmlrpc!(*dotnet46*)" ${XMLRPC_SRC_DIR} # Apply all except dotnet 4.6
 shopt -u extglob

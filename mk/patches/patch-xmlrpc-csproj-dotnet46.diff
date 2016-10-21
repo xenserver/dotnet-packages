@@ -28,21 +28,23 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- src/xmlrpc.csproj	2013-12-04 11:14:53.912769100 +0000
-+++ src/xmlrpc.csproj	2013-12-04 13:29:10.442341500 +0000
+--- src/xmlrpc.csproj	2016-10-21 09:38:33.063879500 +0100
++++ src/xmlrpc.csproj	2016-10-21 09:42:33.269461100 +0100
 @@ -1,4 +1,5 @@
--﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
 +﻿<?xml version="1.0" encoding="utf-8"?>
 +<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
    <PropertyGroup>
      <ProjectType>Local</ProjectType>
-     <ProductVersion>8.0.50727</ProductVersion>
-@@ -26,6 +27,9 @@
+     <ProductVersion>9.0.30729</ProductVersion>
+@@ -25,8 +26,10 @@
+     </FileUpgradeFlags>
      <UpgradeBackupLocation>
      </UpgradeBackupLocation>
-     <SignAssembly Condition="'$(BuildingInsideVisualStudio)' == ''">true</SignAssembly>
+-    <SignAssembly Condition="'$(BuildingInsideVisualStudio)' == ''">false</SignAssembly>
++    <SignAssembly Condition="'$(BuildingInsideVisualStudio)' == ''">true</SignAssembly>
 +    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-+    <OldToolsVersion>2.0</OldToolsVersion>
+     <OldToolsVersion>2.0</OldToolsVersion>
 +    <TargetFrameworkProfile />
    </PropertyGroup>
    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
