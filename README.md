@@ -9,9 +9,9 @@ libraries:
  *  DotNetZip (v1.9.1.8) - a .NET library for handling ZIP files;
  *  SharpZipLib (v0.85.4)- a Zip, GZip, Tar and BZip2 library written 
     entirely in C# for the .NET platform;
- *  XML-RPC.NET (v2.1.0) - a library for implementing XML-RPC Services 
+ *  XML-RPC.NET (v2.5.0) - a library for implementing XML-RPC Services 
     and clients in the .NET environment;
- *  log4net (v1.2.10) - a library providing logging services for purposes 
+ *  log4net (v1.2.13) - a library providing logging services for purposes 
     of application debugging and auditing.
  *  PuTTY (v.0.67) - PuTTY is a free implementation of Telnet and SSH for 
     Windows and Unix platforms, along with an xterm terminal emulator.  
