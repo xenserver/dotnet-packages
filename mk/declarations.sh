@@ -70,12 +70,12 @@ then
     echo "WARN: BUILD_URL env var not set, we will use 'n/a'"
 fi
 
-get_GIT_REVISION=${GIT_COMMIT}
+get_GIT_COMMIT=${GIT_COMMIT}
 
-if [ -z "${get_GIT_REVISION+xxx}" ]
+if [ -z "${get_GIT_COMMIT+xxx}" ]
 then
-    get_GIT_REVISION="none"
-    echo "WARN:	GIT_COMMIT env var not set, we will use $get_GIT_REVISION"
+    get_GIT_COMMIT="none"
+    echo "WARN:	GIT_COMMIT env var not set, we will use $get_GIT_COMMIT"
 fi
 
 #rename Jenkins environment variables to distinguish them from ours; remember to use them as get only
