@@ -58,7 +58,6 @@ apply_patches()
 {
   for i in ${1}
   do
-    # keep it quiet by default, if you want enable if DEBUG is defined.
     patch -d ${2} -p0 <${i}
   done
 }
@@ -126,7 +125,7 @@ unzip -q -d ${PUTTY_SRC_DIR} ${SCRATCH_DIR}/putty-src.zip
 cp ${PUTTY_SRC_DIR}/version.h ${PUTTY_SRC_DIR}/licence.h ${PUTTY_SRC_DIR}/windows/
 
 
-echo "INFO:	Performing main build tasks..."
+echo "INFO: Performing main build tasks..."
 
 run_msbuild()
 {
@@ -214,8 +213,8 @@ done
 echo "${MANIFEST_COMPONENT} mit local" ${DISCUTILS_DIST_FILE} >> ${MANIFEST}
 
 #create manifest and build location
-echo "@branch=${XS_BRANCH}" >> ${OUTPUT_DIR}/manifest
-echo "dotnet-packages dotnet-packages.git" ${get_GIT_REVISION:0:12} >> ${OUTPUT_DIR}/manifest
+echo "@branch=${get_BRANCH}" >> ${OUTPUT_DIR}/manifest
+echo "dotnet-packages dotnet-packages.git" ${get_GIT_COMMIT:0:12} >> ${OUTPUT_DIR}/manifest
 echo ${get_BUILD_URL} >> ${OUTPUT_DIR}/latest-successful-build
 
 set +u
