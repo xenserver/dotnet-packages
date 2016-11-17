@@ -46,21 +46,7 @@ fi
 set -e
 
 ROOT_DIR="$( cd -P "$( dirname "${BASH_SOURCE[0]}" )/../.." && pwd )"
-cd ${ROOT_DIR}
 
 source ${ROOT_DIR}/dotnet-packages.git/mk/declarations.sh
-
-if [ -d "dotnet-packages-ref.hg" ]
-then
-  hg --cwd dotnet-packages-ref.hg pull -u
-else
-  HG_UK_BRANCH=${get_GIT_BRANCH}
-  if [ "${HG_UK_BRANCH}" = "master" ]
-  then
-    HG_UK_BRANCH="trunk"
-  fi
-  hg clone ssh://xenhg@hg.uk.xensource.com/carbon/${HG_UK_BRANCH}/dotnet-packages-ref.hg/
-fi
-
 source ${ROOT_DIR}/dotnet-packages.git/mk/dotnet-packages-build.sh
 source ${ROOT_DIR}/dotnet-packages.git/mk/archive-push.sh

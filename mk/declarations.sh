@@ -70,15 +70,15 @@ get_GIT_COMMIT=${GIT_COMMIT}
 if [ -z "${get_GIT_COMMIT+xxx}" ]
 then
     get_GIT_COMMIT="none"
-    echo "WARN:	GIT_COMMIT env var not set, we will use $get_GIT_COMMIT"
+    echo "WARN: GIT_COMMIT env var not set, we will use $get_GIT_COMMIT"
 fi
 
-get_GIT_BRANCH=${GIT_BRANCH}
+get_BRANCH=${GIT_LOCAL_BRANCH}
 
-if [ -z "${get_GIT_BRANCH+xxx}" ]
+if [ -z "${get_BRANCH+xxx}" ]
 then
-    get_GIT_BRANCH="none"
-    echo "WARN:	GIT_BRANCH env var not set, we will use $get_GIT_BRANCH"
+    get_BRANCH="none"
+    echo "WARN: GIT_LOCAL_BRANCH env var not set, we will use $get_BRANCH"
 fi
 
 get_JOB_NAME=${JOB_NAME}
@@ -134,3 +134,16 @@ DISTFILES=(${REPO}/${XML_RPC_DIST_FILE} \
 BUILD_TOOLS_REPO=git://hg.uk.xensource.com/closed/windows/buildtools.git
 BUILD_TOOLS=${SCRATCH_DIR}/buildtools.git
 STORE_FILES=${BUILD_TOOLS}/scripts/storefiles.py
+
+cd ${ROOT}
+if [ -d "dotnet-packages-ref.hg" ]
+then
+  hg --cwd dotnet-packages-ref.hg pull -u
+else
+  HG_UK_BRANCH=${get_BRANCH}
+  if [ "${HG_UK_BRANCH}" = "master" ]
+  then
+    HG_UK_BRANCH="trunk"
+  fi
+  hg clone ssh://xenhg@hg.uk.xensource.com/carbon/${HG_UK_BRANCH}/dotnet-packages-ref.hg/
+fi
