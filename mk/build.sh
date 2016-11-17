@@ -30,14 +30,13 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
 # SUCH DAMAGE.
 
-# This is usually called by Jenkins
-# If you define DEBUG environment variable you can make it more verbose.
+# This file is the entry point for the build and is usually called by Jenkins
+# Define the environment variable DEBUG=1 before calling it for verbose output.
 #
-# When are you doing modifications to the build system, always do them in such
-# way that it will continue to work even if it's executed manually by a developer
+# When you make modifications to the build system, always do it in such a way
+# that it will continue to work even if it's executed manually by a developer
 # or from a build automation system.
 
-DEBUG=1
 if [ -n "${DEBUG+xxx}" ];
 then
   echo "DEBUG mode activated (verbose)"

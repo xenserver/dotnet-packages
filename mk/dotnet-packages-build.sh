@@ -58,7 +58,6 @@ apply_patches()
 {
   for i in ${1}
   do
-    # keep it quiet by default, if you want enable if DEBUG is defined.
     patch -d ${2} -p0 <${i}
   done
 }
@@ -126,7 +125,7 @@ unzip -q -d ${PUTTY_SRC_DIR} ${SCRATCH_DIR}/putty-src.zip
 cp ${PUTTY_SRC_DIR}/version.h ${PUTTY_SRC_DIR}/licence.h ${PUTTY_SRC_DIR}/windows/
 
 
-echo "INFO:	Performing main build tasks..."
+echo "INFO: Performing main build tasks..."
 
 run_msbuild()
 {
