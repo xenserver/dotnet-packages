@@ -39,13 +39,6 @@ do
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-XS_BRANCH=`cd $DIR;git config --get remote.origin.url|sed -e 's@.*carbon/\(.*\)/dotnet-packages.git.*@\1@'`
-if [[ $XS_BRANCH == *"/"* ]]
-then
-    XS_BRANCH="trunk"
-    echo "WARN:	Failed to detect XS_BRANCH we will fallback to ${XS_BRANCH}"
-fi
-        
 if [ -z "${JOB_NAME+xxx}" ]
 then
     JOB_NAME="devbuild"
@@ -70,6 +63,8 @@ then
     echo "WARN: BUILD_URL env var not set, we will use 'n/a'"
 fi
 
+#rename Jenkins environment variables to distinguish them from ours; remember to use them as get only
+
 get_GIT_COMMIT=${GIT_COMMIT}
 
 if [ -z "${get_GIT_COMMIT+xxx}" ]
@@ -78,7 +73,14 @@ then
     echo "WARN:	GIT_COMMIT env var not set, we will use $get_GIT_COMMIT"
 fi
 
-#rename Jenkins environment variables to distinguish them from ours; remember to use them as get only
+get_GIT_BRANCH=${GIT_BRANCH}
+
+if [ -z "${get_GIT_BRANCH+xxx}" ]
+then
+    get_GIT_BRANCH="none"
+    echo "WARN:	GIT_BRANCH env var not set, we will use $get_GIT_BRANCH"
+fi
+
 get_JOB_NAME=${JOB_NAME}
 get_BUILD_ID=${BUILD_ID}
 get_BUILD_URL=${BUILD_URL}
