@@ -79,6 +79,9 @@ if [ -z "${get_BRANCH+xxx}" ]
 then
     get_BRANCH="none"
     echo "WARN: GIT_LOCAL_BRANCH env var not set, we will use $get_BRANCH"
+elif [ "${get_BRANCH}" = "master" ]
+then
+    get_BRANCH="trunk"   
 fi
 
 get_JOB_NAME=${JOB_NAME}
@@ -140,10 +143,5 @@ if [ -d "dotnet-packages-ref.hg" ]
 then
   hg --cwd dotnet-packages-ref.hg pull -u
 else
-  HG_UK_BRANCH=${get_BRANCH}
-  if [ "${HG_UK_BRANCH}" = "master" ]
-  then
-    HG_UK_BRANCH="trunk"
-  fi
-  hg clone ssh://xenhg@hg.uk.xensource.com/carbon/${HG_UK_BRANCH}/dotnet-packages-ref.hg/
+  hg clone ssh://xenhg@hg.uk.xensource.com/carbon/${get_BRANCH}/dotnet-packages-ref.hg/
 fi
