@@ -40,6 +40,7 @@ mkdir_clean()
 mkdir_clean ${SCRATCH_DIR}
 mkdir_clean ${OUTPUT_DIR}
 mkdir_clean ${OUTPUT_SRC_DIR}
+mkdir_clean ${BUILD_ARCHIVE}
 
 if [ "${BUILD_KIND:+$BUILD_KIND}" = production ]
 then

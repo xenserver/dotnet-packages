@@ -32,6 +32,9 @@ set -eu
 
 source "$( cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/declarations.sh"
 
+#archive build artifacts manually
+cp -R ${OUTPUT_DIR}/* ${BUILD_ARCHIVE}
+
 # Secure build: update buildtools, copy output to local disk, then to remote.
 cd ${OUTPUT_DIR}
 if [ "${BUILD_KIND:+$BUILD_KIND}" = production ]

@@ -113,6 +113,7 @@ then
    HUDSON_HOME=${HOME}
 fi
 
+BUILD_ARCHIVE=$(cygpath -u "${HUDSON_HOME}")/jobs/${get_JOB_NAME}/builds/${get_BUILD_ID}/archive
 SECURE_BUILD_ARCHIVE_UNC=//10.80.13.10/distfiles/distfiles/WindowsBuilds/
 SNK_ORIG=$(cygpath -w "${HOME}/.ssh/xs.net.snk")
 SNK=${SNK_ORIG//\\/\\\\}
