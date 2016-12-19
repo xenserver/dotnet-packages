@@ -129,13 +129,13 @@ echo "INFO: Performing main build tasks..."
 
 run_msbuild()
 {
-  MSBuild.exe /nologo /m /verbosity:minimal /p:Configuration=Release /p:TargetFrameworkVersion=v4.6 /property:PlatformToolset=v120 $*
+  C:/"Program Files (x86)"/MSBuild/14.0/bin/MSBuild.exe /nologo /m /verbosity:minimal /p:Configuration=Release /p:TargetFrameworkVersion=v4.6 /property:PlatformToolset=v140 /p:FrameworkPathOverride="C:/Program Files (x86)/Reference Assemblies/Microsoft/Framework/.NETFramework/v4.6" $*
   return $?
 }
 
 run_msbuild_dotnet45()
 {
-  MSBuild.exe /nologo /m /verbosity:minimal /p:Configuration=Release /p:TargetFrameworkVersion=v4.5 /property:PlatformToolset=v120 $*
+  C:/"Program Files (x86)"/MSBuild/12.0/bin/MSBuild.exe /nologo /m /verbosity:minimal /p:Configuration=Release /p:TargetFrameworkVersion=v4.5 /property:PlatformToolset=v120 $*
   return $?
 }
 
