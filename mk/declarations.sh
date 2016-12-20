@@ -51,18 +51,6 @@ then
     echo "WARN: BUILD_NUMBER env var not set, we will use ${BUILD_NUMBER}"
 fi
 
-if [ -z "${BUILD_ID+xxx}" ]
-then
-    BUILD_ID=$(date +"%Y-%m-%d_%H-%M-%S")
-    echo "WARN: BUILD_ID env var not set, we will use ${BUILD_ID}"
-fi
-
-if [ -z "${BUILD_URL+xxx}" ]
-then
-    BUILD_URL="n/a"
-    echo "WARN: BUILD_URL env var not set, we will use 'n/a'"
-fi
-
 #rename Jenkins environment variables to distinguish them from ours; remember to use them as get only
 
 get_GIT_COMMIT=${GIT_COMMIT}
@@ -85,9 +73,6 @@ then
 fi
 
 get_JOB_NAME=${JOB_NAME}
-get_BUILD_ID=${BUILD_ID}
-get_BUILD_URL=${BUILD_URL}
-
 
 #do everything in place as jenkins runs a clean build, i.e. will delete previous artifacts on starting
 if [ -z "${WORKSPACE+xxx}" ]
@@ -106,12 +91,6 @@ OUTPUT_UNSIGNED_DIR=${OUTPUT_DIR}/UNSIGNED
 REPO=${ROOT}/dotnet-packages.git
 FILES=${REPO}/mk/files
 PATCHES=${REPO}/mk/patches
-
-if [ -z "${HUDSON_HOME+xxx}" ]
-then
-   echo "WARN: Jenkins not found, assuming its home directory is ${HOME}"
-   HUDSON_HOME=${HOME}
-fi
 
 SECURE_BUILD_ARCHIVE_UNC=//10.80.13.10/distfiles/distfiles/WindowsBuilds/
 SNK_ORIG=$(cygpath -w "${HOME}/.ssh/xs.net.snk")
@@ -137,10 +116,3 @@ BUILD_TOOLS_REPO=git://hg.uk.xensource.com/closed/windows/buildtools.git
 BUILD_TOOLS=${SCRATCH_DIR}/buildtools.git
 STORE_FILES=${BUILD_TOOLS}/scripts/storefiles.py
 
-cd ${ROOT}
-if [ -d "dotnet-packages-ref.hg" ]
-then
-  hg --cwd dotnet-packages-ref.hg pull -u
-else
-  hg clone ssh://xenhg@hg.uk.xensource.com/carbon/${get_BRANCH}/dotnet-packages-ref.hg/
-fi
