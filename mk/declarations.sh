@@ -39,12 +39,6 @@ do
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-if [ -z "${JOB_NAME+xxx}" ]
-then
-    JOB_NAME="devbuild"
-    echo "WARN: JOB_NAME env var not set, we will use ${JOB_NAME}"
-fi
-
 if [ -z "${BUILD_NUMBER+xxx}" ]
 then
     BUILD_NUMBER="0"
@@ -69,8 +63,6 @@ then
     echo "WARN: GIT_LOCAL_BRANCH env var not set, using current head ${get_BRANCH} instead"
 fi
 
-get_JOB_NAME=${JOB_NAME}
-
 #do everything in place as jenkins runs a clean build, i.e. will delete previous artifacts on starting
 if [ -z "${WORKSPACE+xxx}" ]
 then
@@ -89,7 +81,6 @@ REPO=${ROOT}/dotnet-packages.git
 FILES=${REPO}/mk/files
 PATCHES=${REPO}/mk/patches
 
-SECURE_BUILD_ARCHIVE_UNC=//10.80.13.10/distfiles/distfiles/WindowsBuilds/
 SNK_ORIG=$(cygpath -w "${HOME}/.ssh/xs.net.snk")
 SNK=${SNK_ORIG//\\/\\\\}
 
@@ -108,8 +99,3 @@ DISTFILES=(${REPO}/${XML_RPC_DIST_FILE} \
            ${REPO}/${MICROSOFT_DOTNET_FRAMEWORK_INSTALLER_FILE} \
            ${REPO}/${DOT_NET_ZIP_FILE} \
            ${REPO}/${PUTTY_ZIP_FILE})
-
-BUILD_TOOLS_REPO=git://hg.uk.xensource.com/closed/windows/buildtools.git
-BUILD_TOOLS=${SCRATCH_DIR}/buildtools.git
-STORE_FILES=${BUILD_TOOLS}/scripts/storefiles.py
-
