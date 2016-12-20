@@ -65,11 +65,8 @@ get_BRANCH=${GIT_LOCAL_BRANCH}
 
 if [ -z "${get_BRANCH+xxx}" ]
 then
-    get_BRANCH="none"
-    echo "WARN: GIT_LOCAL_BRANCH env var not set, we will use $get_BRANCH"
-elif [ "${get_BRANCH}" = "master" ]
-then
-    get_BRANCH="trunk"   
+    get_BRANCH=$($git rev-parse --abbrev-ref HEAD)
+    echo "WARN: GIT_LOCAL_BRANCH env var not set, using current head ${get_BRANCH} instead"
 fi
 
 get_JOB_NAME=${JOB_NAME}
