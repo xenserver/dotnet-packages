@@ -188,7 +188,7 @@ cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat putty.exe "PuTTY by Simon Tatham, sig
 
 MANIFEST=${OUTPUT_DIR}/SOURCES/MANIFEST
 #this is the repo name where the main build system will look for the sources
-MANIFEST_COMPONENT=dotnet-packages-ref
+MANIFEST_COMPONENT=dotnet-packages
 
 echo "${MANIFEST_COMPONENT} mit local" ${XML_RPC_DIST_FILE} >> ${MANIFEST}
 
@@ -214,6 +214,5 @@ echo "${MANIFEST_COMPONENT} mit local" ${DISCUTILS_DIST_FILE} >> ${MANIFEST}
 #create manifest and build location
 echo "@branch=${get_BRANCH}" >> ${OUTPUT_DIR}/manifest
 echo "dotnet-packages dotnet-packages.git" ${get_GIT_COMMIT:0:12} >> ${OUTPUT_DIR}/manifest
-echo ${get_BUILD_URL} >> ${OUTPUT_DIR}/latest-successful-build
 
 set +u

@@ -41,8 +41,4 @@ then
      $STORE_FILES remotestore xensb.uk.xensource.com xenbuild /usr/groups/build/windowsbuilds buildtools.git /usr/groups/build/windowsbuilds/WindowsBuilds $SECURE_BUILD_ARCHIVE_UNC $get_JOB_NAME $BUILD_NUMBER *
 fi
 
-#update local dotnet-packages-ref.hg repository
-cp ${OUTPUT_DIR}/{manifest,latest-successful-build} ${ROOT}/dotnet-packages-ref.hg
-cd ${ROOT}/dotnet-packages-ref.hg && hg commit --user Jenkins -m "Latest successful build ${get_BUILD_ID}"
-
 set +u
