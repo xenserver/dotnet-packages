@@ -41,12 +41,6 @@ mkdir_clean ${SCRATCH_DIR}
 mkdir_clean ${OUTPUT_DIR}
 mkdir_clean ${OUTPUT_SRC_DIR}
 
-if [ "${BUILD_KIND:+$BUILD_KIND}" = production ]
-then
-    ( mkdir -p ${BUILD_TOOLS%/*} && cd ${BUILD_TOOLS%/*} && git clone ${BUILD_TOOLS_REPO} ${BUILD_TOOLS##*/} )
-    chmod +x ${BUILD_TOOLS}/scripts/storefiles.py
-fi
-
 #bring_distfiles
 for file in ${DISTFILES[@]}
 do

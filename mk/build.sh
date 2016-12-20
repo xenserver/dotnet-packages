@@ -49,4 +49,3 @@ ROOT_DIR="$( cd -P "$( dirname "${BASH_SOURCE[0]}" )/../.." && pwd )"
 
 source ${ROOT_DIR}/dotnet-packages.git/mk/declarations.sh
 source ${ROOT_DIR}/dotnet-packages.git/mk/dotnet-packages-build.sh
-source ${ROOT_DIR}/dotnet-packages.git/mk/archive-push.sh
