@@ -212,7 +212,12 @@ done
 echo "${MANIFEST_COMPONENT} mit local" ${DISCUTILS_DIST_FILE} >> ${MANIFEST}
 
 #create manifest and build location
-echo "@branch=${get_BRANCH}" >> ${OUTPUT_DIR}/manifest
+if [ "${get_BRANCH}" = "master" ] ; then
+  echo "@branch=trunk" >> ${OUTPUT_DIR}/manifest
+else
+  echo "@branch=${get_BRANCH}" >> ${OUTPUT_DIR}/manifest
+fi
+
 echo "dotnet-packages dotnet-packages.git" ${get_GIT_COMMIT:0:12} >> ${OUTPUT_DIR}/manifest
 
 set +u
