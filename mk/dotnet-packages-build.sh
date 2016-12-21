@@ -147,37 +147,43 @@ cd ${SCRATCH_DIR}/DiscUtils/src   && run_msbuild
 cd ${SCRATCH_DIR}/PuTTY/windows/VS2010 && run_msbuild_nofw
 
 #collect extra files in the output directory
-cp ${REPO}/mk/sign.bat ${OUTPUT_DIR}
-cp ${SCRATCH_DIR}/xml-rpc.net/bin/CookComputing.XmlRpcV2.{dll,pdb} \
-   ${SCRATCH_DIR}/xml-rpc_v45.net/bin/CookComputing.XmlRpcV2_dotnet45.{dll,pdb} \
+
+mkdir_clean ${OUTPUT_SIGNED_DIR}
+cp ${REPO}/mk/sign.bat \
+   ${SCRATCH_DIR}/xml-rpc.net/bin/CookComputing.XmlRpcV2.{dll,pdb} \
    ${SCRATCH_DIR}/log4net/build/bin/net/2.0/release/log4net.{dll,pdb} \
    ${SCRATCH_DIR}/sharpziplib/bin/ICSharpCode.SharpZipLib.{dll,pdb} \
    ${SCRATCH_DIR}/dotnetzip/DotNetZip-src/DotNetZip/Zip/bin/Release/Ionic.Zip.{dll,pdb} \
    ${SCRATCH_DIR}/DiscUtils/src/bin/Release/DiscUtils.{dll,pdb} \
    ${SCRATCH_DIR}/PuTTY/windows/VS2010/putty/Release/putty.exe \
    ${SCRATCH_DIR}/NDP46-KB3045560-Web.exe \
-   ${OUTPUT_DIR}
+   ${OUTPUT_SIGNED_DIR}
+
+mkdir_clean ${OUTPUT_SIGNED_45_DIR}
+cp ${REPO}/mk/sign.bat \
+   ${SCRATCH_DIR}/xml-rpc_v45.net/bin/CookComputing.XmlRpcV2_dotnet45.{dll,pdb} ${OUTPUT_SIGNED_45_DIR}
 
 #copy unsigned files
 mkdir_clean ${OUTPUT_UNSIGNED_DIR}
-cp ${OUTPUT_DIR}/CookComputing.XmlRpcV2.dll \
-   ${OUTPUT_DIR}/log4net.dll \
-   ${OUTPUT_DIR}/ICSharpCode.SharpZipLib.dll \
-   ${OUTPUT_DIR}/DiscUtils.dll \
-   ${OUTPUT_DIR}/Ionic.Zip.dll \
-   ${OUTPUT_DIR}/putty.exe \
+cp ${OUTPUT_SIGNED_DIR}/CookComputing.XmlRpcV2.dll \
+   ${OUTPUT_SIGNED_DIR}/log4net.dll \
+   ${OUTPUT_SIGNED_DIR}/ICSharpCode.SharpZipLib.dll \
+   ${OUTPUT_SIGNED_DIR}/DiscUtils.dll \
+   ${OUTPUT_SIGNED_DIR}/Ionic.Zip.dll \
+   ${OUTPUT_SIGNED_DIR}/putty.exe \
    ${OUTPUT_UNSIGNED_DIR}  
    
 #sign those necessary
-chmod a+x ${OUTPUT_DIR}/sign.bat
-cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat CookComputing.XmlRpcV2.dll "XML-RPC.NET by Charles Cook, signed by Citrix"
-cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat CookComputing.XmlRpcV2_dotnet45.dll "XML-RPC.NET by Charles Cook, signed by Citrix"
-cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat log4net.dll  "Log4Net by The Apache Software Foundation, signed by Citrix"
-cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat ICSharpCode.SharpZipLib.dll "SharpZipLib by IC#Code, signed by Citrix"
-cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat DiscUtils.dll "DiscUtils by Kenneth Bell, signed by Citrix"
-cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat Ionic.Zip.dll "OSS, signed by Citrix"
-cd ${OUTPUT_DIR} && ${OUTPUT_DIR}/sign.bat putty.exe "PuTTY by Simon Tatham, signed by Citrix"
+chmod a+x ${OUTPUT_SIGNED_DIR}/sign.bat
+cd ${OUTPUT_SIGNED_DIR} && ${OUTPUT_SIGNED_DIR}/sign.bat CookComputing.XmlRpcV2.dll "XML-RPC.NET by Charles Cook, signed by Citrix"
+cd ${OUTPUT_SIGNED_DIR} && ${OUTPUT_SIGNED_DIR}/sign.bat log4net.dll  "Log4Net by The Apache Software Foundation, signed by Citrix"
+cd ${OUTPUT_SIGNED_DIR} && ${OUTPUT_SIGNED_DIR}/sign.bat ICSharpCode.SharpZipLib.dll "SharpZipLib by IC#Code, signed by Citrix"
+cd ${OUTPUT_SIGNED_DIR} && ${OUTPUT_SIGNED_DIR}/sign.bat DiscUtils.dll "DiscUtils by Kenneth Bell, signed by Citrix"
+cd ${OUTPUT_SIGNED_DIR} && ${OUTPUT_SIGNED_DIR}/sign.bat Ionic.Zip.dll "OSS, signed by Citrix"
+cd ${OUTPUT_SIGNED_DIR} && ${OUTPUT_SIGNED_DIR}/sign.bat putty.exe "PuTTY by Simon Tatham, signed by Citrix"
 
+chmod a+x ${OUTPUT_SIGNED_45_DIR}/sign.bat
+cd ${OUTPUT_SIGNED_45_DIR} && ${OUTPUT_SIGNED_45_DIR}/sign.bat CookComputing.XmlRpcV2_dotnet45.dll "XML-RPC.NET by Charles Cook, signed by Citrix"
 #create source manifest
 
 MANIFEST=${OUTPUT_DIR}/SOURCES/MANIFEST
@@ -207,11 +213,11 @@ echo "${MANIFEST_COMPONENT} mit local" ${DISCUTILS_DIST_FILE} >> ${MANIFEST}
 
 #create manifest and build location
 if [ "${get_BRANCH}" = "master" ] ; then
-  echo "@branch=trunk" >> ${OUTPUT_DIR}/manifest
+  echo "@branch=trunk" >> ${OUTPUT_SIGNED_DIR}/manifest
 else
-  echo "@branch=${get_BRANCH}" >> ${OUTPUT_DIR}/manifest
+  echo "@branch=${get_BRANCH}" >> ${OUTPUT_SIGNED_DIR}/manifest
 fi
 
-echo "dotnet-packages dotnet-packages.git" ${get_GIT_COMMIT:0:12} >> ${OUTPUT_DIR}/manifest
+echo "dotnet-packages dotnet-packages.git" ${get_GIT_COMMIT:0:12} >> ${OUTPUT_SIGNED_DIR}/manifest
 
 set +u
