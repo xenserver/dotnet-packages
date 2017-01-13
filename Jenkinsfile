@@ -77,8 +77,15 @@ node {
                 """
     ).trim()
 
+    stage('Build') {
+      bat """
+          cd ${env.WORKSPACE}
+          C:\\tools\\cygwin\\bin\\bash.exe 'dotnet-packages.git/mk/build.sh'
+          """
+    }
+
     stage('Create manifest') {
-      GString manifestFile = "${env.WORKSPACE}\\manifest"
+      GString manifestFile = "${env.WORKSPACE}\\output\\manifest"
       String branchInfo = (GIT_BRANCH == 'master') ? 'trunk' : GIT_BRANCH
 
       bat """
@@ -87,46 +94,36 @@ node {
           """
     }
 
-    stage('Build') {
-      bat """
-          cd ${env.WORKSPACE}
-          C:\\tools\\cygwin\\bin\\bash.exe 'dotnet-packages.git/mk/build.sh'
-          """
-    }
-
     stage('Upload') {
-      def server = Artifactory.server('repo')
-      def buildInfo = Artifactory.newBuildInfo()
-      buildInfo.env.filter.addInclude("*")
-      buildInfo.env.collect()
-      buildInfo.retention maxBuilds: 50, deleteBuildArtifacts: true
+      // note that the pattern further down is relative to this dir
+      dir("${env.WORKSPACE}\\output") {
 
-      GString artifactMeta = "build.name=${env.JOB_NAME};build.number=${env.BUILD_NUMBER};vcs.url=${env.CHANGE_URL};vcs.branch=${GIT_BRANCH};vcs.revision=${GIT_COMMIT}"
+        def server = Artifactory.server('repo')
+        def buildInfo = Artifactory.newBuildInfo()
+        buildInfo.env.filter.addInclude("*")
+        buildInfo.env.collect()
+        buildInfo.retention maxBuilds: 50, deleteBuildArtifacts: true
 
-      def CTX_SIGN_DEFINED = bat(
-        returnStdout: true,
-        script: """
+        GString artifactMeta = "build.name=${env.JOB_NAME};build.number=${env.BUILD_NUMBER};vcs.url=${env.CHANGE_URL};vcs.branch=${GIT_BRANCH};vcs.revision=${GIT_COMMIT}"
+
+        def CTX_SIGN_DEFINED = bat(
+          returnStdout: true,
+          script: """
                 @echo off
                 if defined CTXSIGN (echo 1) else (echo 0)
                 """
-      ).trim()
+        ).trim()
 
-      String targetSubRepo = (CTX_SIGN_DEFINED == '1') ? 'dotnet-packages-ctxsign' : 'dotnet-packages'
+        String targetSubRepo = (CTX_SIGN_DEFINED == '1') ? 'dotnet-packages-ctxsign' : 'dotnet-packages'
 
-      /* IMPORTANT: do not forget the slash at the end of the target path */
-      GString targetPath = "xc-local-build/${targetSubRepo}/${GIT_BRANCH}/${env.BUILD_NUMBER}/"
+        // IMPORTANT: do not forget the slash at the end of the target path
+        GString targetPath = "xc-local-build/${targetSubRepo}/${GIT_BRANCH}/${env.BUILD_NUMBER}/"
 
-      GString uploadSpec = """
+        GString uploadSpec = """
         {
           "files": [
             {
-              "pattern": "output/**/*",
-              "flat": "false",
-              "target": "${targetPath}",
-              "props": "${artifactMeta}"
-            },
-            {
-              "pattern": "manifest",
+              "pattern": "*",
               "flat": "false",
               "target": "${targetPath}",
               "props": "${artifactMeta}"
@@ -135,9 +132,10 @@ node {
         }
       """
 
-      def buildInfo_upload = server.upload(uploadSpec)
-      buildInfo.append buildInfo_upload
-      server.publishBuildInfo buildInfo
+        def buildInfo_upload = server.upload(uploadSpec)
+        buildInfo.append buildInfo_upload
+        server.publishBuildInfo buildInfo
+      }
     }
 
     currentBuild.result = 'SUCCESS'
