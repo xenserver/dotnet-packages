@@ -1,5 +1,5 @@
 @echo off
-rem Copyright (c) Citrix Systems Inc.
+rem Copyright (c) Citrix Systems, Inc.
 rem All rights reserved.
 rem
 rem Redistribution and use in source and binary forms,
