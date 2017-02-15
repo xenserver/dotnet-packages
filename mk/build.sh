@@ -30,6 +30,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
 # SUCH DAMAGE.
 
+# Note: this build does not sign the binaries
+# It's up to the consumer of the binaries to sign them
 
 set -eux
 
@@ -39,9 +41,8 @@ REPO=$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 SCRATCH_DIR=${ROOT}/scratch
 OUTPUT_DIR=${ROOT}/output
 OUTPUT_SRC_DIR=${OUTPUT_DIR}/SOURCES
-OUTPUT_UNSIGNED_DIR=${OUTPUT_DIR}/UNSIGNED
-OUTPUT_SIGNED_DIR=${OUTPUT_DIR}/dotnet
-OUTPUT_SIGNED_45_DIR=${OUTPUT_DIR}/dotnet45
+OUTPUT_46_DIR=${OUTPUT_DIR}/dotnet46
+OUTPUT_45_DIR=${OUTPUT_DIR}/dotnet45
 FILES=${REPO}/mk/files
 PATCHES=${REPO}/mk/patches
 
@@ -178,44 +179,24 @@ cd ${SCRATCH_DIR}/dotnetzip/DotNetZip-src/DotNetZip/Zip && run_msbuild
 cd ${SCRATCH_DIR}/DiscUtils/src   && run_msbuild
 cd ${SCRATCH_DIR}/PuTTY/windows/VS2010 && run_msbuild_nofw
 
-#collect extra files in the output directory
+#collect files in the output directory
 
-mkdir_clean ${OUTPUT_SIGNED_DIR}
-cp ${REPO}/mk/sign.bat \
-   ${SCRATCH_DIR}/xml-rpc.net/bin/CookComputing.XmlRpcV2.{dll,pdb} \
+mkdir_clean ${OUTPUT_46_DIR}
+cp ${SCRATCH_DIR}/xml-rpc.net/bin/CookComputing.XmlRpcV2.{dll,pdb} \
    ${SCRATCH_DIR}/log4net/build/bin/net/2.0/release/log4net.{dll,pdb} \
    ${SCRATCH_DIR}/sharpziplib/bin/ICSharpCode.SharpZipLib.{dll,pdb} \
    ${SCRATCH_DIR}/dotnetzip/DotNetZip-src/DotNetZip/Zip/bin/Release/Ionic.Zip.{dll,pdb} \
    ${SCRATCH_DIR}/DiscUtils/src/bin/Release/DiscUtils.{dll,pdb} \
    ${SCRATCH_DIR}/PuTTY/windows/VS2010/putty/Release/putty.exe \
    ${SCRATCH_DIR}/NDP46-KB3045560-Web.exe \
-   ${OUTPUT_SIGNED_DIR}
+   ${OUTPUT_46_DIR}
 
-mkdir_clean ${OUTPUT_SIGNED_45_DIR}
-cp ${REPO}/mk/sign.bat \
-   ${SCRATCH_DIR}/xml-rpc_v45.net/bin/CookComputing.XmlRpcV2_dotnet45.{dll,pdb} ${OUTPUT_SIGNED_45_DIR}
+mkdir_clean ${OUTPUT_45_DIR}
+cp ${SCRATCH_DIR}/xml-rpc_v45.net/bin/CookComputing.XmlRpcV2_dotnet45.dll ${OUTPUT_45_DIR}/CookComputing.XmlRpcV2.dll
+cp ${SCRATCH_DIR}/xml-rpc_v45.net/bin/CookComputing.XmlRpcV2_dotnet45.pdb ${OUTPUT_45_DIR}/CookComputing.XmlRpcV2.pdb
 
-#copy unsigned files
-mkdir_clean ${OUTPUT_UNSIGNED_DIR}
-cp ${OUTPUT_SIGNED_DIR}/CookComputing.XmlRpcV2.dll \
-   ${OUTPUT_SIGNED_DIR}/log4net.dll \
-   ${OUTPUT_SIGNED_DIR}/ICSharpCode.SharpZipLib.dll \
-   ${OUTPUT_SIGNED_DIR}/DiscUtils.dll \
-   ${OUTPUT_SIGNED_DIR}/Ionic.Zip.dll \
-   ${OUTPUT_SIGNED_DIR}/putty.exe \
-   ${OUTPUT_UNSIGNED_DIR}
+cp ${REPO}/mk/sign.bat ${OUTPUT_DIR}
 
-#sign those necessary
-chmod a+x ${OUTPUT_SIGNED_DIR}/sign.bat
-cd ${OUTPUT_SIGNED_DIR} && ${OUTPUT_SIGNED_DIR}/sign.bat CookComputing.XmlRpcV2.dll "XML-RPC.NET by Charles Cook, signed by Citrix"
-cd ${OUTPUT_SIGNED_DIR} && ${OUTPUT_SIGNED_DIR}/sign.bat log4net.dll  "Log4Net by The Apache Software Foundation, signed by Citrix"
-cd ${OUTPUT_SIGNED_DIR} && ${OUTPUT_SIGNED_DIR}/sign.bat ICSharpCode.SharpZipLib.dll "SharpZipLib by IC#Code, signed by Citrix"
-cd ${OUTPUT_SIGNED_DIR} && ${OUTPUT_SIGNED_DIR}/sign.bat DiscUtils.dll "DiscUtils by Kenneth Bell, signed by Citrix"
-cd ${OUTPUT_SIGNED_DIR} && ${OUTPUT_SIGNED_DIR}/sign.bat Ionic.Zip.dll "OSS, signed by Citrix"
-cd ${OUTPUT_SIGNED_DIR} && ${OUTPUT_SIGNED_DIR}/sign.bat putty.exe "PuTTY by Simon Tatham, signed by Citrix"
-
-chmod a+x ${OUTPUT_SIGNED_45_DIR}/sign.bat
-cd ${OUTPUT_SIGNED_45_DIR} && ${OUTPUT_SIGNED_45_DIR}/sign.bat CookComputing.XmlRpcV2_dotnet45.dll "XML-RPC.NET by Charles Cook, signed by Citrix"
 #create source manifest
 
 MANIFEST=${OUTPUT_DIR}/SOURCES/MANIFEST
