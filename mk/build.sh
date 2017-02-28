@@ -49,6 +49,7 @@ PATCHES=${REPO}/mk/patches
 SNK_ORIG=$(cygpath -w "${HOME}/.ssh/xs.net.snk")
 SNK=${SNK_ORIG//\\/\\\\}
 
+XML_RPC_LICENSE=libraries-src/XML-RPC.NET/LICENSE
 XML_RPC_DIST_FILE="libraries-src/XML-RPC.NET/xml-rpc.net.2.5.0.zip"
 LOG4NET_DIST_FILE="libraries-src/Log4Net/log4net-1.2.13-src.zip"
 SHARP_ZIP_LIB_DIST_FILE="libraries-src/SharpZipLib/SharpZipLib_0854_SourceSamples.zip"
@@ -190,10 +191,12 @@ cp ${SCRATCH_DIR}/xml-rpc.net/bin/CookComputing.XmlRpcV2.{dll,pdb} \
    ${SCRATCH_DIR}/PuTTY/windows/VS2010/putty/Release/putty.exe \
    ${SCRATCH_DIR}/NDP46-KB3045560-Web.exe \
    ${OUTPUT_46_DIR}
+cp ${REPO}/${XML_RPC_LICENSE} ${OUTPUT_46_DIR}/LICENSE.CookComputing.XmlRpcV2.txt
 
 mkdir_clean ${OUTPUT_45_DIR}
 cp ${SCRATCH_DIR}/xml-rpc_v45.net/bin/CookComputing.XmlRpcV2_dotnet45.dll ${OUTPUT_45_DIR}/CookComputing.XmlRpcV2.dll
 cp ${SCRATCH_DIR}/xml-rpc_v45.net/bin/CookComputing.XmlRpcV2_dotnet45.pdb ${OUTPUT_45_DIR}/CookComputing.XmlRpcV2.pdb
+cp ${REPO}/${XML_RPC_LICENSE} ${OUTPUT_45_DIR}/LICENSE.CookComputing.XmlRpcV2.txt
 
 cp ${REPO}/mk/sign.bat ${OUTPUT_DIR}
 
