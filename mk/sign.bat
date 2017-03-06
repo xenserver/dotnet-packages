@@ -32,6 +32,8 @@ rem SUCH DAMAGE.
 set descr="Citrix XenCenter"
 set timestamp_sha1=http://timestamp.verisign.com/scripts/timestamp.dll
 set timestamp_sha2=http://timestamp.geotrust.com/tsa
+set thumbprint1=ba949e6a25b123f17ea3149b22719a436166f78c
+set thumbprint2=6624ce2ed692d34ccb0a349979f2085f0fcad69b
 if /I %~x1 == .msi (
     set is_msi=yes
 ) else (
@@ -83,10 +85,10 @@ if defined CTXSIGN (
         %ddk_path%\bin\catalog\signtool.exe sign -a -s my -n "Citrix Systems, Inc" -d `\"%descr%`\" -t %timestamp_sha1% %1
     ) else (
         if /I "%is_msi%" == "yes" (
-            signtool sign -v -sm -sha1 ba949e6a25b123f17ea3149b22719a436166f78c -d `\"%descr%`\" -tr %timestamp_sha2% -td sha256 %1
+            signtool sign -v -sm -sha1 %thumbprint1% -d `\"%descr%`\" -tr %timestamp_sha2% -td sha256 %1
             goto end
         ) else (
-            C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -Command "$c = Get-ChildItem -Path cert:\\CurrentUser\\My, cert:\\LocalMachine\\My | Where-Object { $_.Thumbprint -like \"6624ce2ed692d34ccb0a349979f2085f0fcad69b\" }; If ($c) { signtool sign -v -sm -sha1 ba949e6a25b123f17ea3149b22719a436166f78c -d `\"%descr%`\" -t %timestamp_sha1% %1; signtool sign -v -sm -as -sha1 6624ce2ed692d34ccb0a349979f2085f0fcad69b -d `\"%descr%`\" -tr %timestamp_sha2% -td sha256 %1 } else {signtool sign -v -s -sha1 0699c0e67181f87ecdf7a7a6ad6f4481ee6c76cf -d `\"%descr%`\" -tr %timestamp_sha1% %1 ; }" <NUL
+            C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -Command "$c = Get-ChildItem -Path cert:\\CurrentUser\\My, cert:\\LocalMachine\\My | Where-Object { $_.Thumbprint -like \"%thumbprint2%\" }; If ($c) { signtool sign -v -sm -sha1 %thumbprint1% -d `\"%descr%`\" -t %timestamp_sha1% %1; signtool sign -v -sm -as -sha1 %thumbprint2%  -d `\"%descr%`\" -tr %timestamp_sha2% -td sha256 %1 } else {signtool sign -v -s -sha1 0699c0e67181f87ecdf7a7a6ad6f4481ee6c76cf -d `\"%descr%`\" -tr %timestamp_sha1% %1 ; }" <NUL
         )
     )
 )
