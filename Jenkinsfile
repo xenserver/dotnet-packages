@@ -31,7 +31,7 @@
  * SUCH DAMAGE.
  */
 
-node("windows") {
+node("cygwin") {
 
   try {
 
@@ -80,7 +80,7 @@ node("windows") {
     stage('Build') {
       bat """
           cd ${env.WORKSPACE}
-          C:\\tools\\cygwin\\bin\\bash.exe 'dotnet-packages.git/mk/build.sh'
+          sh 'dotnet-packages.git/mk/build.sh'
           """
     }
 
