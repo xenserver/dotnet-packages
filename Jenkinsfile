@@ -31,7 +31,7 @@
  * SUCH DAMAGE.
  */
 
-node {
+node("windows") {
 
   try {
 
