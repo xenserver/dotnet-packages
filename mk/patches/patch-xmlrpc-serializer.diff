@@ -67,6 +67,15 @@ diff -ru src/XmlRpcSerializer.cs src/XmlRpcSerializer.cs
  #endif
            xdoc.Load(xmlRdr);
          }
+@@ -1450,7 +1450,7 @@
+           bool dupValue;
+           SelectTwoNodes(member, "name", out nameNode, out dupName, "value",
+             out valueNode, out dupValue);
+-          if (nameNode == null || nameNode.FirstChild == null)
++          if (nameNode == null)
+             throw new XmlRpcInvalidXmlRpcException(parseStack.ParseType
+               + " contains a member with missing name"
+               + " " + StackDump(parseStack));
 @@ -1458,7 +1458,7 @@
              throw new XmlRpcInvalidXmlRpcException(parseStack.ParseType
                + " contains member with more than one name element"
