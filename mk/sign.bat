@@ -29,7 +29,7 @@ rem NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 rem OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 rem SUCH DAMAGE.
 
-set descr="Citrix XenCenter"
+set "descr=Citrix XenCenter"
 set timestamp_sha1=http://timestamp.verisign.com/scripts/timestamp.dll
 set timestamp_sha2=http://sha256timestamp.ws.symantec.com/sha256/timestamp
 set thumbprint1=ba949e6a25b123f17ea3149b22719a436166f78c
@@ -52,7 +52,7 @@ if defined CTXSIGN (
     set /p CCSS_TICKET= < out.txt
     if defined CTXSIGN2 (
         echo CTXSIGN2 %CTXSIGN2% FOUND
-        %CTXSIGN2% --sign --key XenServer.NET_KEY --cross-sign --pagehashes yes --type Authenticode %1
+        %CTXSIGN2% --sign --key XenServer.NET_KEY --cross-sign --pagehashes yes --type Authenticode --description "%descr%" %1
         if %errorlevel% neq 0 exit /b %errorlevel%
         if "%is_msi%"=="no" (
             %CTXSIGN2% --sign --authenticode-append --authenticode-SHA256 --key XenServerSHA256.NET_KEY --cross-sign --pagehashes yes %1
@@ -82,10 +82,10 @@ if defined CTXSIGN (
     if defined debug (echo ddk is %ddk_path%)
 
     if /I not "%ddk_path%" == "SigntoolInPath" (
-        %ddk_path%\bin\catalog\signtool.exe sign -a -s my -n "Citrix Systems, Inc" -d `\"%descr%`\" -t %timestamp_sha1% %1
+        %ddk_path%\bin\catalog\signtool.exe sign -a -s my -n "Citrix Systems, Inc" -d "%descr%" -t %timestamp_sha1% %1
     ) else (
         if /I "%is_msi%" == "yes" (
-            signtool sign -v -sm -sha1 %thumbprint1% -d `\"%descr%`\" -tr %timestamp_sha2% -td sha256 %1
+            signtool sign -v -sm -sha1 %thumbprint1% -d "%descr%" -tr %timestamp_sha2% -td sha256 %1
             goto end
         ) else (
             C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -Command "$c = Get-ChildItem -Path cert:\\CurrentUser\\My, cert:\\LocalMachine\\My | Where-Object { $_.Thumbprint -like \"%thumbprint2%\" }; If ($c) { signtool sign -v -sm -sha1 %thumbprint1% -d `\"%descr%`\" -t %timestamp_sha1% %1; signtool sign -v -sm -as -sha1 %thumbprint2%  -d `\"%descr%`\" -tr %timestamp_sha2% -td sha256 %1 } else {signtool sign -v -s -sha1 0699c0e67181f87ecdf7a7a6ad6f4481ee6c76cf -d `\"%descr%`\" -tr %timestamp_sha1% %1 ; }" <NUL
