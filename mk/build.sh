@@ -198,8 +198,6 @@ cp ${SCRATCH_DIR}/xml-rpc_v45.net/bin/CookComputing.XmlRpcV2_dotnet45.dll ${OUTP
 cp ${SCRATCH_DIR}/xml-rpc_v45.net/bin/CookComputing.XmlRpcV2_dotnet45.pdb ${OUTPUT_45_DIR}/CookComputing.XmlRpcV2.pdb
 cp ${REPO}/${XML_RPC_LICENSE} ${OUTPUT_45_DIR}/LICENSE.CookComputing.XmlRpcV2.txt
 
-cp ${REPO}/mk/sign.bat ${OUTPUT_DIR}
-
 #create source manifest
 
 MANIFEST=${OUTPUT_DIR}/SOURCES/MANIFEST
