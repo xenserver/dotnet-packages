@@ -56,13 +56,11 @@ SHARP_ZIP_LIB_DIST_FILE="libraries-src/SharpZipLib/SharpZipLib_0854_SourceSample
 DISCUTILS_DIST_FILE="libraries-src/DiscUtils/DiscUtils-204669b416f9.zip"
 DOT_NET_ZIP_FILE="libraries-src/DotNetZip/DotNetZip-src-v1.9.1.8.zip"
 PUTTY_ZIP_FILE="libraries-src/PuTTY/putty-src.zip"
-MICROSOFT_DOTNET_FRAMEWORK_INSTALLER_FILE="libraries-redist/dotNetFx46_web_setup/NDP46-KB3045560-Web.exe"
 
 DISTFILES=(${REPO}/${XML_RPC_DIST_FILE} \
            ${REPO}/${LOG4NET_DIST_FILE} \
            ${REPO}/${SHARP_ZIP_LIB_DIST_FILE} \
            ${REPO}/${DISCUTILS_DIST_FILE} \
-           ${REPO}/${MICROSOFT_DOTNET_FRAMEWORK_INSTALLER_FILE} \
            ${REPO}/${DOT_NET_ZIP_FILE} \
            ${REPO}/${PUTTY_ZIP_FILE})
 
@@ -189,7 +187,6 @@ cp ${SCRATCH_DIR}/xml-rpc.net/bin/CookComputing.XmlRpcV2.{dll,pdb} \
    ${SCRATCH_DIR}/dotnetzip/DotNetZip-src/DotNetZip/Zip/bin/Release/Ionic.Zip.{dll,pdb} \
    ${SCRATCH_DIR}/DiscUtils/src/bin/Release/DiscUtils.{dll,pdb} \
    ${SCRATCH_DIR}/PuTTY/windows/VS2010/putty/Release/putty.exe \
-   ${SCRATCH_DIR}/NDP46-KB3045560-Web.exe \
    ${OUTPUT_46_DIR}
 cp ${REPO}/${XML_RPC_LICENSE} ${OUTPUT_46_DIR}/LICENSE.CookComputing.XmlRpcV2.txt
 
