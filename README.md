@@ -13,7 +13,8 @@ libraries:
 * log4net (v1.2.13) - a library providing logging services for purposes
   of application debugging and auditing;
 * PuTTY (v0.67) - PuTTY is a free implementation of Telnet and SSH for
-  Windows and Unix platforms, along with an xterm terminal emulator.
+  Windows and Unix platforms, along with an xterm terminal emulator;
+* Json.NET (v10.0.2) - a Json framework for .NET.
 
 ## Contributions
 
