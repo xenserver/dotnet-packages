@@ -1,33 +1,33 @@
-#!/bin/sh
+#!/bin/bash
 
-# Copyright (c) Citrix Systems, Inc. 
+# Copyright (c) Citrix Systems, Inc.
 # All rights reserved.
-# 
-# Redistribution and use in source and binary forms, 
-# with or without modification, are permitted provided 
-# that the following conditions are met: 
-# 
-# *   Redistributions of source code must retain the above 
-#     copyright notice, this list of conditions and the 
-#     following disclaimer. 
-# *   Redistributions in binary form must reproduce the above 
-#     copyright notice, this list of conditions and the 
-#     following disclaimer in the documentation and/or other 
-#     materials provided with the distribution. 
-# 
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
-# CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
-# INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
-# MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
-# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR 
-# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
-# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
-# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR 
-# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
-# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
-# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING 
-# NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
+#
+# Redistribution and use in source and binary forms,
+# with or without modification, are permitted provided
+# that the following conditions are met:
+#
+# *   Redistributions of source code must retain the above
+#     copyright notice, this list of conditions and the
+#     following disclaimer.
+# *   Redistributions in binary form must reproduce the above
+#     copyright notice, this list of conditions and the
+#     following disclaimer in the documentation and/or other
+#     materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+# CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+# INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+# NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
 # Note: this build does not sign the binaries
@@ -50,19 +50,20 @@ SNK_ORIG=$(cygpath -w "${HOME}/.ssh/xs.net.snk")
 SNK=${SNK_ORIG//\\/\\\\}
 
 XML_RPC_LICENSE=libraries-src/XML-RPC.NET/LICENSE
+JSON_NET_LICENSE=libraries-src/Json.NET/LICENSE.txt
 XML_RPC_DIST_FILE="libraries-src/XML-RPC.NET/xml-rpc.net.2.5.0.zip"
+JSON_NET_ZIP_FILE="libraries-src/Json.NET/Newtonsoft.Json-10.0.2.zip"
 LOG4NET_DIST_FILE="libraries-src/Log4Net/log4net-1.2.13-src.zip"
 SHARP_ZIP_LIB_DIST_FILE="libraries-src/SharpZipLib/SharpZipLib_0854_SourceSamples.zip"
 DISCUTILS_DIST_FILE="libraries-src/DiscUtils/DiscUtils-204669b416f9.zip"
 DOT_NET_ZIP_FILE="libraries-src/DotNetZip/DotNetZip-src-v1.9.1.8.zip"
 PUTTY_ZIP_FILE="libraries-src/PuTTY/putty-src.zip"
-MICROSOFT_DOTNET_FRAMEWORK_INSTALLER_FILE="libraries-redist/dotNetFx46_web_setup/NDP46-KB3045560-Web.exe"
 
 DISTFILES=(${REPO}/${XML_RPC_DIST_FILE} \
+           ${REPO}/${JSON_NET_ZIP_FILE} \
            ${REPO}/${LOG4NET_DIST_FILE} \
            ${REPO}/${SHARP_ZIP_LIB_DIST_FILE} \
            ${REPO}/${DISCUTILS_DIST_FILE} \
-           ${REPO}/${MICROSOFT_DOTNET_FRAMEWORK_INSTALLER_FILE} \
            ${REPO}/${DOT_NET_ZIP_FILE} \
            ${REPO}/${PUTTY_ZIP_FILE})
 
@@ -85,7 +86,7 @@ apply_patches()
 {
   for i in ${1}
   do
-    patch -d ${2} -p0 <${i}
+    patch --binary -d ${2} -p0 <${i}
   done
 }
 
@@ -108,6 +109,28 @@ shopt -s extglob
 apply_patches "${PATCHES}/patch-xmlrpc!(*dotnet46*)" ${XMLRPC_SRC_DIR} # Apply all except dotnet 4.6
 shopt -u extglob
 sed -i "/SignAssembly/ i <AssemblyOriginatorKeyFile>${SNK}</AssemblyOriginatorKeyFile>" ${XMLRPC_SRC_DIR}/src/xmlrpc.csproj
+
+#prepare Json.NET 4.6
+
+JSON_NET_SRC_DIR=${SCRATCH_DIR}/json.net
+mkdir_clean ${JSON_NET_SRC_DIR}
+unzip -q -d ${JSON_NET_SRC_DIR} ${SCRATCH_DIR}/Newtonsoft.Json-10.0.2.zip
+ls ${JSON_NET_SRC_DIR}
+shopt -s extglob
+apply_patches "${PATCHES}/patch-json-net!(*dotnet45*)" ${JSON_NET_SRC_DIR} # Apply all except dotnet 4.5
+shopt -u extglob
+sed -i "/SignAssembly/ i <AssemblyOriginatorKeyFile>${SNK}</AssemblyOriginatorKeyFile>" ${JSON_NET_SRC_DIR}/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/Newtonsoft.Json.Net40.csproj
+
+#prepare Json.NET 4.5
+
+JSON_NET_SRC_DIR=${SCRATCH_DIR}/json_v45.net
+mkdir_clean ${JSON_NET_SRC_DIR}
+unzip -q -d ${JSON_NET_SRC_DIR} ${SCRATCH_DIR}/Newtonsoft.Json-10.0.2.zip
+ls ${JSON_NET_SRC_DIR}
+shopt -s extglob
+apply_patches "${PATCHES}/patch-json-net!(*dotnet46*)" ${JSON_NET_SRC_DIR} # Apply all except dotnet 4.6
+shopt -u extglob
+sed -i "/SignAssembly/ i <AssemblyOriginatorKeyFile>${SNK}</AssemblyOriginatorKeyFile>" ${JSON_NET_SRC_DIR}/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/Newtonsoft.Json.Net40.csproj
 
 #prepare log4net
 
@@ -154,75 +177,42 @@ cp ${PUTTY_SRC_DIR}/version.h ${PUTTY_SRC_DIR}/licence.h ${PUTTY_SRC_DIR}/window
 
 echo "INFO: Performing main build tasks..."
 
-run_msbuild()
-{
-  MSBuild.exe /nologo /m /verbosity:minimal /p:Configuration=Release /p:TargetFrameworkVersion=v4.6 /property:PlatformToolset=v120 $*
-  return $?
-}
+MSBUILD="MSBuild.exe /nologo /m /verbosity:minimal /p:Configuration=Release"
+FRAME45="/p:TargetFrameworkVersion=v4.5"
+FRAME46="/p:TargetFrameworkVersion=v4.6"
+VS2013="/toolsversion:12.0"
+VS2015="/toolsversion:14.0"
+VS2013_CPP="/property:PlatformToolset=v120"
 
-run_msbuild_dotnet45()
-{
-  MSBuild.exe /nologo /m /verbosity:minimal /p:Configuration=Release /p:TargetFrameworkVersion=v4.5 /property:PlatformToolset=v120 $*
-  return $?
-}
-
-run_msbuild_nofw()
-{
-  MSBuild.exe /nologo /m /verbosity:minimal /p:Configuration=Release /property:PlatformToolset=v120 $*
-  return $?
-}
-
-cd ${SCRATCH_DIR}/xml-rpc.net/src && run_msbuild
-cd ${SCRATCH_DIR}/xml-rpc_v45.net/src && run_msbuild_dotnet45 && mv ../bin/CookComputing.XmlRpcV2.dll ../bin/CookComputing.XmlRpcV2_dotnet45.dll && mv ../bin/CookComputing.XmlRpcV2.pdb ../bin/CookComputing.XmlRpcV2_dotnet45.pdb #building for dotnet4.5
-cd ${SCRATCH_DIR}/log4net/src     && run_msbuild log4net.vs2010.csproj
-cd ${SCRATCH_DIR}/sharpziplib/src && run_msbuild
-cd ${SCRATCH_DIR}/dotnetzip/DotNetZip-src/DotNetZip/Zip && run_msbuild
-cd ${SCRATCH_DIR}/DiscUtils/src   && run_msbuild
-cd ${SCRATCH_DIR}/PuTTY/windows/VS2010 && run_msbuild_nofw
+cd ${SCRATCH_DIR}/xml-rpc.net/src && ${MSBUILD} ${FRAME46} ${VS2013}
+cd ${SCRATCH_DIR}/xml-rpc_v45.net/src && ${MSBUILD} ${FRAME45} ${VS2013}
+cd ${SCRATCH_DIR}/json.net/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json && ${MSBUILD} ${FRAME46} ${VS2015} Newtonsoft.Json.Net40.csproj
+cd ${SCRATCH_DIR}/json_v45.net/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json && ${MSBUILD} ${FRAME45} ${VS2015} Newtonsoft.Json.Net40.csproj
+cd ${SCRATCH_DIR}/log4net/src && ${MSBUILD} ${FRAME46} ${VS2013} log4net.vs2010.csproj
+cd ${SCRATCH_DIR}/sharpziplib/src && ${MSBUILD} ${FRAME46} ${VS2013}
+cd ${SCRATCH_DIR}/dotnetzip/DotNetZip-src/DotNetZip/Zip && ${MSBUILD} ${FRAME46} ${VS2013}
+cd ${SCRATCH_DIR}/DiscUtils/src && ${MSBUILD} ${FRAME46} ${VS2013}
+cd ${SCRATCH_DIR}/PuTTY/windows/VS2010 && ${MSBUILD} ${VS2013_CPP}
 
 #collect files in the output directory
 
 mkdir_clean ${OUTPUT_46_DIR}
 cp ${SCRATCH_DIR}/xml-rpc.net/bin/CookComputing.XmlRpcV2.{dll,pdb} \
+   ${SCRATCH_DIR}/json.net/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/bin/Release/net46/Newtonsoft.Json.{dll,pdb} \
    ${SCRATCH_DIR}/log4net/build/bin/net/2.0/release/log4net.{dll,pdb} \
    ${SCRATCH_DIR}/sharpziplib/bin/ICSharpCode.SharpZipLib.{dll,pdb} \
    ${SCRATCH_DIR}/dotnetzip/DotNetZip-src/DotNetZip/Zip/bin/Release/Ionic.Zip.{dll,pdb} \
    ${SCRATCH_DIR}/DiscUtils/src/bin/Release/DiscUtils.{dll,pdb} \
    ${SCRATCH_DIR}/PuTTY/windows/VS2010/putty/Release/putty.exe \
-   ${SCRATCH_DIR}/NDP46-KB3045560-Web.exe \
    ${OUTPUT_46_DIR}
-cp ${REPO}/${XML_RPC_LICENSE} ${OUTPUT_46_DIR}/LICENSE.CookComputing.XmlRpcV2.txt
+cp ${REPO}/${XML_RPC_LICENSE}  ${OUTPUT_46_DIR}/LICENSE.CookComputing.XmlRpcV2.txt
+cp ${REPO}/${JSON_NET_LICENSE} ${OUTPUT_46_DIR}/LICENSE.Newtonsoft.Json.txt
 
 mkdir_clean ${OUTPUT_45_DIR}
-cp ${SCRATCH_DIR}/xml-rpc_v45.net/bin/CookComputing.XmlRpcV2_dotnet45.dll ${OUTPUT_45_DIR}/CookComputing.XmlRpcV2.dll
-cp ${SCRATCH_DIR}/xml-rpc_v45.net/bin/CookComputing.XmlRpcV2_dotnet45.pdb ${OUTPUT_45_DIR}/CookComputing.XmlRpcV2.pdb
+cp ${SCRATCH_DIR}/xml-rpc_v45.net/bin/CookComputing.XmlRpcV2.{dll,pdb} \
+   ${SCRATCH_DIR}/json_v45.net/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/bin/Release/net45/Newtonsoft.Json.{dll,pdb} \
+   ${OUTPUT_45_DIR}
 cp ${REPO}/${XML_RPC_LICENSE} ${OUTPUT_45_DIR}/LICENSE.CookComputing.XmlRpcV2.txt
-
-#create source manifest
-
-MANIFEST=${OUTPUT_DIR}/SOURCES/MANIFEST
-#this is the repo name where the main build system will look for the sources
-MANIFEST_COMPONENT=dotnet-packages
-
-echo "${MANIFEST_COMPONENT} mit local" ${XML_RPC_DIST_FILE} >> ${MANIFEST}
-
-for file in ${PATCHES}/patch-xmlrpc*
-do
-  echo "${MANIFEST_COMPONENT} mit local" $(basename ${file}) >> ${MANIFEST}
-done
-
-echo "${MANIFEST_COMPONENT} apache2 local" ${LOG4NET_DIST_FILE} >> ${MANIFEST}
-for file in ${FILES}/log4net*
-do
-  echo "${MANIFEST_COMPONENT} apache2 local" $(basename ${file}) >> ${MANIFEST}
-done
-
-echo "${MANIFEST_COMPONENT} gpl+linkingexception local" ${SHARP_ZIP_LIB_DIST_FILE} >> ${MANIFEST}
-for file in ${PATCHES}/patch-sharpziplib*
-do
-  echo "${MANIFEST_COMPONENT} gpl+linkingexception local" $(basename ${file}) >> ${MANIFEST}
-done
-
-echo "${MANIFEST_COMPONENT} mit local" ${DISCUTILS_DIST_FILE} >> ${MANIFEST}
+cp ${REPO}/${XML_RPC_LICENSE} ${OUTPUT_45_DIR}/LICENSE.Newtonsoft.Json.txt
 
 set +ux
