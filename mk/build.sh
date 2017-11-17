@@ -79,14 +79,14 @@ mkdir_clean ${OUTPUT_SRC_DIR}
 #bring_distfiles
 for file in ${DISTFILES[@]}
 do
-  cp -r ${file} ${SCRATCH_DIR}
+  install -m 644 ${file} ${SCRATCH_DIR}
 done
 
 apply_patches()
 {
   for i in ${1}
   do
-    patch --binary -d ${2} -p0 <${i}
+    patch -b --binary -d ${2} -p0 <${i}
   done
 }
 
