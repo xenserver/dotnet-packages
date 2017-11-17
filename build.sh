@@ -36,10 +36,11 @@
 set -eux
 
 #do everything in place as jenkins runs a clean build, i.e. will delete previous artifacts on starting
-ROOT=$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+
 REPO=$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-SCRATCH_DIR=${ROOT}/scratch
-OUTPUT_DIR=${ROOT}/output
+BUILD_DIR=${REPO}/_build
+SCRATCH_DIR=${BUILD_DIR}/scratch
+OUTPUT_DIR=${BUILD_DIR}/output
 OUTPUT_SRC_DIR=${OUTPUT_DIR}/SOURCES
 OUTPUT_46_DIR=${OUTPUT_DIR}/dotnet46
 OUTPUT_45_DIR=${OUTPUT_DIR}/dotnet45
@@ -71,6 +72,7 @@ mkdir_clean()
   rm -rf $1 && mkdir -p $1
 }
 
+mkdir_clean ${BUILD_DIR}
 mkdir_clean ${SCRATCH_DIR}
 mkdir_clean ${OUTPUT_DIR}
 mkdir_clean ${OUTPUT_SRC_DIR}
@@ -88,6 +90,8 @@ apply_patches()
     patch -b --binary -d ${2} -p0 <${i}
   done
 }
+
+echo "INFO: Unzipping and patching libraries..."
 
 #prepare xml-rpc dotnet 4.6
 
@@ -173,6 +177,8 @@ mkdir_clean ${PUTTY_SRC_DIR}
 unzip -q -d ${PUTTY_SRC_DIR} ${SCRATCH_DIR}/putty-src.zip
 cp ${PUTTY_SRC_DIR}/version.h ${PUTTY_SRC_DIR}/licence.h ${PUTTY_SRC_DIR}/windows/
 
+echo "DEBUG: Printing  MSBuild.exe version..."
+MSBuild.exe /ver
 
 echo "INFO: Performing main build tasks..."
 

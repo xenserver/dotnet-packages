@@ -85,7 +85,7 @@ node("cygwin") {
     }
 
     stage('Create manifest') {
-      GString manifestFile = "${env.WORKSPACE}\\output\\manifest"
+      GString manifestFile = "${env.WORKSPACE}\\dotnet-packages.git\\_build\\output\\manifest"
       String branchInfo = (GIT_BRANCH == 'master') ? 'trunk' : GIT_BRANCH
 
       bat """
@@ -96,7 +96,7 @@ node("cygwin") {
 
     stage('Upload') {
       // note that the pattern further down is relative to this dir
-      dir("${env.WORKSPACE}\\output") {
+      dir("${env.WORKSPACE}\\dotnet-packages.git\\_build\\output") {
 
         def server = Artifactory.server('repo')
         def buildInfo = Artifactory.newBuildInfo()
