@@ -36,15 +36,14 @@
 set -eux
 
 #do everything in place as jenkins runs a clean build, i.e. will delete previous artifacts on starting
-ROOT=$(cd -P "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
-REPO=$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+ROOT=$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+REPO=$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 SCRATCH_DIR=${ROOT}/scratch
 OUTPUT_DIR=${ROOT}/output
 OUTPUT_SRC_DIR=${OUTPUT_DIR}/SOURCES
 OUTPUT_46_DIR=${OUTPUT_DIR}/dotnet46
 OUTPUT_45_DIR=${OUTPUT_DIR}/dotnet45
-FILES=${REPO}/mk/files
-PATCHES=${REPO}/mk/patches
+PATCHES=${REPO}/patches
 
 SNK_ORIG=$(cygpath -w "${HOME}/.ssh/xs.net.snk")
 SNK=${SNK_ORIG//\\/\\\\}

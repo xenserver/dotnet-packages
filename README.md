@@ -34,4 +34,4 @@ directories. Please see the LICENSE file for more information.
 ## How to build dotnet-packages
 
 The libraries can be built (and patches applied) by executing the script
-`build.sh` at the command line.
+`build.sh` at the command line (you'll need [Cygwin](http://www.cygwin.com)).
