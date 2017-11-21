@@ -177,12 +177,14 @@ mkdir_clean ${PUTTY_SRC_DIR}
 unzip -q -d ${PUTTY_SRC_DIR} ${SCRATCH_DIR}/putty-src.zip
 cp ${PUTTY_SRC_DIR}/version.h ${PUTTY_SRC_DIR}/licence.h ${PUTTY_SRC_DIR}/windows/
 
-echo "DEBUG: Printing  MSBuild.exe version..."
-MSBuild.exe /ver
+MSBUILDEXE=MSBuild.exe
+
+echo "DEBUG: Printing MSBuild.exe version..."
+${MSBUILDEXE} /ver
 
 echo "INFO: Performing main build tasks..."
 
-MSBUILD="MSBuild.exe /nologo /m /verbosity:minimal /p:Configuration=Release"
+MSBUILD="${MSBUILDEXE} /nologo /m /verbosity:minimal /p:Configuration=Release"
 FRAME45="/p:TargetFrameworkVersion=v4.5"
 FRAME46="/p:TargetFrameworkVersion=v4.6"
 VS2013="/toolsversion:12.0"
