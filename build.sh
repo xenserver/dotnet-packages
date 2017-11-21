@@ -36,15 +36,15 @@
 set -eux
 
 #do everything in place as jenkins runs a clean build, i.e. will delete previous artifacts on starting
-ROOT=$(cd -P "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
-REPO=$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-SCRATCH_DIR=${ROOT}/scratch
-OUTPUT_DIR=${ROOT}/output
+
+REPO=$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+BUILD_DIR=${REPO}/_build
+SCRATCH_DIR=${BUILD_DIR}/scratch
+OUTPUT_DIR=${BUILD_DIR}/output
 OUTPUT_SRC_DIR=${OUTPUT_DIR}/SOURCES
 OUTPUT_46_DIR=${OUTPUT_DIR}/dotnet46
 OUTPUT_45_DIR=${OUTPUT_DIR}/dotnet45
-FILES=${REPO}/mk/files
-PATCHES=${REPO}/mk/patches
+PATCHES=${REPO}/patches
 
 SNK_ORIG=$(cygpath -w "${HOME}/.ssh/xs.net.snk")
 SNK=${SNK_ORIG//\\/\\\\}
@@ -72,6 +72,7 @@ mkdir_clean()
   rm -rf $1 && mkdir -p $1
 }
 
+mkdir_clean ${BUILD_DIR}
 mkdir_clean ${SCRATCH_DIR}
 mkdir_clean ${OUTPUT_DIR}
 mkdir_clean ${OUTPUT_SRC_DIR}
@@ -79,16 +80,18 @@ mkdir_clean ${OUTPUT_SRC_DIR}
 #bring_distfiles
 for file in ${DISTFILES[@]}
 do
-  cp -r ${file} ${SCRATCH_DIR}
+  install -m 644 ${file} ${SCRATCH_DIR}
 done
 
 apply_patches()
 {
   for i in ${1}
   do
-    patch --binary -d ${2} -p0 <${i}
+    patch -b --binary -d ${2} -p0 <${i}
   done
 }
+
+echo "INFO: Unzipping and patching libraries..."
 
 #prepare xml-rpc dotnet 4.6
 
@@ -174,10 +177,14 @@ mkdir_clean ${PUTTY_SRC_DIR}
 unzip -q -d ${PUTTY_SRC_DIR} ${SCRATCH_DIR}/putty-src.zip
 cp ${PUTTY_SRC_DIR}/version.h ${PUTTY_SRC_DIR}/licence.h ${PUTTY_SRC_DIR}/windows/
 
+MSBUILDEXE=MSBuild.exe
+
+echo "DEBUG: Printing MSBuild.exe version..."
+${MSBUILDEXE} /ver
 
 echo "INFO: Performing main build tasks..."
 
-MSBUILD="MSBuild.exe /nologo /m /verbosity:minimal /p:Configuration=Release"
+MSBUILD="${MSBUILDEXE} /nologo /m /verbosity:minimal /p:Configuration=Release"
 FRAME45="/p:TargetFrameworkVersion=v4.5"
 FRAME46="/p:TargetFrameworkVersion=v4.6"
 VS2013="/toolsversion:12.0"

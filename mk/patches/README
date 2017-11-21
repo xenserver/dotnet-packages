@@ -1,3 +1,0 @@
-Please bump the version numbers in patch-sharpziplib-version-number.diff and
-patch-xmlrpc-version-number whenever you make any changes, otherwise installers
-may fail to overwrite the old version (see CA-50147).

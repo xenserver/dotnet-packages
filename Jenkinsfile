@@ -1,33 +1,33 @@
 #!groovy
 
-/* Copyright (c) Citrix Systems, Inc. 
- * All rights reserved. 
- * 
- * Redistribution and use in source and binary forms, 
- * with or without modification, are permitted provided 
- * that the following conditions are met: 
- * 
- * *   Redistributions of source code must retain the above 
- *     copyright notice, this list of conditions and the 
- *     following disclaimer. 
- * *   Redistributions in binary form must reproduce the above 
- *     copyright notice, this list of conditions and the 
- *     following disclaimer in the documentation and/or other 
- *     materials provided with the distribution. 
- * 
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND 
- * CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
- * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR 
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR 
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING 
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
+/* Copyright (c) Citrix Systems, Inc.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms,
+ * with or without modification, are permitted provided
+ * that the following conditions are met:
+ *
+ * *   Redistributions of source code must retain the above
+ *     copyright notice, this list of conditions and the
+ *     following disclaimer.
+ * *   Redistributions in binary form must reproduce the above
+ *     copyright notice, this list of conditions and the
+ *     following disclaimer in the documentation and/or other
+ *     materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+ * CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  */
 
@@ -62,7 +62,7 @@ node("cygwin") {
     def GIT_COMMIT = bat(
       returnStdout: true,
       script: """
-                @echo off 
+                @echo off
                 cd ${env.WORKSPACE}\\dotnet-packages.git
                 git rev-parse HEAD
                 """
@@ -80,12 +80,12 @@ node("cygwin") {
     stage('Build') {
       bat """
           cd ${env.WORKSPACE}
-          sh 'dotnet-packages.git/mk/build.sh'
+          sh 'dotnet-packages.git/build.sh'
           """
     }
 
     stage('Create manifest') {
-      GString manifestFile = "${env.WORKSPACE}\\output\\manifest"
+      GString manifestFile = "${env.WORKSPACE}\\dotnet-packages.git\\_build\\output\\manifest"
       String branchInfo = (GIT_BRANCH == 'master') ? 'trunk' : GIT_BRANCH
 
       bat """
@@ -96,7 +96,7 @@ node("cygwin") {
 
     stage('Upload') {
       // note that the pattern further down is relative to this dir
-      dir("${env.WORKSPACE}\\output") {
+      dir("${env.WORKSPACE}\\dotnet-packages.git\\_build\\output") {
 
         def server = Artifactory.server('repo')
         def buildInfo = Artifactory.newBuildInfo()
