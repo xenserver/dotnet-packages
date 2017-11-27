@@ -1,10 +1,10 @@
-# Copyright (c) Citrix Systems, Inc.  
+# Copyright (c) Citrix Systems, Inc.
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms,
 # with or without modification, are permitted provided
 # that the following conditions are met:
-# 
+#
 # *   Redistributions of source code must retain the above
 #     copyright notice, this list of conditions and the
 #     following disclaimer.
@@ -12,7 +12,7 @@
 #     copyright notice, this list of conditions and the
 #     following disclaimer in the documentation and/or other
 #     materials provided with the distribution.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
 # CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 # INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -47,13 +47,15 @@
  [assembly: AssemblyDescription("Json.NET is a popular high-performance JSON framework for .NET")]
  [assembly: AssemblyConfiguration("")]
  [assembly: AssemblyCompany("Newtonsoft")]
-@@ -96,6 +86,6 @@ using System.Security;
+@@ -96,6 +86,7 @@ using System.Security;
  // You can specify all the values or you can default the Revision and Build Numbers 
  // by using the '*' as shown below:
  
 -[assembly: AssemblyVersion("10.0.0.0")]
 -[assembly: AssemblyFileVersion("10.0.0.0")]
+-[assembly: CLSCompliant(true)]
+\ No newline at end of file
++[assembly: SecurityRules(SecurityRuleSet.Level1)]
 +[assembly: AssemblyVersion("10.0.2.0")]
 +[assembly: AssemblyFileVersion("10.0.2.0")]
- [assembly: CLSCompliant(true)]
-\ No newline at end of file
++[assembly: CLSCompliant(true)]
