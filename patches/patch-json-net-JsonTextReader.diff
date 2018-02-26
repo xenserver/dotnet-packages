@@ -1,0 +1,81 @@
+# Copyright (c) Citrix Systems, Inc.
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms,
+# with or without modification, are permitted provided
+# that the following conditions are met:
+#
+# *   Redistributions of source code must retain the above
+#     copyright notice, this list of conditions and the
+#     following disclaimer.
+# *   Redistributions in binary form must reproduce the above
+#     copyright notice, this list of conditions and the
+#     following disclaimer in the documentation and/or other
+#     materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+# CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+# INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+# NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+# SUCH DAMAGE.
+
+--- Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/JsonTextReader.cs
++++ Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/JsonTextReader.cs
+@@ -915,17 +915,17 @@ private object ReadNumberValue(ReadType readType)
+                             case 'N':
+                                 return ParseNumberNaN(readType);
+                             case 'I':
++                            case 'i':
+                                 return ParseNumberPositiveInfinity(readType);
+                             case '-':
+-                                if (EnsureChars(1, true) && _chars[_charPos + 1] == 'I')
+-                                {
+-                                    return ParseNumberNegativeInfinity(readType);
+-                                }
+-                                else
++                                if (EnsureChars(1, true))
+                                 {
+-                                    ParseNumber(readType);
+-                                    return Value;
++                                    var cc = _chars[_charPos + 1];
++                                    if (cc == 'I' || cc == 'i')
++                                        return ParseNumberNegativeInfinity(readType);
+                                 }
++                                ParseNumber(readType);
++                                return Value;
+                             case '.':
+                             case '0':
+                             case '1':
+@@ -2418,7 +2418,9 @@ private void ParseFalse()
+ 
+         private object ParseNumberNegativeInfinity(ReadType readType)
+         {
+-            return ParseNumberNegativeInfinity(readType, MatchValueWithTrailingSeparator(JsonConvert.NegativeInfinity));
++            bool matched = MatchValueWithTrailingSeparator(JsonConvert.NegativeInfinity) ||
++                           MatchValueWithTrailingSeparator(JsonConvert.NegativeInfinityRrds);
++            return ParseNumberNegativeInfinity(readType, matched);
+         }
+ 
+         private object ParseNumberNegativeInfinity(ReadType readType, bool matched)
+@@ -2448,8 +2450,11 @@ private object ParseNumberNegativeInfinity(ReadType readType, bool matched)
+ 
+         private object ParseNumberPositiveInfinity(ReadType readType)
+         {
+-            return ParseNumberPositiveInfinity(readType, MatchValueWithTrailingSeparator(JsonConvert.PositiveInfinity));
++            bool matched = MatchValueWithTrailingSeparator(JsonConvert.PositiveInfinity) ||
++                           MatchValueWithTrailingSeparator(JsonConvert.PositiveInfinityRrds);
++            return ParseNumberPositiveInfinity(readType, matched);
+         }
++
+         private object ParseNumberPositiveInfinity(ReadType readType, bool matched)
+         {
+             if (matched)
