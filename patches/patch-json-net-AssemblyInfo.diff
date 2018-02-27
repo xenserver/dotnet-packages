@@ -56,6 +56,6 @@
 -[assembly: CLSCompliant(true)]
 \ No newline at end of file
 +[assembly: SecurityRules(SecurityRuleSet.Level1)]
-+[assembly: AssemblyVersion("10.0.2.0")]
-+[assembly: AssemblyFileVersion("10.0.2.0")]
++[assembly: AssemblyVersion("10.0.2.1")]
++[assembly: AssemblyFileVersion("10.0.2.1")]
 +[assembly: CLSCompliant(true)]
