@@ -85,7 +85,7 @@ node("cygwin") {
     }
 
     stage('Create manifest') {
-      GString manifestFile = "${env.WORKSPACE}\\dotnet-packages.git\\_build\\output\\manifest"
+      GString manifestFile = "${env.WORKSPACE}\\dotnet-packages.git\\_build\\output\\dotnet-packages-manifest.txt"
       String branchInfo = (GIT_BRANCH == 'master') ? 'trunk' : GIT_BRANCH
 
       bat """
