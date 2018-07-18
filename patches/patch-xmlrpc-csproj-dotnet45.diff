@@ -37,15 +37,33 @@
    <PropertyGroup>
      <ProjectType>Local</ProjectType>
      <ProductVersion>9.0.30729</ProductVersion>
-@@ -25,8 +26,10 @@
-     </FileUpgradeFlags>
+@@ -26,7 +27,9 @@
      <UpgradeBackupLocation>
      </UpgradeBackupLocation>
--    <SignAssembly Condition="'$(BuildingInsideVisualStudio)' == ''">false</SignAssembly>
-+    <SignAssembly Condition="'$(BuildingInsideVisualStudio)' == ''">true</SignAssembly>
+     <SignAssembly Condition="'$(BuildingInsideVisualStudio)' == ''">false</SignAssembly>
 +    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
      <OldToolsVersion>2.0</OldToolsVersion>
 +    <TargetFrameworkProfile />
    </PropertyGroup>
    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
      <OutputPath>..\bin\</OutputPath>
+@@ -60,16 +63,16 @@
+     <DefineConstants>TRACE</DefineConstants>
+     <DocumentationFile>
+     </DocumentationFile>
+-    <DebugSymbols>false</DebugSymbols>
++    <DebugSymbols>true</DebugSymbols>
+     <FileAlignment>4096</FileAlignment>
+     <NoStdLib>false</NoStdLib>
+     <NoWarn>649</NoWarn>
+     <Optimize>true</Optimize>
+     <RegisterForComInterop>false</RegisterForComInterop>
+     <RemoveIntegerChecks>false</RemoveIntegerChecks>
+-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
++    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+     <WarningLevel>4</WarningLevel>
+-    <DebugType>none</DebugType>
++    <DebugType>pdbonly</DebugType>
+     <ErrorReport>prompt</ErrorReport>
+   </PropertyGroup>
+   <ItemGroup>

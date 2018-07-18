@@ -48,6 +48,20 @@ PATCHES=${REPO}/patches
 
 SNK_ORIG=$(cygpath -w "${HOME}/.ssh/xs.net.snk")
 SNK=${SNK_ORIG//\\/\\\\}
+SIGN="/p:SignAssembly=true /p:AssemblyOriginatorKeyFile=${SNK}"
+
+while [ "$#" -gt 0 ]
+do
+  case "$1" in
+    --skip-snk)
+      echo Skip applying a strong name to xmlrpc and json dlls
+      SIGN=""
+      ;;
+    *)
+      ;;
+  esac
+  shift
+done
 
 XML_RPC_LICENSE=libraries-src/XML-RPC.NET/LICENSE
 JSON_NET_LICENSE=libraries-src/Json.NET/LICENSE.txt
@@ -87,6 +101,7 @@ apply_patches()
 {
   for i in ${1}
   do
+    echo applying patch file ${i}...
     patch -b --binary -d ${2} -p0 <${i}
   done
 }
@@ -101,7 +116,6 @@ unzip -q -d ${XMLRPC_SRC_DIR} ${SCRATCH_DIR}/xml-rpc.net.2.5.0.zip
 shopt -s extglob
 apply_patches "${PATCHES}/patch-xmlrpc!(*dotnet45*)" ${XMLRPC_SRC_DIR} # Apply all except dotnet 4.5
 shopt -u extglob
-sed -i "/SignAssembly/ i <AssemblyOriginatorKeyFile>${SNK}</AssemblyOriginatorKeyFile>" ${XMLRPC_SRC_DIR}/src/xmlrpc.csproj
 
 #prepare xml-rpc dotnet 4.5
 
@@ -111,7 +125,6 @@ unzip -q -d ${XMLRPC_SRC_DIR} ${SCRATCH_DIR}/xml-rpc.net.2.5.0.zip
 shopt -s extglob
 apply_patches "${PATCHES}/patch-xmlrpc!(*dotnet46*)" ${XMLRPC_SRC_DIR} # Apply all except dotnet 4.6
 shopt -u extglob
-sed -i "/SignAssembly/ i <AssemblyOriginatorKeyFile>${SNK}</AssemblyOriginatorKeyFile>" ${XMLRPC_SRC_DIR}/src/xmlrpc.csproj
 
 #prepare Json.NET 4.6
 
@@ -122,7 +135,6 @@ ls ${JSON_NET_SRC_DIR}
 shopt -s extglob
 apply_patches "${PATCHES}/patch-json-net!(*dotnet45*)" ${JSON_NET_SRC_DIR} # Apply all except dotnet 4.5
 shopt -u extglob
-sed -i "/SignAssembly/ i <AssemblyOriginatorKeyFile>${SNK}</AssemblyOriginatorKeyFile>" ${JSON_NET_SRC_DIR}/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/Newtonsoft.Json.Net40.csproj
 
 #prepare Json.NET 4.5
 
@@ -133,7 +145,6 @@ ls ${JSON_NET_SRC_DIR}
 shopt -s extglob
 apply_patches "${PATCHES}/patch-json-net!(*dotnet46*)" ${JSON_NET_SRC_DIR} # Apply all except dotnet 4.6
 shopt -u extglob
-sed -i "/SignAssembly/ i <AssemblyOriginatorKeyFile>${SNK}</AssemblyOriginatorKeyFile>" ${JSON_NET_SRC_DIR}/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/Newtonsoft.Json.Net40.csproj
 
 #prepare log4net
 
@@ -191,10 +202,10 @@ VS2013="/toolsversion:12.0"
 VS2015="/toolsversion:14.0"
 VS2013_CPP="/property:PlatformToolset=v120"
 
-cd ${SCRATCH_DIR}/xml-rpc.net/src && ${MSBUILD} ${FRAME46} ${VS2013}
-cd ${SCRATCH_DIR}/xml-rpc_v45.net/src && ${MSBUILD} ${FRAME45} ${VS2013}
-cd ${SCRATCH_DIR}/json.net/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json && ${MSBUILD} ${FRAME46} ${VS2015} Newtonsoft.Json.Net40.csproj
-cd ${SCRATCH_DIR}/json_v45.net/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json && ${MSBUILD} ${FRAME45} ${VS2015} Newtonsoft.Json.Net40.csproj
+cd ${SCRATCH_DIR}/xml-rpc.net/src && ${MSBUILD} ${FRAME46} ${VS2013} ${SIGN}
+cd ${SCRATCH_DIR}/xml-rpc_v45.net/src && ${MSBUILD} ${FRAME45} ${VS2013} ${SIGN}
+cd ${SCRATCH_DIR}/json.net/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json && ${MSBUILD} ${FRAME46} ${VS2015} ${SIGN} Newtonsoft.Json.Net40.csproj
+cd ${SCRATCH_DIR}/json_v45.net/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json && ${MSBUILD} ${FRAME45} ${VS2015} ${SIGN} Newtonsoft.Json.Net40.csproj
 cd ${SCRATCH_DIR}/log4net/src && ${MSBUILD} ${FRAME46} ${VS2013} log4net.vs2010.csproj
 cd ${SCRATCH_DIR}/sharpziplib/src && ${MSBUILD} ${FRAME46} ${VS2013}
 cd ${SCRATCH_DIR}/dotnetzip/DotNetZip-src/DotNetZip/Zip && ${MSBUILD} ${FRAME46} ${VS2013}
