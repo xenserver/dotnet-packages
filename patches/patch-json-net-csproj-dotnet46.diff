@@ -37,17 +37,6 @@
    <PropertyGroup>
      <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
      <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-@@ -10,9 +10,7 @@
-     <AppDesignerFolder>Properties</AppDesignerFolder>
-     <RootNamespace>Newtonsoft.Json</RootNamespace>
-     <AssemblyName>Newtonsoft.Json</AssemblyName>
--    <SignAssembly>false</SignAssembly>
--    <AssemblyOriginatorKeyFile>
--    </AssemblyOriginatorKeyFile>
-+    <SignAssembly>true</SignAssembly>
-     <SccProjectName>
-     </SccProjectName>
-     <SccLocalPath>
 @@ -27,7 +25,7 @@
      <UpgradeBackupLocation>
      </UpgradeBackupLocation>
