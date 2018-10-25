@@ -33,6 +33,8 @@
 # Note: this build does not sign the binaries
 # It's up to the consumer of the binaries to sign them
 
+# Calling with --skip-snk will skip applying strong names to Assembies.
+
 set -eux
 
 #do everything in place as jenkins runs a clean build, i.e. will delete previous artifacts on starting
