@@ -22,14 +22,14 @@ The preferable way to contribute patches is to fork the repository on Github and
 then submit a pull request. If for some reason you can't use Github to submit a
 pull request, then you may send your patch for review to the
 xs-devel@lists.xenserver.org mailing list, with a link to a public git repository
-for review. Please see the CONTRIB.md file for some general guidelines on submitting
+for review. Please see the [CONTRIB](CONTRIB) file for some general guidelines on submitting
 changes.
 
 ## License
 
 This code is licensed under the BSD 2-Clause license. The individual libraries
 are subject to their own licenses, which can be found in the corresponding
-directories. Please see the LICENSE file for more information.
+directories. Please see the [LICENSE](LICENSE) file for more information.
 
 ## How to build dotnet-packages
 
