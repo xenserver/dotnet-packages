@@ -33,5 +33,22 @@ directories. Please see the [LICENSE](LICENSE) file for more information.
 
 ## How to build dotnet-packages
 
-The libraries can be built (and patches applied) by executing the script
-`build.sh` at the command line (you'll need [Cygwin](http://www.cygwin.com)).
+### Prerequisites
+
+1. .Net Framework 4.5 and 4.6 installed.
+2. Visual Studio build tools for 2013 (toolsversion 12.0) and 2015 (toolsversion 14.0).
+3. The Windows 8.1 SDK (PlatformToolset v120 included in VS2013).
+4. Add the location of the `msbuild` executable to the System Path.
+5. [Cygwin](http://www.cygwin.com)) installed including the `unzip` and `patch` packages.
+6. Add the Cygwin `/bin` directory to your System Path.
+7. Make sure Git is installed and can be accessed from the command-line.
+
+### Build
+
+The libraries can be built (with patches applied) by opening the command line in
+a suitable directory and running the following commands:
+
+```shell
+git clone https://github.com/xenserver/dotnet-packages.git
+sh dotnet-packages/build.sh
+```
