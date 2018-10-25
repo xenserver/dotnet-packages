@@ -50,5 +50,5 @@ a suitable directory and running the following commands:
 
 ```shell
 git clone https://github.com/xenserver/dotnet-packages.git
-sh dotnet-packages/build.sh
+sh dotnet-packages/build.sh --skip-snk
 ```
