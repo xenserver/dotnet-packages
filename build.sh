@@ -33,7 +33,7 @@
 # Note: this build does not sign the binaries
 # It's up to the consumer of the binaries to sign them
 
-# Calling with --skip-snk will skip applying strong names to Assembies.
+# Calling with --skip-snk will skip applying strong names to Assemblies.
 
 set -eux
 
