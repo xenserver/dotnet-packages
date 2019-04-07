@@ -80,7 +80,7 @@ node("cygwin") {
     stage('Build') {
       bat """
           cd ${env.WORKSPACE}
-          sh 'dotnet-packages.git/build.sh'
+          sh "dotnet-packages.git/build.sh --snk ${env.SNK_LOCATION}"
           """
     }
 
