@@ -33,7 +33,8 @@
 # Note: this build does not sign the binaries
 # It's up to the consumer of the binaries to sign them
 
-# Calling with --skip-snk will skip applying strong names to Assemblies.
+# Calling with --snk <snk-file> will apply strong names to the assemblies
+# using the specified key
 
 set -eux
 
@@ -48,25 +49,25 @@ OUTPUT_46_DIR=${OUTPUT_DIR}/dotnet46
 OUTPUT_45_DIR=${OUTPUT_DIR}/dotnet45
 PATCHES=${REPO}/patches
 
-SNK_ORIG=$(cygpath -w "${HOME}/.ssh/xs.net.snk")
-SNK=${SNK_ORIG//\\/\\\\}
-SIGN="/p:SignAssembly=true /p:AssemblyOriginatorKeyFile=${SNK}"
+SIGN=""
 
 while [ "$#" -gt 0 ]
 do
   case "$1" in
-    --skip-snk)
-      echo Skip applying a strong name to xmlrpc and json dlls
-      SIGN=""
+    --snk)
+      echo Will apply a strong name to xmlrpc and json dlls
+      SIGN="/p:SignAssembly=true /p:AssemblyOriginatorKeyFile=${2}"
+      shift
+      shift
       ;;
     *)
+      shift
       ;;
   esac
-  shift
 done
 
-XML_RPC_LICENSE=libraries-src/XML-RPC.NET/LICENSE
-JSON_NET_LICENSE=libraries-src/Json.NET/LICENSE.txt
+XML_RPC_LICENSE="libraries-src/XML-RPC.NET/LICENSE"
+JSON_NET_LICENSE="libraries-src/Json.NET/LICENSE.txt"
 XML_RPC_DIST_FILE="libraries-src/XML-RPC.NET/xml-rpc.net.2.5.0.zip"
 JSON_NET_ZIP_FILE="libraries-src/Json.NET/Newtonsoft.Json-10.0.2.zip"
 LOG4NET_DIST_FILE="libraries-src/Log4Net/log4net-1.2.13-src.zip"

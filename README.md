@@ -39,7 +39,7 @@ directories. Please see the [LICENSE](LICENSE) file for more information.
 2. Visual Studio build tools for 2013 (toolsversion 12.0) and 2015 (toolsversion 14.0).
 3. The Windows 8.1 SDK (PlatformToolset v120 included in VS2013).
 4. Add the location of the `msbuild` executable to the System Path.
-5. [Cygwin](http://www.cygwin.com)) installed including the `unzip` and `patch` packages.
+5. [Cygwin](http://www.cygwin.com) installed including the `unzip` and `patch` packages.
 6. Add the Cygwin `/bin` directory to your System Path.
 7. Make sure Git is installed and can be accessed from the command-line.
 
@@ -50,5 +50,5 @@ a suitable directory and running the following commands:
 
 ```shell
 git clone https://github.com/xenserver/dotnet-packages.git
-sh dotnet-packages/build.sh --skip-snk
+sh dotnet-packages/build.sh [--snk <snk-file>]
 ```
