@@ -226,14 +226,13 @@ cp ${SCRATCH_DIR}/xml-rpc.net/bin/CookComputing.XmlRpcV2.{dll,pdb} \
    ${SCRATCH_DIR}/DiscUtils/src/bin/Release/DiscUtils.{dll,pdb} \
    ${SCRATCH_DIR}/PuTTY/windows/VS2010/putty/Release/putty.exe \
    ${OUTPUT_46_DIR}
-cp ${REPO}/${XML_RPC_LICENSE}  ${OUTPUT_46_DIR}/LICENSE.CookComputing.XmlRpcV2.txt
-cp ${REPO}/${JSON_NET_LICENSE} ${OUTPUT_46_DIR}/LICENSE.Newtonsoft.Json.txt
 
 mkdir_clean ${OUTPUT_45_DIR}
 cp ${SCRATCH_DIR}/xml-rpc_v45.net/bin/CookComputing.XmlRpcV2.{dll,pdb} \
    ${SCRATCH_DIR}/json_v45.net/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/bin/Release/net45/Newtonsoft.Json.{dll,pdb} \
    ${OUTPUT_45_DIR}
-cp ${REPO}/${XML_RPC_LICENSE} ${OUTPUT_45_DIR}/LICENSE.CookComputing.XmlRpcV2.txt
-cp ${REPO}/${JSON_NET_LICENSE} ${OUTPUT_45_DIR}/LICENSE.Newtonsoft.Json.txt
+
+cp ${REPO}/${XML_RPC_LICENSE} ${OUTPUT_DIR}/LICENSE.CookComputing.XmlRpcV2.txt
+cp ${REPO}/${JSON_NET_LICENSE} ${OUTPUT_DIR}/LICENSE.Newtonsoft.Json.txt
 
 set +ux
