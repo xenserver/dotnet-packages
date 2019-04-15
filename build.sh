@@ -191,29 +191,29 @@ mkdir_clean ${PUTTY_SRC_DIR}
 unzip -q -d ${PUTTY_SRC_DIR} ${SCRATCH_DIR}/putty-src.zip
 cp ${PUTTY_SRC_DIR}/version.h ${PUTTY_SRC_DIR}/licence.h ${PUTTY_SRC_DIR}/windows/
 
-MSBUILDEXE=MSBuild.exe
+MSBUILD=MSBuild.exe
 
 echo "DEBUG: Printing MSBuild.exe version..."
-${MSBUILDEXE} /ver
+"${MSBUILD}" /ver
 
 echo "INFO: Performing main build tasks..."
 
-MSBUILD="${MSBUILDEXE} /nologo /m /verbosity:minimal /p:Configuration=Release"
+SWITCHES="/nologo /m /verbosity:minimal /p:Configuration=Release"
 FRAME45="/p:TargetFrameworkVersion=v4.5"
 FRAME46="/p:TargetFrameworkVersion=v4.6"
 VS2013="/toolsversion:12.0"
 VS2015="/toolsversion:14.0"
 VS2013_CPP="/property:PlatformToolset=v120"
 
-cd ${SCRATCH_DIR}/xml-rpc.net/src && ${MSBUILD} ${FRAME46} ${VS2013} ${SIGN}
-cd ${SCRATCH_DIR}/xml-rpc_v45.net/src && ${MSBUILD} ${FRAME45} ${VS2013} ${SIGN}
-cd ${SCRATCH_DIR}/json.net/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json && ${MSBUILD} ${FRAME46} ${VS2015} ${SIGN} Newtonsoft.Json.Net40.csproj
-cd ${SCRATCH_DIR}/json_v45.net/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json && ${MSBUILD} ${FRAME45} ${VS2015} ${SIGN} Newtonsoft.Json.Net40.csproj
-cd ${SCRATCH_DIR}/log4net/src && ${MSBUILD} ${FRAME46} ${VS2013} log4net.vs2010.csproj
-cd ${SCRATCH_DIR}/sharpziplib/src && ${MSBUILD} ${FRAME46} ${VS2013}
-cd ${SCRATCH_DIR}/dotnetzip/DotNetZip-src/DotNetZip/Zip && ${MSBUILD} ${FRAME46} ${VS2013}
-cd ${SCRATCH_DIR}/DiscUtils/src && ${MSBUILD} ${FRAME46} ${VS2013}
-cd ${SCRATCH_DIR}/PuTTY/windows/VS2010 && ${MSBUILD} ${VS2013_CPP}
+cd ${SCRATCH_DIR}/xml-rpc.net/src && "${MSBUILD}" ${SWITCHES} ${FRAME46} ${VS2013} ${SIGN}
+cd ${SCRATCH_DIR}/xml-rpc_v45.net/src && "${MSBUILD}" ${SWITCHES} ${FRAME45} ${VS2013} ${SIGN}
+cd ${SCRATCH_DIR}/json.net/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json && "${MSBUILD}" ${SWITCHES} ${FRAME46} ${VS2015} ${SIGN} Newtonsoft.Json.Net40.csproj
+cd ${SCRATCH_DIR}/json_v45.net/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json && "${MSBUILD}" ${SWITCHES} ${FRAME45} ${VS2015} ${SIGN} Newtonsoft.Json.Net40.csproj
+cd ${SCRATCH_DIR}/log4net/src && "${MSBUILD}" ${SWITCHES} ${FRAME46} ${VS2013} log4net.vs2010.csproj
+cd ${SCRATCH_DIR}/sharpziplib/src && "${MSBUILD}" ${SWITCHES} ${FRAME46} ${VS2013}
+cd ${SCRATCH_DIR}/dotnetzip/DotNetZip-src/DotNetZip/Zip && "${MSBUILD}" ${SWITCHES} ${FRAME46} ${VS2013}
+cd ${SCRATCH_DIR}/DiscUtils/src && "${MSBUILD}" ${SWITCHES} ${FRAME46} ${VS2013}
+cd ${SCRATCH_DIR}/PuTTY/windows/VS2010 && "${MSBUILD}" ${SWITCHES} ${VS2013_CPP}
 
 #collect files in the output directory
 
