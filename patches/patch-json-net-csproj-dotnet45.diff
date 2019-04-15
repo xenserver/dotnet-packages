@@ -37,6 +37,15 @@
    <PropertyGroup>
      <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
      <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+@@ -9,7 +9,7 @@
+     <OutputType>Library</OutputType>
+     <AppDesignerFolder>Properties</AppDesignerFolder>
+     <RootNamespace>Newtonsoft.Json</RootNamespace>
+-    <AssemblyName>Newtonsoft.Json</AssemblyName>
++    <AssemblyName>Newtonsoft.Json.CH</AssemblyName>
+     <SignAssembly>false</SignAssembly>
+     <AssemblyOriginatorKeyFile>
+     </AssemblyOriginatorKeyFile>
 @@ -27,7 +25,7 @@
      <UpgradeBackupLocation>
      </UpgradeBackupLocation>
