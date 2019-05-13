@@ -105,26 +105,14 @@ node("cygwin") {
 
         GString artifactMeta = "build.name=${env.JOB_NAME};build.number=${env.BUILD_NUMBER};vcs.url=${env.CHANGE_URL};vcs.branch=${GIT_BRANCH};vcs.revision=${GIT_COMMIT}"
 
-        def CTX_SIGN_DEFINED = bat(
-          returnStdout: true,
-          script: """
-                @echo off
-                if defined CTXSIGN (echo 1) else (echo 0)
-                """
-        ).trim()
-
-        String targetSubRepo = (CTX_SIGN_DEFINED == '1') ? 'dotnet-packages-ctxsign' : 'dotnet-packages'
-
         // IMPORTANT: do not forget the slash at the end of the target path
-        GString targetPath = "xc-local-build/${targetSubRepo}/${GIT_BRANCH}/${env.BUILD_NUMBER}/"
-
         GString uploadSpec = """
         {
           "files": [
             {
               "pattern": "*",
               "flat": "false",
-              "target": "${targetPath}",
+              "target": "xc-local-build/dotnet-packages/${GIT_BRANCH}/${env.BUILD_NUMBER}/",
               "props": "${artifactMeta}"
             }
           ]
