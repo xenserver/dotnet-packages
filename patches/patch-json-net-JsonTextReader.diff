@@ -28,8 +28,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/JsonTextReader.cs
-+++ Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/JsonTextReader.cs
+--- Newtonsoft.Json/JsonTextReader.cs
++++ Newtonsoft.Json/JsonTextReader.cs
 @@ -607,15 +607,15 @@
                                  ParseString(currentChar, readType);
                                  return FinishReadQuotedStringValue(readType);

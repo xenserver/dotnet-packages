@@ -28,8 +28,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/Newtonsoft.Json.Net40.csproj
-+++ Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/Newtonsoft.Json.Net40.csproj
+--- Newtonsoft.Json/Newtonsoft.Json.Net40.csproj
++++ Newtonsoft.Json/Newtonsoft.Json.Net40.csproj
 @@ -1,5 +1,5 @@
  ﻿<?xml version="1.0" encoding="utf-8"?>
 -<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">

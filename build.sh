@@ -131,31 +131,32 @@ shopt -u extglob
 cd ${SCRATCH_DIR}/xml-rpc_v45.net/src && "${MSBUILD}" ${SWITCHES} ${FRAME45} ${VS2017} ${SIGN}
 cp ${SCRATCH_DIR}/xml-rpc_v45.net/bin/CookComputing.XmlRpcV2.{dll,pdb} ${OUTPUT_45_DIR}
 
-#prepare Json.NET 4.6
+
+#prepare Json.NET
 
 install -m 644 ${REPO}/${JSON_NET_ZIP_FILE} ${SCRATCH_DIR}
+mkdir_clean ${SCRATCH_DIR}/json.net
+unzip -q -d ${SCRATCH_DIR}/json.net ${SCRATCH_DIR}/Newtonsoft.Json-10.0.2.zip Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/*
 
-JSON_NET_SRC_DIR=${SCRATCH_DIR}/json.net
-mkdir_clean ${JSON_NET_SRC_DIR}
-unzip -q -d ${JSON_NET_SRC_DIR} ${SCRATCH_DIR}/Newtonsoft.Json-10.0.2.zip
-ls ${JSON_NET_SRC_DIR}
+#prepare Json.NET 4.6
+
+mkdir_clean ${SCRATCH_DIR}/json46.net
+cp -r ${SCRATCH_DIR}/json.net/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json ${SCRATCH_DIR}/json46.net/
 shopt -s extglob
-apply_patches "${PATCHES}/patch-json-net!(*dotnet45*)" ${JSON_NET_SRC_DIR} # Apply all except dotnet 4.5
+apply_patches "${PATCHES}/patch-json-net!(*dotnet45*)" ${SCRATCH_DIR}/json46.net # Apply all except dotnet 4.5
 shopt -u extglob
-cd ${SCRATCH_DIR}/json.net/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json && "${MSBUILD}" ${SWITCHES} ${FRAME46} ${VS2017} ${SIGN} Newtonsoft.Json.Net40.csproj
-cp ${SCRATCH_DIR}/json.net/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/bin/Release/net46/Newtonsoft.Json.CH.{dll,pdb} ${OUTPUT_46_DIR}
+cd ${SCRATCH_DIR}/json46.net/Newtonsoft.Json && "${MSBUILD}" ${SWITCHES} ${FRAME46} ${VS2017} ${SIGN} Newtonsoft.Json.Net40.csproj
+cp ${SCRATCH_DIR}/json46.net/Newtonsoft.Json/bin/Release/net46/Newtonsoft.Json.CH.{dll,pdb} ${OUTPUT_46_DIR}
 
 #prepare Json.NET 4.5
 
-JSON_NET_SRC_DIR=${SCRATCH_DIR}/json_v45.net
-mkdir_clean ${JSON_NET_SRC_DIR}
-unzip -q -d ${JSON_NET_SRC_DIR} ${SCRATCH_DIR}/Newtonsoft.Json-10.0.2.zip
-ls ${JSON_NET_SRC_DIR}
+mkdir_clean ${SCRATCH_DIR}/json45.net
+cp -r ${SCRATCH_DIR}/json.net/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json ${SCRATCH_DIR}/json45.net/
 shopt -s extglob
-apply_patches "${PATCHES}/patch-json-net!(*dotnet46*)" ${JSON_NET_SRC_DIR} # Apply all except dotnet 4.6
+apply_patches "${PATCHES}/patch-json-net!(*dotnet46*)" ${SCRATCH_DIR}/json45.net # Apply all except dotnet 4.6
 shopt -u extglob
-cd ${SCRATCH_DIR}/json_v45.net/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json && "${MSBUILD}" ${SWITCHES} ${FRAME45} ${VS2017} ${SIGN} Newtonsoft.Json.Net40.csproj
-cp ${SCRATCH_DIR}/json_v45.net/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/bin/Release/net45/Newtonsoft.Json.CH.{dll,pdb} ${OUTPUT_45_DIR}
+cd ${SCRATCH_DIR}/json45.net/Newtonsoft.Json && "${MSBUILD}" ${SWITCHES} ${FRAME45} ${VS2017} ${SIGN} Newtonsoft.Json.Net40.csproj
+cp ${SCRATCH_DIR}/json45.net/Newtonsoft.Json/bin/Release/net45/Newtonsoft.Json.CH.{dll,pdb} ${OUTPUT_45_DIR}
 
 #prepare log4net
 
