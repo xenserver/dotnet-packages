@@ -73,8 +73,7 @@ echo "DEBUG: Printing MSBuild.exe version..."
 SWITCHES="/nologo /m /verbosity:minimal /p:Configuration=Release"
 FRAME45="/p:TargetFrameworkVersion=v4.5"
 FRAME46="/p:TargetFrameworkVersion=v4.6"
-VS2013="/toolsversion:12.0"
-VS2015="/toolsversion:14.0"
+VS2017="/toolsversion:15.0"
 VS2017_CPP="/property:PlatformToolset=v141"
 
 XML_RPC_LICENSE="libraries-src/XML-RPC.NET/LICENSE"
@@ -118,7 +117,7 @@ unzip -q -d ${XMLRPC_SRC_DIR} ${SCRATCH_DIR}/xml-rpc.net.2.5.0.zip
 shopt -s extglob
 apply_patches "${PATCHES}/patch-xmlrpc!(*dotnet45*)" ${XMLRPC_SRC_DIR} # Apply all except dotnet 4.5
 shopt -u extglob
-cd ${SCRATCH_DIR}/xml-rpc.net/src && "${MSBUILD}" ${SWITCHES} ${FRAME46} ${VS2013} ${SIGN}
+cd ${SCRATCH_DIR}/xml-rpc.net/src && "${MSBUILD}" ${SWITCHES} ${FRAME46} ${VS2017} ${SIGN}
 cp ${SCRATCH_DIR}/xml-rpc.net/bin/CookComputing.XmlRpcV2.{dll,pdb} ${OUTPUT_46_DIR}
 
 #prepare xml-rpc dotnet 4.5
@@ -129,7 +128,7 @@ unzip -q -d ${XMLRPC_SRC_DIR} ${SCRATCH_DIR}/xml-rpc.net.2.5.0.zip
 shopt -s extglob
 apply_patches "${PATCHES}/patch-xmlrpc!(*dotnet46*)" ${XMLRPC_SRC_DIR} # Apply all except dotnet 4.6
 shopt -u extglob
-cd ${SCRATCH_DIR}/xml-rpc_v45.net/src && "${MSBUILD}" ${SWITCHES} ${FRAME45} ${VS2013} ${SIGN}
+cd ${SCRATCH_DIR}/xml-rpc_v45.net/src && "${MSBUILD}" ${SWITCHES} ${FRAME45} ${VS2017} ${SIGN}
 cp ${SCRATCH_DIR}/xml-rpc_v45.net/bin/CookComputing.XmlRpcV2.{dll,pdb} ${OUTPUT_45_DIR}
 
 #prepare Json.NET 4.6
@@ -143,7 +142,7 @@ ls ${JSON_NET_SRC_DIR}
 shopt -s extglob
 apply_patches "${PATCHES}/patch-json-net!(*dotnet45*)" ${JSON_NET_SRC_DIR} # Apply all except dotnet 4.5
 shopt -u extglob
-cd ${SCRATCH_DIR}/json.net/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json && "${MSBUILD}" ${SWITCHES} ${FRAME46} ${VS2015} ${SIGN} Newtonsoft.Json.Net40.csproj
+cd ${SCRATCH_DIR}/json.net/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json && "${MSBUILD}" ${SWITCHES} ${FRAME46} ${VS2017} ${SIGN} Newtonsoft.Json.Net40.csproj
 cp ${SCRATCH_DIR}/json.net/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/bin/Release/net46/Newtonsoft.Json.CH.{dll,pdb} ${OUTPUT_46_DIR}
 
 #prepare Json.NET 4.5
@@ -155,7 +154,7 @@ ls ${JSON_NET_SRC_DIR}
 shopt -s extglob
 apply_patches "${PATCHES}/patch-json-net!(*dotnet46*)" ${JSON_NET_SRC_DIR} # Apply all except dotnet 4.6
 shopt -u extglob
-cd ${SCRATCH_DIR}/json_v45.net/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json && "${MSBUILD}" ${SWITCHES} ${FRAME45} ${VS2015} ${SIGN} Newtonsoft.Json.Net40.csproj
+cd ${SCRATCH_DIR}/json_v45.net/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json && "${MSBUILD}" ${SWITCHES} ${FRAME45} ${VS2017} ${SIGN} Newtonsoft.Json.Net40.csproj
 cp ${SCRATCH_DIR}/json_v45.net/Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/bin/Release/net45/Newtonsoft.Json.CH.{dll,pdb} ${OUTPUT_45_DIR}
 
 #prepare log4net
@@ -168,7 +167,7 @@ rm -rf ${LOG4NET_DIST_DIR}
 unzip -q -d ${SCRATCH_DIR} ${SCRATCH_DIR}/log4net-1.2.13-src.zip
 mv ${LOG4NET_DIST_DIR} ${LOG4NET_SRC_DIR}
 apply_patches "${PATCHES}/patch-log4net*" ${LOG4NET_SRC_DIR}
-cd ${SCRATCH_DIR}/log4net/src && "${MSBUILD}" ${SWITCHES} ${FRAME46} ${VS2013} log4net.vs2010.csproj
+cd ${SCRATCH_DIR}/log4net/src && "${MSBUILD}" ${SWITCHES} ${FRAME46} ${VS2017} log4net.vs2010.csproj
 cp ${SCRATCH_DIR}/log4net/build/bin/net/2.0/release/log4net.{dll,pdb} ${OUTPUT_46_DIR}
 
 #prepare sharpziplib
@@ -179,7 +178,7 @@ mkdir_clean ${SHARPZIPLIB_SRC_DIR}
 unzip -q -d ${SHARPZIPLIB_SRC_DIR} ${SCRATCH_DIR}/SharpZipLib_0854_SourceSamples.zip
 cp ${PATCHES}/patch-sharpziplib* ${OUTPUT_SRC_DIR}
 apply_patches "${PATCHES}/patch-sharpziplib*" ${SHARPZIPLIB_SRC_DIR}
-cd ${SCRATCH_DIR}/sharpziplib/src && "${MSBUILD}" ${SWITCHES} ${FRAME46} ${VS2013}
+cd ${SCRATCH_DIR}/sharpziplib/src && "${MSBUILD}" ${SWITCHES} ${FRAME46} ${VS2017}
 cp ${SCRATCH_DIR}/sharpziplib/bin/ICSharpCode.SharpZipLib.{dll,pdb} ${OUTPUT_46_DIR}
 
 #prepare dotnetzip
@@ -190,7 +189,7 @@ mkdir_clean ${DOTNETZIP_SRC_DIR}
 unzip -q -d ${DOTNETZIP_SRC_DIR} ${SCRATCH_DIR}/DotNetZip-src-v1.9.1.8.zip
 cp ${PATCHES}/patch-dotnetzip* ${OUTPUT_SRC_DIR}
 apply_patches "${PATCHES}/patch-dotnetzip*" ${DOTNETZIP_SRC_DIR}
-cd ${SCRATCH_DIR}/dotnetzip/DotNetZip-src/DotNetZip/Zip && "${MSBUILD}" ${SWITCHES} ${FRAME46} ${VS2013}
+cd ${SCRATCH_DIR}/dotnetzip/DotNetZip-src/DotNetZip/Zip && "${MSBUILD}" ${SWITCHES} ${FRAME46} ${VS2017}
 cp ${SCRATCH_DIR}/dotnetzip/DotNetZip-src/DotNetZip/Zip/bin/Release/Ionic.Zip.{dll,pdb} ${OUTPUT_46_DIR}
 
 #prepare discutils
@@ -202,7 +201,7 @@ unzip -q -d ${DISCUTILS_SRC_DIR} ${SCRATCH_DIR}/DiscUtils-204669b416f9.zip
 mv ${DISCUTILS_SRC_DIR}/DiscUtils_204669b416f9/* ${DISCUTILS_SRC_DIR}
 cp ${PATCHES}/patch-discutils* ${OUTPUT_SRC_DIR}
 apply_patches "${PATCHES}/patch-discutils*" ${DISCUTILS_SRC_DIR}
-cd ${SCRATCH_DIR}/DiscUtils/src && "${MSBUILD}" ${SWITCHES} ${FRAME46} ${VS2013}
+cd ${SCRATCH_DIR}/DiscUtils/src && "${MSBUILD}" ${SWITCHES} ${FRAME46} ${VS2017}
 cp ${SCRATCH_DIR}/DiscUtils/src/bin/Release/DiscUtils.{dll,pdb} ${OUTPUT_46_DIR}
 
 #prepare PuTTY
