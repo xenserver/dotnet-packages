@@ -28,8 +28,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/JsonConvert.cs
-+++ Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/JsonConvert.cs
+--- Newtonsoft.Json/JsonConvert.cs
++++ Newtonsoft.Json/JsonConvert.cs
 @@ -95,6 +95,16 @@
          public static readonly string NaN = "NaN";
  

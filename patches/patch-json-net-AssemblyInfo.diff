@@ -28,8 +28,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/Properties/AssemblyInfo.cs
-+++ Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/Properties/AssemblyInfo.cs
+--- Newtonsoft.Json/Properties/AssemblyInfo.cs
++++ Newtonsoft.Json/Properties/AssemblyInfo.cs
 @@ -56,16 +56,6 @@
  [assembly: AllowPartiallyTrustedCallers]
  #endif
