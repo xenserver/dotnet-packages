@@ -75,7 +75,7 @@ FRAME45="/p:TargetFrameworkVersion=v4.5"
 FRAME46="/p:TargetFrameworkVersion=v4.6"
 VS2013="/toolsversion:12.0"
 VS2015="/toolsversion:14.0"
-VS2013_CPP="/property:PlatformToolset=v120"
+VS2017_CPP="/property:PlatformToolset=v141"
 
 XML_RPC_LICENSE="libraries-src/XML-RPC.NET/LICENSE"
 JSON_NET_LICENSE="libraries-src/Json.NET/LICENSE.txt"
@@ -212,8 +212,8 @@ PUTTY_SRC_DIR=${SCRATCH_DIR}/PuTTY
 mkdir_clean ${PUTTY_SRC_DIR}
 unzip -q -d ${PUTTY_SRC_DIR} ${SCRATCH_DIR}/putty-src.zip
 cp ${PUTTY_SRC_DIR}/version.h ${PUTTY_SRC_DIR}/licence.h ${PUTTY_SRC_DIR}/windows/
-cd ${SCRATCH_DIR}/PuTTY/windows/VS2010 && "${MSBUILD}" ${SWITCHES} ${VS2013_CPP}
-cp ${SCRATCH_DIR}/PuTTY/windows/VS2010/putty/Release/putty.exe ${OUTPUT_46_DIR}
+cd ${SCRATCH_DIR}/PuTTY/windows/VS2012 && "${MSBUILD}" ${SWITCHES} ${VS2017_CPP}
+cp ${SCRATCH_DIR}/PuTTY/windows/VS2012/putty/Release/putty.exe ${OUTPUT_46_DIR}
 
 #copy licences
 
