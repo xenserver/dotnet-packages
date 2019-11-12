@@ -117,7 +117,7 @@ unzip -q -d ${XMLRPC_SRC_DIR} ${SCRATCH_DIR}/xml-rpc.net.2.5.0.zip
 shopt -s extglob
 apply_patches "${PATCHES}/patch-xmlrpc!(*dotnet45*)" ${XMLRPC_SRC_DIR} # Apply all except dotnet 4.5
 shopt -u extglob
-cd ${SCRATCH_DIR}/xml-rpc.net/src && "${MSBUILD}" ${SWITCHES} ${FRAME46} ${VS2017} ${SIGN}
+cd ${SCRATCH_DIR}/xml-rpc.net/src && "${MSBUILD}" ${SWITCHES} ${FRAME46} ${VS2017} ${SIGN} xmlrpc.csproj
 cp ${SCRATCH_DIR}/xml-rpc.net/bin/CookComputing.XmlRpcV2.{dll,pdb} ${OUTPUT_46_DIR}
 
 #prepare xml-rpc dotnet 4.5
@@ -128,7 +128,7 @@ unzip -q -d ${XMLRPC_SRC_DIR} ${SCRATCH_DIR}/xml-rpc.net.2.5.0.zip
 shopt -s extglob
 apply_patches "${PATCHES}/patch-xmlrpc!(*dotnet46*)" ${XMLRPC_SRC_DIR} # Apply all except dotnet 4.6
 shopt -u extglob
-cd ${SCRATCH_DIR}/xml-rpc_v45.net/src && "${MSBUILD}" ${SWITCHES} ${FRAME45} ${VS2017} ${SIGN}
+cd ${SCRATCH_DIR}/xml-rpc_v45.net/src && "${MSBUILD}" ${SWITCHES} ${FRAME45} ${VS2017} ${SIGN} xmlrpc.csproj
 cp ${SCRATCH_DIR}/xml-rpc_v45.net/bin/CookComputing.XmlRpcV2.{dll,pdb} ${OUTPUT_45_DIR}
 
 
