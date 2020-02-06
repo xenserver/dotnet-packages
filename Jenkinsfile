@@ -62,36 +62,25 @@ node("cygwin") {
     def GIT_COMMIT = bat(
       returnStdout: true,
       script: """
-                @echo off
-                cd ${env.WORKSPACE}\\dotnet-packages.git
-                git rev-parse HEAD
-                """
+      @echo off
+      cd ${env.WORKSPACE}\\dotnet-packages.git
+      git rev-parse HEAD
+      """
     ).trim()
 
     def GIT_BRANCH = bat(
       returnStdout: true,
       script: """
-                @echo off
-                cd ${env.WORKSPACE}\\dotnet-packages.git
-                git rev-parse --abbrev-ref HEAD
-                """
+      @echo off
+      cd ${env.WORKSPACE}\\dotnet-packages.git
+      git rev-parse --abbrev-ref HEAD
+      """
     ).trim()
 
     stage('Build') {
-      bat """
-          cd ${env.WORKSPACE}
-          sh 'dotnet-packages.git/build.sh' --snk ${env.SNK_LOCATION}
-          """
-    }
-
-    stage('Create manifest') {
-      GString manifestFile = "${env.WORKSPACE}\\dotnet-packages.git\\_build\\output\\dotnet-packages-manifest.txt"
-      String branchInfo = (GIT_BRANCH == 'master') ? 'trunk' : GIT_BRANCH
-
-      bat """
-          echo @branch=${branchInfo} > ${manifestFile}
-          echo dotnet-packages dotnet-packages.git ${GIT_COMMIT} >> ${manifestFile}
-          """
+      dir("${env.WORKSPACE}\\dotnet-packages.git"){
+        powershell """.\\build.ps1 -SnkKey ${env.SNK_LOCATION}"""
+      }
     }
 
     stage('Upload') {

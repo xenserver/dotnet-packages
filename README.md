@@ -35,20 +35,19 @@ directories. Please see the [LICENSE](LICENSE) file for more information.
 
 ### Prerequisites
 
-1. .Net Framework 4.5 and 4.6 installed.
-2. Visual Studio build tools for 2013 (toolsversion 12.0) and 2015 (toolsversion 14.0).
-3. The Windows 8.1 SDK (PlatformToolset v120 included in VS2013).
-4. Add the location of the `msbuild` executable to the System Path.
-5. [Cygwin](http://www.cygwin.com) installed including the `unzip` and `patch` packages.
-6. Add the Cygwin `/bin` directory to your System Path.
-7. Make sure Git is installed and can be accessed from the command-line.
+1. PowerShell 3.0 or above
+2. Net Framework 4.5 and 4.6 installed.
+3. Visual Studio build tools for 2017 (toolsversion 15.0 and toolset v141 for C++).
+  Add the location of `msbuild` to the System Path.
+4. The Windows 8.1 SDK.
+5. `git`, `patch`, `zip` and `unzip` packages. These can be obtained with
+  [Cygwin](https://www.cygwin.com/) or [Chocolatey](https://chocolatey.org).
 
 ### Build
 
-The libraries can be built (with patches applied) by opening the command line in
-a suitable directory and running the following commands:
+The libraries can be built (with patches applied) by opening a PowerShell prompt
+in the repo root and running:
 
 ```shell
-git clone https://github.com/xenserver/dotnet-packages.git
-sh dotnet-packages/build.sh [--snk <snk-file>]
+.\build.ps1 [-SnkKey <snk-file>]
 ```
