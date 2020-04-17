@@ -64,9 +64,9 @@ function applyPatch {
 
 $SWITCHES = '/nologo', '/m', '/verbosity:normal', '/p:Configuration=Release'
 $FRAME45 = '/p:TargetFrameworkVersion=v4.5'
-$FRAME46 = '/p:TargetFrameworkVersion=v4.6'
-$VS2017 = '/toolsversion:15.0'
-$VS2017_CPP = '/property:PlatformToolset=v141'
+$FRAME48 = '/p:TargetFrameworkVersion=v4.8'
+$VS2019 = '/toolsversion:Current'
+$VS2019_CPP = '/property:PlatformToolset=v142'
 
 if ($SnkKey) {
   $SIGN = '/p:SignAssembly=true', "/p:AssemblyOriginatorKeyFile=$SnkKey"
@@ -77,7 +77,7 @@ $BUILD_DIR = "$REPO\_build"
 $SCRATCH_DIR = "$BUILD_DIR\scratch"
 $OUTPUT_DIR = "$BUILD_DIR\output"
 $OUTPUT_SRC_DIR = "$OUTPUT_DIR\SOURCES"
-$OUTPUT_46_DIR = "$OUTPUT_DIR\dotnet46"
+$OUTPUT_48_DIR = "$OUTPUT_DIR\dotnet48"
 $OUTPUT_45_DIR = "$OUTPUT_DIR\dotnet45"
 $PATCHES = "$REPO\patches"
 
@@ -85,7 +85,7 @@ Write-Output 'DEBUG: Printing MSBuild.exe version...'
 MSBuild.exe /ver
 Write-Output ''
 
-mkdirClean $BUILD_DIR, $SCRATCH_DIR, $OUTPUT_DIR, $OUTPUT_SRC_DIR, $OUTPUT_46_DIR, $OUTPUT_45_DIR
+mkdirClean $BUILD_DIR, $SCRATCH_DIR, $OUTPUT_DIR, $OUTPUT_SRC_DIR, $OUTPUT_48_DIR, $OUTPUT_45_DIR
 
 #prepare sources and manifest
 
@@ -94,43 +94,43 @@ $gitCommit = git rev-parse HEAD
 git archive --format=zip -o "$OUTPUT_SRC_DIR\\dotnet-packages-sources.zip" $gitCommit
 "dotnet-packages.git $gitCommit" | Out-File -FilePath "$OUTPUT_DIR\dotnet-packages-manifest.txt"
 
-#prepare xml-rpc dotnet 4.6
+#prepare xml-rpc dotnet 4.8
 
-mkdirClean "$SCRATCH_DIR\xml-rpc_v46.net"
-unzip -q -d "$SCRATCH_DIR\xml-rpc_v46.net" "$REPO\XML-RPC.NET\xml-rpc.net.2.5.0.zip"
+mkdirClean "$SCRATCH_DIR\xml-rpc_v48.net"
+unzip -q -d "$SCRATCH_DIR\xml-rpc_v48.net" "$REPO\XML-RPC.NET\xml-rpc.net.2.5.0.zip"
 
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-xmlrpc") -and !$_.Name.Contains("dotnet45") } |`
-  % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\xml-rpc_v46.net"
+  % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\xml-rpc_v48.net"
 
 
-MSBuild.exe $SWITCHES $FRAME46 $VS2017 $SIGN "$SCRATCH_DIR\xml-rpc_v46.net\src\xmlrpc.csproj"
-'dll', 'pdb' | % { "$SCRATCH_DIR\xml-rpc_v46.net\bin\CookComputing.XmlRpcV2." + $_ } |`
-  Move-Item -Destination $OUTPUT_46_DIR
+MSBuild.exe $SWITCHES $FRAME48 $VS2019 $SIGN "$SCRATCH_DIR\xml-rpc_v48.net\src\xmlrpc.csproj"
+'dll', 'pdb' | % { "$SCRATCH_DIR\xml-rpc_v48.net\bin\CookComputing.XmlRpcV2." + $_ } |`
+  Move-Item -Destination $OUTPUT_48_DIR
 
 #prepare xml-rpc dotnet 4.5
 
 mkdirClean "$SCRATCH_DIR\xml-rpc_v45.net"
 unzip -q -d "$SCRATCH_DIR\xml-rpc_v45.net" "$REPO\XML-RPC.NET\xml-rpc.net.2.5.0.zip"
 
-Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-xmlrpc") -and !$_.Name.Contains("dotnet46") } |`
+Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-xmlrpc") -and !$_.Name.Contains("dotnet48") } |`
   % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\xml-rpc_v45.net"
 
-MSBuild.exe $SWITCHES $FRAME45 $VS2017 $SIGN "$SCRATCH_DIR\xml-rpc_v45.net\src\xmlrpc.csproj"
+MSBuild.exe $SWITCHES $FRAME45 $VS2019 $SIGN "$SCRATCH_DIR\xml-rpc_v45.net\src\xmlrpc.csproj"
 'dll', 'pdb' | % { "$SCRATCH_DIR\xml-rpc_v45.net\bin\CookComputing.XmlRpcV2." + $_ } |`
   Move-Item -Destination $OUTPUT_45_DIR
 
-#prepare Json.NET 4.6
+#prepare Json.NET 4.8
 
-mkdirClean "$SCRATCH_DIR\json46.net"
-unzip -q -d "$SCRATCH_DIR\json46.net" "$REPO\Json.NET\Newtonsoft.Json-10.0.2.zip" "Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/*"
-Move-Item "$SCRATCH_DIR\json46.net\Newtonsoft.Json-10.0.2\Src\Newtonsoft.Json" "$SCRATCH_DIR\json46.net"
+mkdirClean "$SCRATCH_DIR\json48.net"
+unzip -q -d "$SCRATCH_DIR\json48.net" "$REPO\Json.NET\Newtonsoft.Json-10.0.2.zip" "Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/*"
+Move-Item "$SCRATCH_DIR\json48.net\Newtonsoft.Json-10.0.2\Src\Newtonsoft.Json" "$SCRATCH_DIR\json48.net"
 
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-json-net") -and !$_.Name.Contains("dotnet45") } |`
-  % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\json46.net"
+  % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\json48.net"
 
-MSBuild.exe $SWITCHES $FRAME46 $VS2017 $SIGN "$SCRATCH_DIR\json46.net\Newtonsoft.Json\Newtonsoft.Json.Net40.csproj"
-'dll', 'pdb' | % { "$SCRATCH_DIR\json46.net\Newtonsoft.Json\bin\Release\net46\Newtonsoft.Json.CH." + $_ } |`
-  Move-Item -Destination $OUTPUT_46_DIR
+MSBuild.exe $SWITCHES $FRAME48 $VS2019 $SIGN "$SCRATCH_DIR\json48.net\Newtonsoft.Json\Newtonsoft.Json.Net40.csproj"
+'dll', 'pdb' | % { "$SCRATCH_DIR\json48.net\Newtonsoft.Json\bin\Release\net48\Newtonsoft.Json.CH." + $_ } |`
+  Move-Item -Destination $OUTPUT_48_DIR
 
 #prepare Json.NET 4.5
 
@@ -138,10 +138,10 @@ mkdirClean "$SCRATCH_DIR\json45.net"
 unzip -q -d "$SCRATCH_DIR\json45.net" "$REPO\Json.NET\Newtonsoft.Json-10.0.2.zip" "Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/*"
 Move-Item "$SCRATCH_DIR\json45.net\Newtonsoft.Json-10.0.2\Src\Newtonsoft.Json" "$SCRATCH_DIR\json45.net"
 
-Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-json-net") -and !$_.Name.Contains("dotnet46") } |`
+Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-json-net") -and !$_.Name.Contains("dotnet48") } |`
   % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\json45.net"
 
-MSBuild.exe $SWITCHES $FRAME45 $VS2017 $SIGN "$SCRATCH_DIR\json45.net\Newtonsoft.Json\Newtonsoft.Json.Net40.csproj"
+MSBuild.exe $SWITCHES $FRAME45 $VS2019 $SIGN "$SCRATCH_DIR\json45.net\Newtonsoft.Json\Newtonsoft.Json.Net40.csproj"
 'dll', 'pdb' | % { "$SCRATCH_DIR\json45.net\Newtonsoft.Json\bin\Release\net45\Newtonsoft.Json.CH." + $_ } |`
   Move-Item -Destination $OUTPUT_45_DIR
 
@@ -154,9 +154,9 @@ Move-Item "$SCRATCH_DIR\log4net\log4net-1.2.13\*" "$SCRATCH_DIR\log4net"
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-log4net") } | % { $_.FullName } |`
   applyPatch -Path "$SCRATCH_DIR\log4net"
 
-MSBuild.exe $SWITCHES $FRAME46 $VS2017 "$SCRATCH_DIR\log4net\src\log4net.vs2010.csproj"
+MSBuild.exe $SWITCHES $FRAME48 $VS2019 "$SCRATCH_DIR\log4net\src\log4net.vs2010.csproj"
 'dll', 'pdb' | % { "$SCRATCH_DIR\log4net\build\bin\net\2.0\release\log4net." + $_ } |`
-  Move-Item -Destination $OUTPUT_46_DIR
+  Move-Item -Destination $OUTPUT_48_DIR
 
 #prepare sharpziplib
 
@@ -166,9 +166,9 @@ unzip -q -d "$SCRATCH_DIR\sharpziplib" "$REPO\SharpZipLib\SharpZipLib_0854_Sourc
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-sharpziplib") } | % { $_.FullName } |`
   applyPatch -Path "$SCRATCH_DIR\sharpziplib"
 
-MSBuild.exe $SWITCHES $FRAME46 $VS2017 "$SCRATCH_DIR\sharpziplib\src\ICSharpCode.SharpZLib.csproj"
+MSBuild.exe $SWITCHES $FRAME48 $VS2019 "$SCRATCH_DIR\sharpziplib\src\ICSharpCode.SharpZLib.csproj"
 'dll', 'pdb' | % { "$SCRATCH_DIR\sharpziplib\bin\ICSharpCode.SharpZipLib." + $_ } |`
-  Move-Item -Destination $OUTPUT_46_DIR
+  Move-Item -Destination $OUTPUT_48_DIR
 
 #prepare dotnetzip
 
@@ -178,9 +178,9 @@ unzip -q -d "$SCRATCH_DIR\dotnetzip" "$REPO\DotNetZip\DotNetZip-src-v1.9.1.8.zip
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-dotnetzip") } | % { $_.FullName } |`
   applyPatch -Path "$SCRATCH_DIR\dotnetzip"
 
-MSBuild.exe $SWITCHES $FRAME46 $VS2017 "$SCRATCH_DIR\dotnetzip\DotNetZip-src\DotNetZip\Zip\Zip DLL.csproj"
+MSBuild.exe $SWITCHES $FRAME48 $VS2019 "$SCRATCH_DIR\dotnetzip\DotNetZip-src\DotNetZip\Zip\Zip DLL.csproj"
 'dll', 'pdb' | % { "$SCRATCH_DIR\dotnetzip\DotNetZip-src\DotNetZip\Zip\bin\Release\Ionic.Zip." + $_ } |`
-  Move-Item -Destination $OUTPUT_46_DIR
+  Move-Item -Destination $OUTPUT_48_DIR
 
 #prepare discutils
 
@@ -191,17 +191,17 @@ Move-Item "$SCRATCH_DIR\DiscUtils\DiscUtils_204669b416f9\*" "$SCRATCH_DIR\DiscUt
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-discutils") } | % { $_.FullName } |`
   applyPatch -Path "$SCRATCH_DIR\DiscUtils"
 
-MSBuild.exe $SWITCHES $FRAME46 $VS2017 "$SCRATCH_DIR\DiscUtils\src\DiscUtils.csproj"
+MSBuild.exe $SWITCHES $FRAME48 $VS2019 "$SCRATCH_DIR\DiscUtils\src\DiscUtils.csproj"
 'dll', 'pdb' | % { "$SCRATCH_DIR\DiscUtils\src\bin\Release\DiscUtils." + $_ } |`
-  Move-Item -Destination $OUTPUT_46_DIR
+  Move-Item -Destination $OUTPUT_48_DIR
 
 #prepare PuTTY
 
 mkdirClean "$SCRATCH_DIR\PuTTY"
 unzip -q -d "$SCRATCH_DIR\PuTTY" "$REPO\PuTTY\putty-src.zip"
 'version.h', 'licence.h' | % { "$SCRATCH_DIR\PuTTY\" + $_ } | Copy-Item -Destination "$SCRATCH_DIR\PuTTY\windows\"
-MSBuild.exe $SWITCHES $VS2017_CPP "$SCRATCH_DIR\PuTTY\windows\VS2012"
-Move-Item "$SCRATCH_DIR\PuTTY\windows\VS2012\putty\Release\putty.exe" -Destination $OUTPUT_46_DIR
+MSBuild.exe $SWITCHES $VS2019_CPP "$SCRATCH_DIR\PuTTY\windows\VS2012"
+Move-Item "$SCRATCH_DIR\PuTTY\windows\VS2012\putty\Release\putty.exe" -Destination $OUTPUT_48_DIR
 
 #copy licences
 

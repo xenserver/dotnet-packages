@@ -30,15 +30,6 @@
 
 --- "DotNetZip-src/DotNetZip/Zip/Zip DLL.csproj"	2011-11-02 11:24:48.000000000 +0000
 +++ "DotNetZip-src/DotNetZip/Zip/Zip DLL.csproj"	2013-12-04 14:36:16.364893500 +0000
-@@ -22,7 +22,7 @@
-     <SccLocalPath>SAK</SccLocalPath>
-     <SccAuxPath>SAK</SccAuxPath>
-     <SccProvider>SAK</SccProvider>
--    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
-+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-     <PublishUrl>publish\</PublishUrl>
-     <Install>true</Install>
-     <InstallFrom>Disk</InstallFrom>
 @@ -37,6 +37,7 @@
      <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
      <UseApplicationTrust>false</UseApplicationTrust>
