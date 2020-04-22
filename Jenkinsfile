@@ -31,7 +31,7 @@
  * SUCH DAMAGE.
  */
 
-node("cygwin") {
+node('xencenter') {
 
   try {
 
