@@ -59,6 +59,10 @@ function applyPatch {
   process {
     Write-Output "Applying patch file $patch..."
     patch -b --binary -d $Path -p0 -i $Patch
+
+    if (-not $?) {
+        Write-Error "Failed to apply $Patch"
+    }
   }
 }
 

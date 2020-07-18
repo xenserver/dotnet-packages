@@ -79,7 +79,11 @@ node('xencenter') {
 
     stage('Build') {
       dir("${env.WORKSPACE}\\dotnet-packages.git"){
-        powershell """.\\build.ps1 -SnkKey ${env.SNK_LOCATION}"""
+        def result = powershell(
+            returnStatus: true,
+            script: ".\\build.ps1 -SnkKey ${env.SNK_LOCATION}"
+        )
+        assert result == 0
       }
     }
 
@@ -116,9 +120,9 @@ node('xencenter') {
 
     currentBuild.result = 'SUCCESS'
 
-  } catch (Exception ex) {
+  } catch (Throwable ex) {
     currentBuild.result = 'FAILURE'
-    throw ex as java.lang.Throwable
+    throw ex
   } finally {
     step([
       $class                  : 'Mailer',
