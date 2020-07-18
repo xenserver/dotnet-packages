@@ -76,7 +76,6 @@ $REPO = Get-Item "$PSScriptRoot" | select -ExpandProperty FullName
 $BUILD_DIR = "$REPO\_build"
 $SCRATCH_DIR = "$BUILD_DIR\scratch"
 $OUTPUT_DIR = "$BUILD_DIR\output"
-$OUTPUT_SRC_DIR = "$OUTPUT_DIR\SOURCES"
 $OUTPUT_48_DIR = "$OUTPUT_DIR\dotnet48"
 $OUTPUT_45_DIR = "$OUTPUT_DIR\dotnet45"
 $PATCHES = "$REPO\patches"
@@ -87,13 +86,13 @@ Write-Output 'DEBUG: Printing MSBuild.exe version...'
 & $msbuild /ver
 Write-Output ''
 
-mkdirClean $BUILD_DIR, $SCRATCH_DIR, $OUTPUT_DIR, $OUTPUT_SRC_DIR, $OUTPUT_48_DIR, $OUTPUT_45_DIR
+mkdirClean $BUILD_DIR, $SCRATCH_DIR, $OUTPUT_DIR, $OUTPUT_48_DIR, $OUTPUT_45_DIR
 
 #prepare sources and manifest
 
 Set-Location -Path $REPO
 $gitCommit = git rev-parse HEAD
-git archive --format=zip -o "$OUTPUT_SRC_DIR\\dotnet-packages-sources.zip" $gitCommit
+git archive --format=zip -o "$OUTPUT_DIR\\dotnet-packages-sources.zip" $gitCommit
 "dotnet-packages.git $gitCommit" | Out-File -FilePath "$OUTPUT_DIR\dotnet-packages-manifest.txt"
 
 #prepare xml-rpc dotnet 4.8
