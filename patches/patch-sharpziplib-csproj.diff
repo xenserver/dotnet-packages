@@ -1,10 +1,10 @@
-# Copyright (c) Citrix Systems, Inc.  
+# Copyright (c) Citrix Systems, Inc.
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms,
 # with or without modification, are permitted provided
 # that the following conditions are met:
-# 
+#
 # *   Redistributions of source code must retain the above
 #     copyright notice, this list of conditions and the
 #     following disclaimer.
@@ -12,7 +12,7 @@
 #     copyright notice, this list of conditions and the
 #     following disclaimer in the documentation and/or other
 #     materials provided with the distribution.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
 # CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 # INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -28,10 +28,20 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- src/ICSharpCode.SharpZLib.csproj	2010-02-06 11:40:09.000000000 +0000
-+++ src/ICSharpCode.SharpZLib.csproj	2010-02-06 11:43:32.000000000 +0000
-@@ -18,13 +18,13 @@
+--- src/ICSharpCode.SharpZLib.csproj	2007-08-25 06:30:00.000000000 +0100
++++ src/ICSharpCode.SharpZLib.csproj	2020-07-18 15:31:03.078763300 +0100
+@@ -1,4 +1,5 @@
+-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" xmlns:Conversion="urn:Conversion">
++<?xml version="1.0" encoding="utf-8"?>
++<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" xmlns:Conversion="urn:Conversion" ToolsVersion="Current">
+   <PropertyGroup>
+     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+@@ -16,15 +17,16 @@
+     <PreBuildEvent />
+     <PostBuildEvent />
      <DocumentationFile>..\bin\ICSharpCode.SharpZipLib.xml</DocumentationFile>
++    <TargetFrameworkProfile />
    </PropertyGroup>
    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
 -    <DebugSymbols>false</DebugSymbols>
@@ -41,8 +51,8 @@
      <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
      <OutputPath>..\bin\</OutputPath>
 -    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 -    <DebugType>None</DebugType>
++    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 +    <DebugType>pdbonly</DebugType>
    </PropertyGroup>
    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
