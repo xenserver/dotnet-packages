@@ -203,7 +203,7 @@ mkdirClean "$SCRATCH_DIR\PuTTY"
 unzip -q -d "$SCRATCH_DIR\PuTTY" "$REPO\PuTTY\putty-src.zip"
 'version.h', 'licence.h' | % { "$SCRATCH_DIR\PuTTY\" + $_ } | Copy-Item -Destination "$SCRATCH_DIR\PuTTY\windows\"
 & $msbuild $SWITCHES $VS2019_CPP "$SCRATCH_DIR\PuTTY\windows\VS2012"
-Move-Item "$SCRATCH_DIR\PuTTY\windows\VS2012\putty\Release\putty.exe" -Destination $OUTPUT_48_DIR
+Move-Item "$SCRATCH_DIR\PuTTY\windows\VS2012\putty\Release\putty.exe" -Destination $OUTPUT_DIR
 
 #copy licences
 
