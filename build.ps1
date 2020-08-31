@@ -162,7 +162,7 @@ Move-Item "$SCRATCH_DIR\log4net48\log4net-2.0.8\*" "$SCRATCH_DIR\log4net48"
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-log4net") } | % { $_.FullName } |`
   applyPatch -Path "$SCRATCH_DIR\log4net48"
 
-& $msbuild $SWITCHES $FRAME48 $VS2019 "$SCRATCH_DIR\log4net48\src\log4net.vs2012.csproj"
+& $msbuild $SWITCHES $FRAME48 $VS2019 $SIGN "$SCRATCH_DIR\log4net48\src\log4net.vs2012.csproj"
 'dll', 'pdb' | % { "$SCRATCH_DIR\log4net48\build\bin\net\4.5\release\log4net." + $_ } |`
   Move-Item -Destination $OUTPUT_48_DIR
 
@@ -175,7 +175,7 @@ Move-Item "$SCRATCH_DIR\log4net46\log4net-2.0.8\*" "$SCRATCH_DIR\log4net46"
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-log4net") } | % { $_.FullName } |`
   applyPatch -Path "$SCRATCH_DIR\log4net46"
 
-& $msbuild $SWITCHES $FRAME46 $VS2019 "$SCRATCH_DIR\log4net46\src\log4net.vs2012.csproj"
+& $msbuild $SWITCHES $FRAME46 $VS2019 $SIGN "$SCRATCH_DIR\log4net46\src\log4net.vs2012.csproj"
 
 try {
   Set-Location -Path "$SCRATCH_DIR\log4net46"
@@ -196,7 +196,7 @@ unzip -q -d "$SCRATCH_DIR\sharpziplib" "$REPO\SharpZipLib\SharpZipLib_0854_Sourc
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-sharpziplib") } | % { $_.FullName } |`
   applyPatch -Path "$SCRATCH_DIR\sharpziplib"
 
-& $msbuild $SWITCHES $FRAME48 $VS2019 "$SCRATCH_DIR\sharpziplib\src\ICSharpCode.SharpZLib.csproj"
+& $msbuild $SWITCHES $FRAME48 $VS2019 $SIGN "$SCRATCH_DIR\sharpziplib\src\ICSharpCode.SharpZLib.csproj"
 'dll', 'pdb' | % { "$SCRATCH_DIR\sharpziplib\bin\ICSharpCode.SharpZipLib." + $_ } |`
   Move-Item -Destination $OUTPUT_48_DIR
 
@@ -208,7 +208,7 @@ unzip -q -d "$SCRATCH_DIR\dotnetzip" "$REPO\DotNetZip\DotNetZip-src-v1.9.1.8.zip
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-dotnetzip") } | % { $_.FullName } |`
   applyPatch -Path "$SCRATCH_DIR\dotnetzip"
 
-& $msbuild $SWITCHES $FRAME48 $VS2019 "$SCRATCH_DIR\dotnetzip\DotNetZip-src\DotNetZip\Zip\Zip DLL.csproj"
+& $msbuild $SWITCHES $FRAME48 $VS2019 $SIGN "$SCRATCH_DIR\dotnetzip\DotNetZip-src\DotNetZip\Zip\Zip DLL.csproj"
 'dll', 'pdb' | % { "$SCRATCH_DIR\dotnetzip\DotNetZip-src\DotNetZip\Zip\bin\Release\Ionic.Zip." + $_ } |`
   Move-Item -Destination $OUTPUT_48_DIR
 
@@ -221,7 +221,7 @@ Move-Item "$SCRATCH_DIR\DiscUtils\DiscUtils_204669b416f9\*" "$SCRATCH_DIR\DiscUt
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-discutils") } | % { $_.FullName } |`
   applyPatch -Path "$SCRATCH_DIR\DiscUtils"
 
-& $msbuild $SWITCHES $FRAME48 $VS2019 "$SCRATCH_DIR\DiscUtils\src\DiscUtils.csproj"
+& $msbuild $SWITCHES $FRAME48 $VS2019 $SIGN "$SCRATCH_DIR\DiscUtils\src\DiscUtils.csproj"
 'dll', 'pdb' | % { "$SCRATCH_DIR\DiscUtils\src\bin\Release\DiscUtils." + $_ } |`
   Move-Item -Destination $OUTPUT_48_DIR
 
