@@ -215,13 +215,12 @@ Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-dotnetzip") } | % { $
 #prepare discutils
 
 mkdirClean "$SCRATCH_DIR\DiscUtils"
-unzip -q -d "$SCRATCH_DIR\DiscUtils" "$REPO\DiscUtils\DiscUtils-204669b416f9.zip"  "DiscUtils_204669b416f9/*"
-Move-Item "$SCRATCH_DIR\DiscUtils\DiscUtils_204669b416f9\*" "$SCRATCH_DIR\DiscUtils"
+unzip -q -d "$SCRATCH_DIR\DiscUtils" "$REPO\DiscUtils\DiscUtils-0.11.zip"
 
-Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-discutils") } | % { $_.FullName } |`
-  applyPatch -Path "$SCRATCH_DIR\DiscUtils"
+Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-discutils") } |`
+  % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\DiscUtils"
 
-& $msbuild $SWITCHES $FRAME48 $VS2019 $SIGN "$SCRATCH_DIR\DiscUtils\src\DiscUtils.csproj"
+& $msbuild $SWITCHES $FRAME48 $VS2019 $SIGN "$SCRATCH_DIR\DiscUtils\LibraryOnly.sln"
 'dll', 'pdb' | % { "$SCRATCH_DIR\DiscUtils\src\bin\Release\DiscUtils." + $_ } |`
   Move-Item -Destination $OUTPUT_48_DIR
 

@@ -3,7 +3,7 @@
 This repository contains the source code and patches for the third-party
 libraries:
 
-* DiscUtils (v0.7) - a .NET library for reading and writing ISO files
+* DiscUtils (v0.11) - a .NET library for reading and writing ISO files
   and Virtual Machine disk files (VHD, VDI, XVA, VMDK, etc);
 * DotNetZip (v1.9.1.8) - a .NET library for handling ZIP files;
 * SharpZipLib (v0.85.4)- a Zip, GZip, Tar and BZip2 library written
