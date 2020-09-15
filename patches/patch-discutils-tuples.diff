@@ -1,10 +1,10 @@
-# Copyright (c) Citrix Systems, Inc.  
+# Copyright (c) Citrix Systems, Inc.
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms,
 # with or without modification, are permitted provided
 # that the following conditions are met:
-# 
+#
 # *   Redistributions of source code must retain the above
 #     copyright notice, this list of conditions and the
 #     following disclaimer.
@@ -12,7 +12,7 @@
 #     copyright notice, this list of conditions and the
 #     following disclaimer in the documentation and/or other
 #     materials provided with the distribution.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
 # CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 # INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -28,29 +28,27 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- src/DiscUtils.csproj	2010-04-07 00:14:36.000000000 +0100
-+++ src/DiscUtils.csproj	2013-12-04 14:21:51.329398600 +0000
-@@ -1,5 +1,5 @@
- ﻿<?xml version="1.0" encoding="utf-8"?>
--<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-+<Project ToolsVersion="Current" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-   <PropertyGroup>
-     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-@@ -10,12 +10,16 @@
-     <AssemblyName>DiscUtils</AssemblyName>
-     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
-     <FileAlignment>512</FileAlignment>
--    <TargetFrameworkSubset>
--    </TargetFrameworkSubset>
-     <SignAssembly>false</SignAssembly>
-     <AssemblyOriginatorKeyFile>..\DiscUtilsSigningKey.snk</AssemblyOriginatorKeyFile>
-+    <FileUpgradeFlags>
-+    </FileUpgradeFlags>
-+    <UpgradeBackupLocation>
-+    </UpgradeBackupLocation>
-+    <OldToolsVersion>3.5</OldToolsVersion>
-+    <TargetFrameworkProfile />
-   </PropertyGroup>
-   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-     <DebugSymbols>true</DebugSymbols>
+--- src/Ntfs/ClusterBitmap.cs	2018-01-09 11:56:04.000000000 +0000
++++ src/Ntfs/ClusterBitmap.cs	2020-09-15 23:43:22.884436000 +0100
+@@ -147,7 +147,7 @@
+         {
+             foreach (var run in runs)
+             {
+-                _bitmap.MarkAbsentRange(run.First, run.Second);
++                _bitmap.MarkAbsentRange(run.Item1, run.Item2);
+             }
+         }
+ 
+--- src/Ntfs/RawClusterStream.cs	2018-01-09 11:56:06.000000000 +0000
++++ src/Ntfs/RawClusterStream.cs	2020-09-15 23:44:31.738225600 +0100
+@@ -221,8 +221,8 @@
+                     long lcn = runIdx == 0 ? 0 : _cookedRuns[runIdx - 1].StartLcn;
+                     foreach (var allocation in alloced)
+                     {
+-                        runs.Add(new DataRun(allocation.First - lcn, allocation.Second, false));
+-                        lcn = allocation.First;
++                        runs.Add(new DataRun(allocation.Item1 - lcn, allocation.Item2, false));
++                        lcn = allocation.Item1;
+                     }
+ 
+                     _cookedRuns.MakeNonSparse(runIdx, runs);
