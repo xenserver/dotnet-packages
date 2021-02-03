@@ -86,8 +86,13 @@ $OUTPUT_46_DIR = "$OUTPUT_DIR\dotnet46"
 $OUTPUT_45_DIR = "$OUTPUT_DIR\dotnet45"
 $PATCHES = "$REPO\patches"
 
-$msbuild="${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\MSBuild.exe"
-$nuget="nuget.exe"
+$msbuild = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe"
+$nuget = "nuget.exe"
+
+if (-not (Test-Path $msbuild)) {
+  Write-Output 'DEBUG: Did not find VS Community edition. Trying Professional'
+  $msbuild = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\MSBuild.exe"
+}
 
 Write-Output 'DEBUG: Printing MSBuild.exe version...'
 & $msbuild /ver
@@ -105,7 +110,7 @@ git archive --format=zip -o "$OUTPUT_DIR\\dotnet-packages-sources.zip" $gitCommi
 #prepare xml-rpc dotnet 4.8
 
 mkdirClean "$SCRATCH_DIR\xml-rpc_v48.net"
-unzip -q -d "$SCRATCH_DIR\xml-rpc_v48.net" "$REPO\XML-RPC.NET\xml-rpc.net.2.5.0.zip"
+Expand-Archive -DestinationPath "$SCRATCH_DIR\xml-rpc_v48.net" -Path "$REPO\XML-RPC.NET\xml-rpc.net.2.5.0.zip"
 
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-xmlrpc") -and !$_.Name.Contains("dotnet45") } |`
   % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\xml-rpc_v48.net"
@@ -118,7 +123,7 @@ Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-xmlrpc") -and !$_.Nam
 #prepare xml-rpc dotnet 4.5
 
 mkdirClean "$SCRATCH_DIR\xml-rpc_v45.net"
-unzip -q -d "$SCRATCH_DIR\xml-rpc_v45.net" "$REPO\XML-RPC.NET\xml-rpc.net.2.5.0.zip"
+Expand-Archive -DestinationPath "$SCRATCH_DIR\xml-rpc_v45.net" -Path "$REPO\XML-RPC.NET\xml-rpc.net.2.5.0.zip"
 
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-xmlrpc") -and !$_.Name.Contains("dotnet48") } |`
   % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\xml-rpc_v45.net"
@@ -130,7 +135,7 @@ Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-xmlrpc") -and !$_.Nam
 #prepare Json.NET 4.8
 
 mkdirClean "$SCRATCH_DIR\json48.net"
-unzip -q -d "$SCRATCH_DIR\json48.net" "$REPO\Json.NET\Newtonsoft.Json-10.0.2.zip" "Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/*"
+Expand-Archive -DestinationPath "$SCRATCH_DIR\json48.net" -Path "$REPO\Json.NET\Newtonsoft.Json-10.0.2.zip"
 Move-Item "$SCRATCH_DIR\json48.net\Newtonsoft.Json-10.0.2\Src\Newtonsoft.Json" "$SCRATCH_DIR\json48.net"
 
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-json-net") -and !$_.Name.Contains("dotnet45") } |`
@@ -143,7 +148,7 @@ Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-json-net") -and !$_.N
 #prepare Json.NET 4.5
 
 mkdirClean "$SCRATCH_DIR\json45.net"
-unzip -q -d "$SCRATCH_DIR\json45.net" "$REPO\Json.NET\Newtonsoft.Json-10.0.2.zip" "Newtonsoft.Json-10.0.2/Src/Newtonsoft.Json/*"
+Expand-Archive -DestinationPath "$SCRATCH_DIR\json45.net" -Path "$REPO\Json.NET\Newtonsoft.Json-10.0.2.zip"
 Move-Item "$SCRATCH_DIR\json45.net\Newtonsoft.Json-10.0.2\Src\Newtonsoft.Json" "$SCRATCH_DIR\json45.net"
 
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-json-net") -and !$_.Name.Contains("dotnet48") } |`
@@ -156,7 +161,7 @@ Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-json-net") -and !$_.N
 #prepare log4net 4.8
 
 mkdirClean "$SCRATCH_DIR\log4net48"
-unzip -q -d "$SCRATCH_DIR\log4net48" "$REPO\Log4Net\log4net-2.0.8-src.zip" "log4net-2.0.8/*"
+Expand-Archive -DestinationPath "$SCRATCH_DIR\log4net48" -Path "$REPO\Log4Net\log4net-2.0.8-src.zip"
 Move-Item "$SCRATCH_DIR\log4net48\log4net-2.0.8\*" "$SCRATCH_DIR\log4net48"
 
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-log4net") } | % { $_.FullName } |`
@@ -169,7 +174,7 @@ Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-log4net") } | % { $_.
 #prepare log4net 4.6
 
 mkdirClean "$SCRATCH_DIR\log4net46"
-unzip -q -d "$SCRATCH_DIR\log4net46" "$REPO\Log4Net\log4net-2.0.8-src.zip" "log4net-2.0.8/*"
+Expand-Archive -DestinationPath "$SCRATCH_DIR\log4net46" -Path "$REPO\Log4Net\log4net-2.0.8-src.zip"
 Move-Item "$SCRATCH_DIR\log4net46\log4net-2.0.8\*" "$SCRATCH_DIR\log4net46"
 
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-log4net") } | % { $_.FullName } |`
@@ -181,7 +186,7 @@ try {
   Set-Location -Path "$SCRATCH_DIR\log4net46"
   & $nuget pack "log4net.nuspec"
 }
-finally{
+finally {
   Set-Location -Path $REPO
 }
 Move-Item "$SCRATCH_DIR\log4net46\log4net.2.0.8.nupkg" -Destination $OUTPUT_46_DIR
@@ -191,7 +196,7 @@ Move-Item "$SCRATCH_DIR\log4net46\log4net.2.0.8.nupkg" -Destination $OUTPUT_46_D
 #prepare sharpziplib
 
 mkdirClean "$SCRATCH_DIR\sharpziplib"
-unzip -q -d "$SCRATCH_DIR\sharpziplib" "$REPO\SharpZipLib\SharpZipLib_0854_SourceSamples.zip"
+Expand-Archive -DestinationPath "$SCRATCH_DIR\sharpziplib" -Path "$REPO\SharpZipLib\SharpZipLib_0854_SourceSamples.zip"
 
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-sharpziplib") } | % { $_.FullName } |`
   applyPatch -Path "$SCRATCH_DIR\sharpziplib"
@@ -203,7 +208,7 @@ Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-sharpziplib") } | % {
 #prepare dotnetzip
 
 mkdirClean "$SCRATCH_DIR\dotnetzip"
-unzip -q -d "$SCRATCH_DIR\dotnetzip" "$REPO\DotNetZip\DotNetZip-src-v1.9.1.8.zip"
+Expand-Archive -DestinationPath "$SCRATCH_DIR\dotnetzip" -Path "$REPO\DotNetZip\DotNetZip-src-v1.9.1.8.zip"
 
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-dotnetzip") } | % { $_.FullName } |`
   applyPatch -Path "$SCRATCH_DIR\dotnetzip"
@@ -215,7 +220,7 @@ Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-dotnetzip") } | % { $
 #prepare discutils
 
 mkdirClean "$SCRATCH_DIR\DiscUtils"
-unzip -q -d "$SCRATCH_DIR\DiscUtils" "$REPO\DiscUtils\DiscUtils-0.11.zip"
+Expand-Archive -DestinationPath "$SCRATCH_DIR\DiscUtils" -Path "$REPO\DiscUtils\DiscUtils-0.11.zip"
 
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-discutils") } |`
   % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\DiscUtils"
@@ -227,7 +232,7 @@ Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-discutils") } |`
 #prepare PuTTY
 
 mkdirClean "$SCRATCH_DIR\PuTTY"
-unzip -q -d "$SCRATCH_DIR\PuTTY" "$REPO\PuTTY\putty-src.zip"
+Expand-Archive -DestinationPath "$SCRATCH_DIR\PuTTY" -Path "$REPO\PuTTY\putty-src.zip"
 'version.h', 'licence.h' | % { "$SCRATCH_DIR\PuTTY\" + $_ } | Copy-Item -Destination "$SCRATCH_DIR\PuTTY\windows\"
 & $msbuild $SWITCHES $VS2019_CPP "$SCRATCH_DIR\PuTTY\windows\VS2012"
 Move-Item "$SCRATCH_DIR\PuTTY\windows\VS2012\putty\Release\putty.exe" -Destination $OUTPUT_DIR

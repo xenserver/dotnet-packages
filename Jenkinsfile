@@ -31,103 +31,33 @@
  * SUCH DAMAGE.
  */
 
-node('xencenter') {
+@Library(["dotnet-packages-pipeline@v1.0"])
+import com.citrix.pipeline.dotnetpackages.*
 
-  try {
-
-    properties([
-      [
+properties([
+    [
         $class  : 'BuildDiscarderProperty',
-        strategy: [$class: 'LogRotator', numToKeepStr: '10', artifactNumToKeepStr: '10']
-      ]
-    ])
+        strategy: [
+            $class: 'LogRotator',
+            numToKeepStr: '10',
+            artifactNumToKeepStr: '10'
+        ]
+    ]
+])
 
-    stage('Clean workspace') {
-      deleteDir()
+def builder = null
+def globals = globals()
+
+node(globals.buildNodeLabel) {
+    try {
+        builder = new Build(globals)
+        runPipeline(builder)
+        currentBuild.result = 'SUCCESS'
+
+    } catch (Throwable ex) {
+        currentBuild.result = 'FAILURE'
+        throw ex
+    } finally {
+        buildComplete()
     }
-
-    stage('Checkout source') {
-      checkout([
-        $class           : 'GitSCM',
-        branches         : scm.branches,
-        extensions       : [
-          [$class: 'RelativeTargetDirectory', relativeTargetDir: 'dotnet-packages.git'],
-          [$class: 'LocalBranch', localBranch: '**'],
-          [$class: 'CleanCheckout']
-        ],
-        userRemoteConfigs: scm.userRemoteConfigs
-      ])
-    }
-
-    def GIT_COMMIT = bat(
-      returnStdout: true,
-      script: """
-      @echo off
-      cd ${env.WORKSPACE}\\dotnet-packages.git
-      git rev-parse HEAD
-      """
-    ).trim()
-
-    def GIT_BRANCH = bat(
-      returnStdout: true,
-      script: """
-      @echo off
-      cd ${env.WORKSPACE}\\dotnet-packages.git
-      git rev-parse --abbrev-ref HEAD
-      """
-    ).trim()
-
-    stage('Build') {
-      dir("${env.WORKSPACE}\\dotnet-packages.git"){
-        def result = powershell(
-            returnStatus: true,
-            script: ".\\build.ps1 -SnkKey ${env.SNK_LOCATION}"
-        )
-        assert result == 0
-      }
-    }
-
-    stage('Upload') {
-      // note that the pattern further down is relative to this dir
-      dir("${env.WORKSPACE}\\dotnet-packages.git\\_build\\output") {
-
-        def server = Artifactory.server('repo')
-        def buildInfo = Artifactory.newBuildInfo()
-        buildInfo.env.filter.addInclude("*")
-        buildInfo.env.collect()
-
-        GString artifactMeta = "build.name=${env.JOB_NAME};build.number=${env.BUILD_NUMBER};vcs.url=${env.CHANGE_URL};vcs.branch=${GIT_BRANCH};vcs.revision=${GIT_COMMIT}"
-
-        // IMPORTANT: do not forget the slash at the end of the target path
-        GString uploadSpec = """
-        {
-          "files": [
-            {
-              "pattern": "*",
-              "flat": "false",
-              "target": "xc-local-build/dotnet-packages/${GIT_BRANCH}/${env.BUILD_NUMBER}/",
-              "props": "${artifactMeta}"
-            }
-          ]
-        }
-      """
-
-        def buildInfo_upload = server.upload(uploadSpec)
-        buildInfo.append buildInfo_upload
-        server.publishBuildInfo buildInfo
-      }
-    }
-
-    currentBuild.result = 'SUCCESS'
-
-  } catch (Throwable ex) {
-    currentBuild.result = 'FAILURE'
-    throw ex
-  } finally {
-    step([
-      $class                  : 'Mailer',
-      notifyEveryUnstableBuild: true,
-      recipients              : "${env.XENCENTER_DEVELOPERS}",
-      sendToIndividuals       : true])
-  }
 }
