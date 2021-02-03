@@ -38,3 +38,6 @@ diff -r -u src/AssemblyInfo.cs src/AssemblyInfo.cs
 -[assembly: AssemblyVersion("0.85.4.369")]
 +[assembly: AssemblyVersion("0.85.4.404")]
  [assembly: AssemblyInformationalVersionAttribute("0.85.4")]
+ 
+ 
+ 
