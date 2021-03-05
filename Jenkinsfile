@@ -31,7 +31,7 @@
  * SUCH DAMAGE.
  */
 
-@Library(["dotnet-packages-pipeline@v1.0"])
+@Library(["dotnet-packages-pipeline@v1.1"])
 import com.citrix.pipeline.dotnetpackages.*
 
 properties([
@@ -58,6 +58,6 @@ node(globals.buildNodeLabel) {
         currentBuild.result = 'FAILURE'
         throw ex
     } finally {
-        buildComplete()
+        buildComplete(builder)
     }
 }
