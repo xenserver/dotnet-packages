@@ -66,7 +66,8 @@ function applyPatch {
   }
 }
 
-$SWITCHES = '/nologo', '/m', '/verbosity:normal', '/p:Configuration=Release'
+$SWITCHES = '/nologo', '/m', '/verbosity:normal', '/p:Configuration=Release', `
+            '/p:DebugSymbols=true', '/p:DebugType=pdbonly'
 $FRAME45 = '/p:TargetFrameworkVersion=v4.5'
 $FRAME46 = '/p:TargetFrameworkVersion=v4.6'
 $FRAME48 = '/p:TargetFrameworkVersion=v4.8'
@@ -87,7 +88,6 @@ $OUTPUT_45_DIR = "$OUTPUT_DIR\dotnet45"
 $PATCHES = "$REPO\patches"
 
 $msbuild = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe"
-$nuget = "nuget.exe"
 
 if (-not (Test-Path $msbuild)) {
   Write-Output 'DEBUG: Did not find VS Community edition. Trying Professional'
@@ -161,36 +161,29 @@ Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-json-net") -and !$_.N
 #prepare log4net 4.8
 
 mkdirClean "$SCRATCH_DIR\log4net48"
-Expand-Archive -DestinationPath "$SCRATCH_DIR\log4net48" -Path "$REPO\Log4Net\log4net-2.0.8-src.zip"
-Move-Item "$SCRATCH_DIR\log4net48\log4net-2.0.8\*" "$SCRATCH_DIR\log4net48"
+Expand-Archive -DestinationPath "$SCRATCH_DIR\log4net48" -Path "$REPO\Log4Net\apache-log4net-source-2.0.12.zip"
 
-Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-log4net") } | % { $_.FullName } |`
-  applyPatch -Path "$SCRATCH_DIR\log4net48"
+Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-log4net") -and !$_.Name.Contains("dotnet46") } | `
+  % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\log4net48"
 
-& $msbuild $SWITCHES $FRAME48 $VS2019 $SIGN "$SCRATCH_DIR\log4net48\src\log4net.vs2012.csproj"
-'dll', 'pdb' | % { "$SCRATCH_DIR\log4net48\build\bin\net\4.5\release\log4net." + $_ } |`
+& $msbuild /t:restore,build $SWITCHES $FRAME48 $VS2019 $SIGN "$SCRATCH_DIR\log4net48\src\log4net\log4net.csproj"
+
+Move-Item "$SCRATCH_DIR\log4net48\build\artifacts\log4net.2.0.12.nupkg" -Destination $OUTPUT_48_DIR
+'dll', 'pdb' | % { "$SCRATCH_DIR\log4net48\build\Release\net48\log4net." + $_ } |`
   Move-Item -Destination $OUTPUT_48_DIR
 
 #prepare log4net 4.6
 
 mkdirClean "$SCRATCH_DIR\log4net46"
-Expand-Archive -DestinationPath "$SCRATCH_DIR\log4net46" -Path "$REPO\Log4Net\log4net-2.0.8-src.zip"
-Move-Item "$SCRATCH_DIR\log4net46\log4net-2.0.8\*" "$SCRATCH_DIR\log4net46"
+Expand-Archive -DestinationPath "$SCRATCH_DIR\log4net46" -Path "$REPO\Log4Net\apache-log4net-source-2.0.12.zip"
 
-Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-log4net") } | % { $_.FullName } |`
-  applyPatch -Path "$SCRATCH_DIR\log4net46"
+Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-log4net") -and !$_.Name.Contains("dotnet48") } | `
+  % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\log4net46"
 
-& $msbuild $SWITCHES $FRAME46 $VS2019 $SIGN "$SCRATCH_DIR\log4net46\src\log4net.vs2012.csproj"
+& $msbuild /t:restore,build $SWITCHES $FRAME46 $VS2019 $SIGN "$SCRATCH_DIR\log4net46\src\log4net\log4net.csproj"
 
-try {
-  Set-Location -Path "$SCRATCH_DIR\log4net46"
-  & $nuget pack "log4net.nuspec"
-}
-finally {
-  Set-Location -Path $REPO
-}
-Move-Item "$SCRATCH_DIR\log4net46\log4net.2.0.8.nupkg" -Destination $OUTPUT_46_DIR
-'dll', 'pdb' | % { "$SCRATCH_DIR\log4net46\build\bin\net\4.5\release\log4net." + $_ } |`
+Move-Item "$SCRATCH_DIR\log4net46\build\artifacts\log4net.2.0.12.nupkg" -Destination $OUTPUT_46_DIR
+'dll', 'pdb' | % { "$SCRATCH_DIR\log4net46\build\Release\net46\log4net." + $_ } |`
   Move-Item -Destination $OUTPUT_46_DIR
 
 #prepare sharpziplib
