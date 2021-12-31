@@ -222,14 +222,6 @@ Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-discutils") } |`
 'dll', 'pdb' | % { "$SCRATCH_DIR\DiscUtils\src\bin\Release\DiscUtils." + $_ } |`
   Move-Item -Destination $OUTPUT_48_DIR
 
-#prepare PuTTY
-
-mkdirClean "$SCRATCH_DIR\PuTTY"
-Expand-Archive -DestinationPath "$SCRATCH_DIR\PuTTY" -Path "$REPO\PuTTY\putty-src.zip"
-'version.h', 'licence.h' | % { "$SCRATCH_DIR\PuTTY\" + $_ } | Copy-Item -Destination "$SCRATCH_DIR\PuTTY\windows\"
-& $msbuild $SWITCHES $VS2019_CPP "$SCRATCH_DIR\PuTTY\windows\VS2012"
-Move-Item "$SCRATCH_DIR\PuTTY\windows\VS2012\putty\Release\putty.exe" -Destination $OUTPUT_DIR
-
 #copy licences
 
 Copy-Item "$REPO\XML-RPC.NET\LICENSE" -Destination "$OUTPUT_DIR\LICENSE.CookComputing.XmlRpcV2.txt"
