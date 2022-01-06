@@ -72,7 +72,6 @@ $FRAME45 = '/p:TargetFrameworkVersion=v4.5'
 $FRAME46 = '/p:TargetFrameworkVersion=v4.6'
 $FRAME48 = '/p:TargetFrameworkVersion=v4.8'
 $VS2019 = '/toolsversion:Current'
-$VS2019_CPP = '/property:PlatformToolset=v142'
 
 if ($SnkKey) {
   $SIGN = '/p:SignAssembly=true', "/p:AssemblyOriginatorKeyFile=$SnkKey"
@@ -221,14 +220,6 @@ Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-discutils") } |`
 & $msbuild $SWITCHES $FRAME48 $VS2019 $SIGN "$SCRATCH_DIR\DiscUtils\LibraryOnly.sln"
 'dll', 'pdb' | % { "$SCRATCH_DIR\DiscUtils\src\bin\Release\DiscUtils." + $_ } |`
   Move-Item -Destination $OUTPUT_48_DIR
-
-#prepare PuTTY
-
-mkdirClean "$SCRATCH_DIR\PuTTY"
-Expand-Archive -DestinationPath "$SCRATCH_DIR\PuTTY" -Path "$REPO\PuTTY\putty-src.zip"
-'version.h', 'licence.h' | % { "$SCRATCH_DIR\PuTTY\" + $_ } | Copy-Item -Destination "$SCRATCH_DIR\PuTTY\windows\"
-& $msbuild $SWITCHES $VS2019_CPP "$SCRATCH_DIR\PuTTY\windows\VS2012"
-Move-Item "$SCRATCH_DIR\PuTTY\windows\VS2012\putty\Release\putty.exe" -Destination $OUTPUT_DIR
 
 #copy licences
 

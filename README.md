@@ -12,8 +12,6 @@ libraries:
   and clients in the .NET environment;
 * log4net (v2.0.12) - a library providing logging services for purposes
   of application debugging and auditing;
-* PuTTY (v0.76) - PuTTY is a free implementation of Telnet and SSH for
-  Windows and Unix platforms, along with an xterm terminal emulator;
 * Json.NET (v10.0.2) - a Json framework for .NET.
 
 ## Contributions
@@ -37,7 +35,7 @@ directories. Please see the [LICENSE](LICENSE) file for more information.
 
 1. PowerShell 3.0 or above
 2. Net Framework 4.5 and 4.8 installed.
-3. Visual Studio build tools for 2019 (toolsversion 16.0 and toolset v142 for C++).
+3. Visual Studio build tools for 2019 (toolsversion 16.0).
   Add the location of `msbuild` to the System Path.
 4. The Windows 10.0.18362.0 SDK (included in VS 2019).
 5. `git`, `patch`, `zip` and `unzip` packages. These can be obtained with
