@@ -35,7 +35,7 @@ directories. Please see the [LICENSE](LICENSE) file for more information.
 
 1. PowerShell 3.0 or above
 2. Net Framework 4.5 and 4.8 installed.
-3. Visual Studio build tools for 2019 (toolsversion 16.0 and toolset v142 for C++).
+3. Visual Studio build tools for 2019 (toolsversion 16.0).
   Add the location of `msbuild` to the System Path.
 4. The Windows 10.0.18362.0 SDK (included in VS 2019).
 5. `git`, `patch`, `zip` and `unzip` packages. These can be obtained with

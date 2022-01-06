@@ -72,7 +72,6 @@ $FRAME45 = '/p:TargetFrameworkVersion=v4.5'
 $FRAME46 = '/p:TargetFrameworkVersion=v4.6'
 $FRAME48 = '/p:TargetFrameworkVersion=v4.8'
 $VS2019 = '/toolsversion:Current'
-$VS2019_CPP = '/property:PlatformToolset=v142'
 
 if ($SnkKey) {
   $SIGN = '/p:SignAssembly=true', "/p:AssemblyOriginatorKeyFile=$SnkKey"
