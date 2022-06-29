@@ -134,26 +134,28 @@ Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-xmlrpc") -and !$_.Nam
 #prepare Json.NET 4.8
 
 mkdirClean "$SCRATCH_DIR\json48.net"
-Expand-Archive -DestinationPath "$SCRATCH_DIR\json48.net" -Path "$REPO\Json.NET\Newtonsoft.Json-10.0.2.zip"
-Move-Item "$SCRATCH_DIR\json48.net\Newtonsoft.Json-10.0.2\Src\Newtonsoft.Json" "$SCRATCH_DIR\json48.net"
+Expand-Archive -DestinationPath "$SCRATCH_DIR\json48.net" -Path "$REPO\Json.NET\Newtonsoft.Json-13.0.1.zip"
+Move-Item "$SCRATCH_DIR\json48.net\Newtonsoft.Json-13.0.1\Src\Newtonsoft.Json" "$SCRATCH_DIR\json48.net"
 
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-json-net") -and !$_.Name.Contains("dotnet45") } |`
   % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\json48.net"
+dotnet restore "$SCRATCH_DIR\json48.net\Newtonsoft.Json\Newtonsoft.Json.csproj"
 
-& $msbuild $SWITCHES $FRAME48 $VS2019 $SIGN "$SCRATCH_DIR\json48.net\Newtonsoft.Json\Newtonsoft.Json.Net40.csproj"
+& $msbuild $SWITCHES $FRAME48 $VS2019 $SIGN "$SCRATCH_DIR\json48.net\Newtonsoft.Json\Newtonsoft.Json.csproj"
 'dll', 'pdb' | % { "$SCRATCH_DIR\json48.net\Newtonsoft.Json\bin\Release\net48\Newtonsoft.Json.CH." + $_ } |`
   Move-Item -Destination $OUTPUT_48_DIR
 
 #prepare Json.NET 4.5
 
 mkdirClean "$SCRATCH_DIR\json45.net"
-Expand-Archive -DestinationPath "$SCRATCH_DIR\json45.net" -Path "$REPO\Json.NET\Newtonsoft.Json-10.0.2.zip"
-Move-Item "$SCRATCH_DIR\json45.net\Newtonsoft.Json-10.0.2\Src\Newtonsoft.Json" "$SCRATCH_DIR\json45.net"
+Expand-Archive -DestinationPath "$SCRATCH_DIR\json45.net" -Path "$REPO\Json.NET\Newtonsoft.Json-13.0.1.zip"
+Move-Item "$SCRATCH_DIR\json45.net\Newtonsoft.Json-13.0.1\Src\Newtonsoft.Json" "$SCRATCH_DIR\json45.net"
 
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-json-net") -and !$_.Name.Contains("dotnet48") } |`
   % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\json45.net"
+dotnet restore "$SCRATCH_DIR\json45.net\Newtonsoft.Json\Newtonsoft.Json.csproj"
 
-& $msbuild $SWITCHES $FRAME45 $VS2019 $SIGN "$SCRATCH_DIR\json45.net\Newtonsoft.Json\Newtonsoft.Json.Net40.csproj"
+& $msbuild $SWITCHES $FRAME45 $VS2019 $SIGN "$SCRATCH_DIR\json45.net\Newtonsoft.Json\Newtonsoft.Json.csproj"
 'dll', 'pdb' | % { "$SCRATCH_DIR\json45.net\Newtonsoft.Json\bin\Release\net45\Newtonsoft.Json.CH." + $_ } |`
   Move-Item -Destination $OUTPUT_45_DIR
 

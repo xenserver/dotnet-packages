@@ -1,0 +1,94 @@
+# Copyright (c) Citrix Systems, Inc.
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms,
+# with or without modification, are permitted provided
+# that the following conditions are met:
+#
+# *   Redistributions of source code must retain the above
+#     copyright notice, this list of conditions and the
+#     following disclaimer.
+# *   Redistributions in binary form must reproduce the above
+#     copyright notice, this list of conditions and the
+#     following disclaimer in the documentation and/or other
+#     materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+# CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+# INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+# NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+# SUCH DAMAGE.
+
+--- Newtonsoft.Json/Newtonsoft.Json.csproj
++++ Newtonsoft.Json/Newtonsoft.Json.csproj
+@@ -1,22 +1,21 @@
+ ﻿<Project Sdk="Microsoft.NET.Sdk">
+   <PropertyGroup>
+-    <TargetFrameworks Condition="'$(LibraryFrameworks)'==''">net45;net40;net35;net20;netstandard1.0;netstandard1.3;netstandard2.0</TargetFrameworks>
++    <TargetFrameworks Condition="'$(LibraryFrameworks)'==''">net48;net45</TargetFrameworks>
+     <TargetFrameworks Condition="'$(LibraryFrameworks)'!=''">$(LibraryFrameworks)</TargetFrameworks>
+     <LangVersion>9.0</LangVersion>
+     <!-- version numbers will be updated by build -->
+-    <AssemblyVersion>11.0.0.0</AssemblyVersion>
+-    <FileVersion>11.0.1</FileVersion>
+-    <VersionPrefix>11.0.1</VersionPrefix>
++    <AssemblyVersion>13.0.1.0</AssemblyVersion>
++    <FileVersion>13.0.1</FileVersion>
++    <VersionPrefix>13.0.1</VersionPrefix>
+     <VersionSuffix>beta2</VersionSuffix>
+-    <Authors>James Newton-King</Authors>
+-    <Company>Newtonsoft</Company>
+-    <Product>Json.NET</Product>
+-    <Description>Json.NET is a popular high-performance JSON framework for .NET</Description>
+-    <Copyright>Copyright © James Newton-King 2008</Copyright>
++    <Authors>James Newton-King, Chris Lancaster, Danilo Del Busso, Konstantina Chremmou</Authors>
++    <Company>Newtonsoft, Citrix Systems Inc.</Company>
++    <Product>Json.NET CH</Product>
++    <Copyright>Copyright © James Newton-King 2008, Citrix Systems Inc. 2022</Copyright>
+     <Summary>Json.NET is a popular high-performance JSON framework for .NET</Summary>
+     <NeutralLanguage>en-US</NeutralLanguage>
+     <Title>Json.NET</Title>
+-    <PackageId>Newtonsoft.Json</PackageId>
++    <PackageId>Newtonsoft.Json.CH</PackageId>
+     <PackageTags>json</PackageTags>
+     <PackageIcon>packageIcon.png</PackageIcon>
+     <PackageIconFullPath>$(MSBuildThisFileDirectory)packageIcon.png</PackageIconFullPath>
+@@ -24,7 +23,7 @@
+     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+     <PublishRepositoryUrl>true</PublishRepositoryUrl> 
+     <RootNamespace>Newtonsoft.Json</RootNamespace>
+-    <AssemblyName>Newtonsoft.Json</AssemblyName>
++    <AssemblyName>Newtonsoft.Json.CH</AssemblyName>
+     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+     <Nullable>enable</Nullable>
+     <MinClientVersion>2.12</MinClientVersion>
+@@ -36,14 +35,14 @@
+   <ItemGroup>
+     <None Remove="**\*.orig" />
+     <None Include="..\..\LICENSE.md" Pack="true" PackagePath="LICENSE.md" />
+-    <None Include="$(PackageIconFullPath)" Pack="true" PackagePath="\"/>
+-  </ItemGroup>
+-  <ItemGroup>
+-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="$(MicrosoftCodeAnalysisNetAnalyzersPackageVersion)" PrivateAssets="All" />
+-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="$(MicrosoftSourceLinkGitHubPackageVersion)" PrivateAssets="All" />
++    <None Include="$(PackageIconFullPath)" Pack="true" PackagePath="\" />
+   </ItemGroup>
++  <PropertyGroup Condition="'$(TargetFramework)'=='net48'">
++    <AssemblyTitle>Json.NET.CH .NET 4.8</AssemblyTitle>
++    <DefineConstants>HAVE_ADO_NET;HAVE_APP_DOMAIN;HAVE_ASYNC;HAVE_BIG_INTEGER;HAVE_BINARY_FORMATTER;HAVE_BINARY_SERIALIZATION;HAVE_BINARY_EXCEPTION_SERIALIZATION;HAVE_CAS;HAVE_CHAR_TO_LOWER_WITH_CULTURE;HAVE_CHAR_TO_STRING_WITH_CULTURE;HAVE_COM_ATTRIBUTES;HAVE_COMPONENT_MODEL;HAVE_CONCURRENT_COLLECTIONS;HAVE_COVARIANT_GENERICS;HAVE_DATA_CONTRACTS;HAVE_DATE_TIME_OFFSET;HAVE_DB_NULL_TYPE_CODE;HAVE_DYNAMIC;HAVE_EMPTY_TYPES;HAVE_ENTITY_FRAMEWORK;HAVE_EXPRESSIONS;HAVE_FAST_REVERSE;HAVE_FSHARP_TYPES;HAVE_FULL_REFLECTION;HAVE_GUID_TRY_PARSE;HAVE_HASH_SET;HAVE_ICLONEABLE;HAVE_ICONVERTIBLE;HAVE_IGNORE_DATA_MEMBER_ATTRIBUTE;HAVE_INOTIFY_COLLECTION_CHANGED;HAVE_INOTIFY_PROPERTY_CHANGING;HAVE_ISET;HAVE_LINQ;HAVE_MEMORY_BARRIER;HAVE_METHOD_IMPL_ATTRIBUTE;HAVE_NON_SERIALIZED_ATTRIBUTE;HAVE_READ_ONLY_COLLECTIONS;HAVE_REFLECTION_EMIT;HAVE_REGEX_TIMEOUTS;HAVE_SECURITY_SAFE_CRITICAL_ATTRIBUTE;HAVE_SERIALIZATION_BINDER_BIND_TO_NAME;HAVE_STREAM_READER_WRITER_CLOSE;HAVE_STRING_JOIN_WITH_ENUMERABLE;HAVE_TIME_SPAN_PARSE_WITH_CULTURE;HAVE_TIME_SPAN_TO_STRING_WITH_CULTURE;HAVE_TIME_ZONE_INFO;HAVE_TRACE_WRITER;HAVE_TYPE_DESCRIPTOR;HAVE_UNICODE_SURROGATE_DETECTION;HAVE_VARIANT_TYPE_PARAMETERS;HAVE_VERSION_TRY_PARSE;HAVE_XLINQ;HAVE_XML_DOCUMENT;HAVE_XML_DOCUMENT_TYPE;HAVE_CONCURRENT_DICTIONARY;$(AdditionalConstants)</DefineConstants>
++  </PropertyGroup>
+   <PropertyGroup Condition="'$(TargetFramework)'=='net45'">
+-    <AssemblyTitle>Json.NET</AssemblyTitle>
++    <AssemblyTitle>Json.NET.CH</AssemblyTitle>
+     <DefineConstants>HAVE_ADO_NET;HAVE_APP_DOMAIN;HAVE_ASYNC;HAVE_BIG_INTEGER;HAVE_BINARY_FORMATTER;HAVE_BINARY_SERIALIZATION;HAVE_BINARY_EXCEPTION_SERIALIZATION;HAVE_CAS;HAVE_CHAR_TO_LOWER_WITH_CULTURE;HAVE_CHAR_TO_STRING_WITH_CULTURE;HAVE_COM_ATTRIBUTES;HAVE_COMPONENT_MODEL;HAVE_CONCURRENT_COLLECTIONS;HAVE_COVARIANT_GENERICS;HAVE_DATA_CONTRACTS;HAVE_DATE_TIME_OFFSET;HAVE_DB_NULL_TYPE_CODE;HAVE_DYNAMIC;HAVE_EMPTY_TYPES;HAVE_ENTITY_FRAMEWORK;HAVE_EXPRESSIONS;HAVE_FAST_REVERSE;HAVE_FSHARP_TYPES;HAVE_FULL_REFLECTION;HAVE_GUID_TRY_PARSE;HAVE_HASH_SET;HAVE_ICLONEABLE;HAVE_ICONVERTIBLE;HAVE_IGNORE_DATA_MEMBER_ATTRIBUTE;HAVE_INOTIFY_COLLECTION_CHANGED;HAVE_INOTIFY_PROPERTY_CHANGING;HAVE_ISET;HAVE_LINQ;HAVE_MEMORY_BARRIER;HAVE_METHOD_IMPL_ATTRIBUTE;HAVE_NON_SERIALIZED_ATTRIBUTE;HAVE_READ_ONLY_COLLECTIONS;HAVE_REFLECTION_EMIT;HAVE_REGEX_TIMEOUTS;HAVE_SECURITY_SAFE_CRITICAL_ATTRIBUTE;HAVE_SERIALIZATION_BINDER_BIND_TO_NAME;HAVE_STREAM_READER_WRITER_CLOSE;HAVE_STRING_JOIN_WITH_ENUMERABLE;HAVE_TIME_SPAN_PARSE_WITH_CULTURE;HAVE_TIME_SPAN_TO_STRING_WITH_CULTURE;HAVE_TIME_ZONE_INFO;HAVE_TRACE_WRITER;HAVE_TYPE_DESCRIPTOR;HAVE_UNICODE_SURROGATE_DETECTION;HAVE_VARIANT_TYPE_PARAMETERS;HAVE_VERSION_TRY_PARSE;HAVE_XLINQ;HAVE_XML_DOCUMENT;HAVE_XML_DOCUMENT_TYPE;HAVE_CONCURRENT_DICTIONARY;$(AdditionalConstants)</DefineConstants>
+   </PropertyGroup>
+   <PropertyGroup Condition="'$(TargetFramework)'=='net40'">
