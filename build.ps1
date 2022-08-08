@@ -131,32 +131,21 @@ Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-xmlrpc") -and !$_.Nam
 'dll', 'pdb' | % { "$SCRATCH_DIR\xml-rpc_v45.net\bin\CookComputing.XmlRpcV2." + $_ } |`
   Move-Item -Destination $OUTPUT_45_DIR
 
-#prepare Json.NET 4.8
+#prepare Json.NET 4.5 and 4.8
 
-mkdirClean "$SCRATCH_DIR\json48.net"
-Expand-Archive -DestinationPath "$SCRATCH_DIR\json48.net" -Path "$REPO\Json.NET\Newtonsoft.Json-13.0.1.zip"
-Move-Item "$SCRATCH_DIR\json48.net\Newtonsoft.Json-13.0.1\Src\Newtonsoft.Json" "$SCRATCH_DIR\json48.net"
+mkdirClean "$SCRATCH_DIR\json.net"
+Expand-Archive -DestinationPath "$SCRATCH_DIR\json.net" -Path "$REPO\Json.NET\Newtonsoft.Json-13.0.1.zip"
+Move-Item "$SCRATCH_DIR\json.net\Newtonsoft.Json-13.0.1\Src\Newtonsoft.Json" "$SCRATCH_DIR\json.net"
 
-Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-json-net") -and !$_.Name.Contains("dotnet45") } |`
-  % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\json48.net"
-dotnet restore "$SCRATCH_DIR\json48.net\Newtonsoft.Json\Newtonsoft.Json.csproj"
+Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-json-net")} |`
+  % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\json.net"
+dotnet restore "$SCRATCH_DIR\json.net\Newtonsoft.Json\Newtonsoft.Json.csproj"
 
-& $msbuild $SWITCHES $FRAME48 $VS2019 $SIGN "$SCRATCH_DIR\json48.net\Newtonsoft.Json\Newtonsoft.Json.csproj"
-'dll', 'pdb' | % { "$SCRATCH_DIR\json48.net\Newtonsoft.Json\bin\Release\net48\Newtonsoft.Json.CH." + $_ } |`
+& $msbuild $SWITCHES $VS2019 $SIGN "$SCRATCH_DIR\json.net\Newtonsoft.Json\Newtonsoft.Json.csproj"
+
+'dll', 'pdb' | % { "$SCRATCH_DIR\json.net\Newtonsoft.Json\bin\Release\net48\Newtonsoft.Json.CH." + $_ } |`
   Move-Item -Destination $OUTPUT_48_DIR
-
-#prepare Json.NET 4.5
-
-mkdirClean "$SCRATCH_DIR\json45.net"
-Expand-Archive -DestinationPath "$SCRATCH_DIR\json45.net" -Path "$REPO\Json.NET\Newtonsoft.Json-13.0.1.zip"
-Move-Item "$SCRATCH_DIR\json45.net\Newtonsoft.Json-13.0.1\Src\Newtonsoft.Json" "$SCRATCH_DIR\json45.net"
-
-Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-json-net") -and !$_.Name.Contains("dotnet48") } |`
-  % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\json45.net"
-dotnet restore "$SCRATCH_DIR\json45.net\Newtonsoft.Json\Newtonsoft.Json.csproj"
-
-& $msbuild $SWITCHES $FRAME45 $VS2019 $SIGN "$SCRATCH_DIR\json45.net\Newtonsoft.Json\Newtonsoft.Json.csproj"
-'dll', 'pdb' | % { "$SCRATCH_DIR\json45.net\Newtonsoft.Json\bin\Release\net45\Newtonsoft.Json.CH." + $_ } |`
+'dll', 'pdb' | % { "$SCRATCH_DIR\json.net\Newtonsoft.Json\bin\Release\net45\Newtonsoft.Json.CH." + $_ } |`
   Move-Item -Destination $OUTPUT_45_DIR
 
 #prepare log4net 4.8
