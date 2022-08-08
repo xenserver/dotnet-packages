@@ -47,5 +47,5 @@ The libraries can be built (with patches applied) by opening a PowerShell prompt
 in the repo root and running:
 
 ```shell
-.\build.ps1 [-SnkKey <snk-file>]
+.\build.ps1 [-SnkKey <snk-file>] [-NugetSources <package-sources>]
 ```
