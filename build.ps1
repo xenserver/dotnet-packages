@@ -37,8 +37,8 @@
 Param(
   [Parameter(Mandatory = $false, HelpMessage = "Key for applying strong names to the assemblies")]
   [String]$SnkKey,
-  [Parameter(Mandatory = $false, HelpMessage = "Semicolon-delimited list of package sources for NuGet restores.")]
-  [String]$NugetSources='https://api.nuget.org/v3/index.json'
+  [Parameter(Mandatory = $true, HelpMessage = "Package source for NuGet restores.")]
+  [String]$NugetSource
 )
 
 $ErrorActionPreference = 'Stop'
@@ -70,7 +70,7 @@ function applyPatch {
 
 $SWITCHES = '/nologo', '/m', '/verbosity:normal', '/p:Configuration=Release', `
             '/p:DebugSymbols=true', '/p:DebugType=pdbonly'
-$RESTORE_SWITCHES= '/restore', "/p:RestoreSources=${NugetSources}", '/p:RestoreNoCache=true'
+$RESTORE_SWITCHES= '/restore', '/p:RestoreNoCache=true'
 $FRAME45 = '/p:TargetFrameworkVersion=v4.5'
 $FRAME46 = '/p:TargetFrameworkVersion=v4.6'
 $FRAME48 = '/p:TargetFrameworkVersion=v4.8'
@@ -139,11 +139,17 @@ Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-xmlrpc") -and !$_.Nam
 mkdirClean "$SCRATCH_DIR\json.net"
 Expand-Archive -DestinationPath "$SCRATCH_DIR\json.net" -Path "$REPO\Json.NET\Newtonsoft.Json-13.0.1.zip"
 Move-Item "$SCRATCH_DIR\json.net\Newtonsoft.Json-13.0.1\Src\Newtonsoft.Json" "$SCRATCH_DIR\json.net"
+Move-Item "$SCRATCH_DIR\json.net\Newtonsoft.Json-13.0.1\Src\NuGet.Config" "$SCRATCH_DIR\json.net"
+
+$RESTORE_NUGET_CONFIG_FILE="$SCRATCH_DIR\json.net\NuGet.Config"
+
+((Get-Content -path $RESTORE_NUGET_CONFIG_FILE -Raw) -replace 'https://api.nuget.org/v3/index.json', $NugetSource) |`
+ Set-Content -Path $RESTORE_NUGET_CONFIG_FILE
 
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-json-net")} |`
   % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\json.net"
 
-& $msbuild $SWITCHES $RESTORE_SWITCHES $VS2019 $SIGN "$SCRATCH_DIR\json.net\Newtonsoft.Json\Newtonsoft.Json.csproj"
+& $msbuild $SWITCHES $RESTORE_SWITCHES -p:RestoreConfigFile=$RESTORE_NUGET_CONFIG_FILE $VS2019 $SIGN "$SCRATCH_DIR\json.net\Newtonsoft.Json\Newtonsoft.Json.csproj"
 
 'dll', 'pdb' | % { "$SCRATCH_DIR\json.net\Newtonsoft.Json\bin\Release\net48\Newtonsoft.Json.CH." + $_ } |`
   Move-Item -Destination $OUTPUT_48_DIR
