@@ -31,7 +31,7 @@
  * SUCH DAMAGE.
  */
 
-@Library(["dotnet-packages-pipeline@v1.1"])
+@Library(["dotnet-packages-pipeline@v1.2"])
 import com.citrix.pipeline.dotnetpackages.*
 
 properties([
