@@ -30,7 +30,7 @@
 
 --- Newtonsoft.Json/JsonTextReader.cs
 +++ Newtonsoft.Json/JsonTextReader.cs
-@@ -607,15 +607,15 @@
+@@ -637,15 +637,15 @@ public override bool Read()
                                  ParseString(currentChar, readType);
                                  return FinishReadQuotedStringValue(readType);
                              case '-':
@@ -53,23 +53,19 @@
                              case '.':
                              case '0':
                              case '1':
-@@ -649,7 +649,9 @@
-                                 SetToken(JsonToken.String, expected);
+@@ -680,6 +680,8 @@ public override bool Read()
                                  return expected;
                              case 'I':
--                                return ParseNumberPositiveInfinity(readType);
-+                                return ParseNumberPositiveInfinity(readType);
+                                 return ParseNumberPositiveInfinity(readType);
 +                            case 'i':
 +                                return ParseNumberPositiveInfinityRrds(readType);
                              case 'N':
                                  return ParseNumberNaN(readType);
                              case 'n':
-@@ -915,17 +917,19 @@
-                             case 'N':
+@@ -948,16 +950,18 @@ private void ProcessValueComma()
                                  return ParseNumberNaN(readType);
                              case 'I':
--                                return ParseNumberPositiveInfinity(readType);
-+                                return ParseNumberPositiveInfinity(readType);
+                                 return ParseNumberPositiveInfinity(readType);
 +                            case 'i':
 +                                return ParseNumberPositiveInfinityRrds(readType);
                              case '-':
@@ -92,12 +88,10 @@
                              case '.':
                              case '0':
                              case '1':
-@@ -1688,16 +1692,19 @@
-                         return true;
+@@ -1753,15 +1757,18 @@ private bool ParseValue()
                      case 'I':
                          ParseNumberPositiveInfinity(ReadType.Read);
--                        return true;
-+                        return true;
+                         return true;
 +                    case 'i':
 +                        ParseNumberPositiveInfinityRrds(ReadType.Read);
 +                        return true;
@@ -119,7 +113,7 @@
                          return true;
                      case '/':
                          ParseComment(true);
-@@ -2418,7 +2425,14 @@
+@@ -2501,7 +2508,14 @@ private void ParseFalse()
  
          private object ParseNumberNegativeInfinity(ReadType readType)
          {
@@ -135,7 +129,7 @@
          }
  
          private object ParseNumberNegativeInfinity(ReadType readType, bool matched)
-@@ -2448,8 +2462,16 @@
+@@ -2531,8 +2545,16 @@ private object ParseNumberNegativeInfinity(ReadType readType, bool matched)
  
          private object ParseNumberPositiveInfinity(ReadType readType)
          {
