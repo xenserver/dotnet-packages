@@ -30,20 +30,25 @@
 
 --- Newtonsoft.Json/JsonConvert.cs
 +++ Newtonsoft.Json/JsonConvert.cs
-@@ -95,6 +95,16 @@
+@@ -97,10 +97,20 @@ public static class JsonConvert
          public static readonly string NaN = "NaN";
  
          /// <summary>
+-        /// Converts the <see cref="DateTime"/> to its JSON string representation.
 +        /// Represents RRDs' positive infinity as a string. This field is read-only.
 +        /// </summary>
 +        public static readonly string PositiveInfinityRrds = "inf";
 +
 +        /// <summary>
 +        /// Represents RRDs' negative infinity as a string. This field is read-only.
-+        /// </summary>
+         /// </summary>
 +        public static readonly string NegativeInfinityRrds = "-inf";
 +
 +        /// <summary>
-         /// Converts the <see cref="DateTime"/> to its JSON string representation.
-         /// </summary>
++        /// Converts the <see cref="DateTime"/> to its JSON string representation.
          /// <param name="value">The value to convert.</param>
+         /// <returns>A JSON string representation of the <see cref="DateTime"/>.</returns>
++        /// </summary>
+         public static string ToString(DateTime value)
+         {
+             return ToString(value, DateFormatHandling.IsoDateFormat, DateTimeZoneHandling.RoundtripKind);

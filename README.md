@@ -12,7 +12,7 @@ libraries:
   and clients in the .NET environment;
 * log4net (v2.0.12) - a library providing logging services for purposes
   of application debugging and auditing;
-* Json.NET (v10.0.2) - a Json framework for .NET.
+* Json.NET (v13.0.1) - a Json framework for .NET.
 
 ## Contributions
 
@@ -47,5 +47,5 @@ The libraries can be built (with patches applied) by opening a PowerShell prompt
 in the repo root and running:
 
 ```shell
-.\build.ps1 [-SnkKey <snk-file>]
+.\build.ps1 [-SnkKey <snk-file>] [-NugetSources <package-sources>]
 ```
