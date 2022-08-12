@@ -36,7 +36,9 @@
 
 Param(
   [Parameter(Mandatory = $false, HelpMessage = "Key for applying strong names to the assemblies")]
-  [String]$SnkKey
+  [String]$SnkKey,
+  [Parameter(Mandatory = $true, HelpMessage = "Package source for NuGet restores.")]
+  [String]$NugetSource
 )
 
 $ErrorActionPreference = 'Stop'
@@ -68,6 +70,7 @@ function applyPatch {
 
 $SWITCHES = '/nologo', '/m', '/verbosity:normal', '/p:Configuration=Release', `
             '/p:DebugSymbols=true', '/p:DebugType=pdbonly'
+$RESTORE_SWITCHES= '/restore', '/p:RestoreNoCache=true'
 $FRAME45 = '/p:TargetFrameworkVersion=v4.5'
 $FRAME46 = '/p:TargetFrameworkVersion=v4.6'
 $FRAME48 = '/p:TargetFrameworkVersion=v4.8'
@@ -132,30 +135,26 @@ Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-xmlrpc") -and !$_.Nam
 'dll', 'pdb' | % { "$SCRATCH_DIR\xml-rpc_v45.net\bin\CookComputing.XmlRpcV2." + $_ } |`
   Move-Item -Destination $OUTPUT_45_DIR
 
-#prepare Json.NET 4.8
+#prepare Json.NET 4.5 and 4.8
 
-mkdirClean "$SCRATCH_DIR\json48.net"
-Expand-Archive -DestinationPath "$SCRATCH_DIR\json48.net" -Path "$REPO\Json.NET\Newtonsoft.Json-10.0.2.zip"
-Move-Item "$SCRATCH_DIR\json48.net\Newtonsoft.Json-10.0.2\Src\Newtonsoft.Json" "$SCRATCH_DIR\json48.net"
+mkdirClean "$SCRATCH_DIR\json.net"
+Expand-Archive -DestinationPath "$SCRATCH_DIR\json.net" -Path "$REPO\Json.NET\Newtonsoft.Json-13.0.1.zip"
+Move-Item "$SCRATCH_DIR\json.net\Newtonsoft.Json-13.0.1\Src\Newtonsoft.Json" "$SCRATCH_DIR\json.net"
+Move-Item "$SCRATCH_DIR\json.net\Newtonsoft.Json-13.0.1\Src\NuGet.Config" "$SCRATCH_DIR\json.net"
 
-Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-json-net") -and !$_.Name.Contains("dotnet45") } |`
-  % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\json48.net"
+$RESTORE_NUGET_CONFIG_FILE="$SCRATCH_DIR\json.net\NuGet.Config"
 
-& $msbuild $SWITCHES $FRAME48 $VS2019 $SIGN "$SCRATCH_DIR\json48.net\Newtonsoft.Json\Newtonsoft.Json.Net40.csproj"
-'dll', 'pdb' | % { "$SCRATCH_DIR\json48.net\Newtonsoft.Json\bin\Release\net48\Newtonsoft.Json.CH." + $_ } |`
+((Get-Content -path $RESTORE_NUGET_CONFIG_FILE -Raw) -replace 'https://api.nuget.org/v3/index.json', $NugetSource) |`
+ Set-Content -Path $RESTORE_NUGET_CONFIG_FILE
+
+Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-json-net")} |`
+  % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\json.net"
+
+& $msbuild $SWITCHES $RESTORE_SWITCHES -p:RestoreConfigFile=$RESTORE_NUGET_CONFIG_FILE $VS2019 $SIGN "$SCRATCH_DIR\json.net\Newtonsoft.Json\Newtonsoft.Json.csproj"
+
+'dll', 'pdb' | % { "$SCRATCH_DIR\json.net\Newtonsoft.Json\bin\Release\net48\Newtonsoft.Json.CH." + $_ } |`
   Move-Item -Destination $OUTPUT_48_DIR
-
-#prepare Json.NET 4.5
-
-mkdirClean "$SCRATCH_DIR\json45.net"
-Expand-Archive -DestinationPath "$SCRATCH_DIR\json45.net" -Path "$REPO\Json.NET\Newtonsoft.Json-10.0.2.zip"
-Move-Item "$SCRATCH_DIR\json45.net\Newtonsoft.Json-10.0.2\Src\Newtonsoft.Json" "$SCRATCH_DIR\json45.net"
-
-Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-json-net") -and !$_.Name.Contains("dotnet48") } |`
-  % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\json45.net"
-
-& $msbuild $SWITCHES $FRAME45 $VS2019 $SIGN "$SCRATCH_DIR\json45.net\Newtonsoft.Json\Newtonsoft.Json.Net40.csproj"
-'dll', 'pdb' | % { "$SCRATCH_DIR\json45.net\Newtonsoft.Json\bin\Release\net45\Newtonsoft.Json.CH." + $_ } |`
+'dll', 'pdb' | % { "$SCRATCH_DIR\json.net\Newtonsoft.Json\bin\Release\net45\Newtonsoft.Json.CH." + $_ } |`
   Move-Item -Destination $OUTPUT_45_DIR
 
 #prepare log4net 4.8
