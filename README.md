@@ -10,7 +10,7 @@ libraries:
   entirely in C# for the .NET platform;
 * XML-RPC.NET (v2.5.0) - a library for implementing XML-RPC Services
   and clients in the .NET environment;
-* log4net (v2.0.12) - a library providing logging services for purposes
+* log4net (v2.0.15) - a library providing logging services for purposes
   of application debugging and auditing;
 * PuTTY (v0.76) - PuTTY is a free implementation of Telnet and SSH for
   Windows and Unix platforms, along with an xterm terminal emulator;

@@ -157,32 +157,23 @@ Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-json-net")} |`
 'dll', 'pdb' | % { "$SCRATCH_DIR\json.net\Newtonsoft.Json\bin\Release\net45\Newtonsoft.Json.CH." + $_ } |`
   Move-Item -Destination $OUTPUT_45_DIR
 
-#prepare log4net 4.8
+#prepare log4net 4.6 and 4.8
 
-mkdirClean "$SCRATCH_DIR\log4net48"
-Expand-Archive -DestinationPath "$SCRATCH_DIR\log4net48" -Path "$REPO\Log4Net\apache-log4net-source-2.0.12.zip"
+mkdirClean "$SCRATCH_DIR\log4net"
+Expand-Archive -DestinationPath "$SCRATCH_DIR\log4net" -Path "$REPO\Log4Net\logging-log4net-rel-2.0.15.zip"
+Move-Item "$SCRATCH_DIR\log4net\logging-log4net-rel-2.0.15\*" "$SCRATCH_DIR\log4net"
 
-Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-log4net") -and !$_.Name.Contains("dotnet46") } | `
-  % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\log4net48"
+Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-log4net") } | `
+  % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\log4net"
 
-& $msbuild /t:restore,build $SWITCHES $FRAME48 $VS2019 $SIGN "$SCRATCH_DIR\log4net48\src\log4net\log4net.csproj"
+& $msbuild /t:restore,build $SWITCHES $VS2019 $SIGN "$SCRATCH_DIR\log4net\src\log4net\log4net.csproj"
 
-Move-Item "$SCRATCH_DIR\log4net48\build\artifacts\log4net.2.0.12.nupkg" -Destination $OUTPUT_48_DIR
-'dll', 'pdb' | % { "$SCRATCH_DIR\log4net48\build\Release\net48\log4net." + $_ } |`
+Move-Item "$SCRATCH_DIR\log4net\build\artifacts\log4net.2.0.15.nupkg" -Destination $OUTPUT_DIR
+
+'dll', 'pdb' | % { "$SCRATCH_DIR\log4net\build\Release\net48\log4net." + $_ } |`
   Move-Item -Destination $OUTPUT_48_DIR
 
-#prepare log4net 4.6
-
-mkdirClean "$SCRATCH_DIR\log4net46"
-Expand-Archive -DestinationPath "$SCRATCH_DIR\log4net46" -Path "$REPO\Log4Net\apache-log4net-source-2.0.12.zip"
-
-Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-log4net") -and !$_.Name.Contains("dotnet48") } | `
-  % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\log4net46"
-
-& $msbuild /t:restore,build $SWITCHES $FRAME46 $VS2019 $SIGN "$SCRATCH_DIR\log4net46\src\log4net\log4net.csproj"
-
-Move-Item "$SCRATCH_DIR\log4net46\build\artifacts\log4net.2.0.12.nupkg" -Destination $OUTPUT_46_DIR
-'dll', 'pdb' | % { "$SCRATCH_DIR\log4net46\build\Release\net46\log4net." + $_ } |`
+'dll', 'pdb' | % { "$SCRATCH_DIR\log4net\build\Release\net46\log4net." + $_ } |`
   Move-Item -Destination $OUTPUT_46_DIR
 
 #prepare sharpziplib

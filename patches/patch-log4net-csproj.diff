@@ -1,0 +1,140 @@
+# Copyright (c) Citrix Systems, Inc.
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms,
+# with or without modification, are permitted provided
+# that the following conditions are met:
+#
+# *   Redistributions of source code must retain the above
+#     copyright notice, this list of conditions and the
+#     following disclaimer.
+# *   Redistributions in binary form must reproduce the above
+#     copyright notice, this list of conditions and the
+#     following disclaimer in the documentation and/or other
+#     materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+# CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+# INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+# NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+# SUCH DAMAGE.
+
+--- src/log4net/log4net.csproj	2022-08-03 07:31:38.000000000 +0100
++++ src/log4net/log4net.csproj	2022-09-28 15:18:08.477331400 +0100
+@@ -30,7 +30,7 @@
+     <RepositoryUrl>https://github.com/apache/logging-log4net</RepositoryUrl>
+     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+     <Platforms>AnyCPU</Platforms>
+-    <TargetFrameworks>net20;net35;net40;net40-client;net45;netstandard1.3;netstandard2.0</TargetFrameworks>
++    <TargetFrameworks>net46;net48</TargetFrameworks>
+     <Configurations>Debug;Release</Configurations>
+     <LangVersion>latest</LangVersion>
+     <RootNamespace>log4net</RootNamespace>
+@@ -71,38 +71,10 @@
+     <RegisterForComInterop>false</RegisterForComInterop>
+     <RemoveIntegerChecks>false</RemoveIntegerChecks>
+   </PropertyGroup>
+-  <PropertyGroup Condition="'$(TargetFramework)'=='net35-client'">
+-    <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
+-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+-    <OutDir>..\..\build\$(Configuration)\net35-client</OutDir>
+-    <DefineConstants>$(DefineConstants);NET_2_0;NET_3_5;CLIENT_PROFILE</DefineConstants>
+-  </PropertyGroup>
+-  <PropertyGroup Condition="'$(TargetFramework)'=='net40-client'">
+-    <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
+-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+-    <OutDir>..\..\build\$(Configuration)\net40-client</OutDir>
+-    <DefineConstants>$(DefineConstants);NET_2_0;NET_4_0;CLIENT_PROFILE</DefineConstants>
+-  </PropertyGroup>
+-  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
+-    <DefineConstants>$(DefineConstants);NETSTANDARD;NETSTANDARD1_3</DefineConstants>
+-    <NoWarn>1574</NoWarn>
+-  </PropertyGroup>
+-  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+-    <DefineConstants>$(DefineConstants);NETSTANDARD;NETSTANDARD2_0</DefineConstants>
+-    <NoWarn>1574</NoWarn>
+-  </PropertyGroup>
+-  <PropertyGroup Condition="'$(TargetFramework)'=='net20'">
+-    <DefineConstants>$(DefineConstants);NET_2_0</DefineConstants>
+-  </PropertyGroup>
+-  <PropertyGroup Condition="'$(TargetFramework)'=='net35'">
+-    <DefineConstants>$(DefineConstants);NET_2_0;NET_3_5</DefineConstants>
+-  </PropertyGroup>
+-  <PropertyGroup Condition="'$(TargetFramework)'=='net40'">
+-    <DefineConstants>$(DefineConstants);NET_2_0;NET_4_0</DefineConstants>
++  <PropertyGroup Condition="'$(TargetFramework)'=='net46'">
++    <DefineConstants>$(DefineConstants);NET_2_0;NET_4_0;NET_4_5</DefineConstants>
+   </PropertyGroup>
+-  <PropertyGroup Condition="'$(TargetFramework)'=='net45'">
++  <PropertyGroup Condition="'$(TargetFramework)'=='net48'">
+     <DefineConstants>$(DefineConstants);NET_2_0;NET_4_0;NET_4_5</DefineConstants>
+   </PropertyGroup>
+   <PropertyGroup Condition=" '$(Configuration)'=='Debug' ">
+@@ -128,39 +100,6 @@
+       <Name>System.XML</Name>
+     </Reference>
+   </ItemGroup>
+-  <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
+-    <PackageReference Include="System.AppContext" Version="4.3.0" />
+-    <PackageReference Include="System.Collections.NonGeneric" Version="4.0.1" />
+-    <PackageReference Include="System.Console" Version="4.3.0" />
+-    <PackageReference Include="System.Data.Common" Version="4.1.0" />
+-    <PackageReference Include="System.Diagnostics.Debug" Version="4.3.0" />
+-    <PackageReference Include="System.Diagnostics.Process" Version="4.1.0" />
+-    <PackageReference Include="System.Diagnostics.StackTrace" Version="4.0.1" />
+-    <PackageReference Include="System.Diagnostics.TraceSource" Version="4.0.0" />
+-    <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
+-    <PackageReference Include="System.IO.FileSystem.Watcher" Version="4.0.0" />
+-    <PackageReference Include="System.Linq" Version="4.3.0" />
+-    <PackageReference Include="System.Net.NameResolution" Version="4.0.0" />
+-    <PackageReference Include="System.Net.Requests" Version="4.0.11" />
+-    <PackageReference Include="System.Net.Sockets" Version="4.3.0" />
+-    <PackageReference Include="System.Reflection" Version="4.3.0" />
+-    <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
+-    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.1.0" />
+-    <PackageReference Include="System.Runtime.Extensions" Version="4.3.1" />
+-    <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
+-    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
+-    <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
+-    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+-    <PackageReference Include="System.Text.Encoding" Version="4.3.0" />
+-    <PackageReference Include="System.Threading" Version="4.3.0" />
+-    <PackageReference Include="System.Threading.Thread" Version="4.0.0" />
+-    <PackageReference Include="System.Threading.Timer" Version="4.3.0" />
+-    <PackageReference Include="System.Xml.ReaderWriter" Version="4.3.0" />
+-    <PackageReference Include="System.Xml.XmlDocument" Version="4.0.1" />
+-  </ItemGroup>
+-  <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
+-  </ItemGroup>
+   <ItemGroup>
+     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+       <Visible>False</Visible>
+@@ -191,16 +130,6 @@
+       <Link>package-icon.png</Link>
+     </Content>
+   </ItemGroup>
+-  <ItemGroup>
+-    <PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="4.0.1">
+-      <PrivateAssets>all</PrivateAssets>
+-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+-    </PackageReference>
+-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net35" Version="1.0.2">
+-      <PrivateAssets>all</PrivateAssets>
+-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+-    </PackageReference>
+-  </ItemGroup>
+   <PropertyGroup />
+   <Import Project="../MonoForFramework.targets" />
+ </Project>
