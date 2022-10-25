@@ -84,6 +84,7 @@ $REPO = Get-Item "$PSScriptRoot" | select -ExpandProperty FullName
 $BUILD_DIR = "$REPO\_build"
 $SCRATCH_DIR = "$BUILD_DIR\scratch"
 $OUTPUT_DIR = "$BUILD_DIR\output"
+$OUTPUT_20_DIR = "$OUTPUT_DIR\netstandard2.0"
 $OUTPUT_48_DIR = "$OUTPUT_DIR\dotnet48"
 $OUTPUT_46_DIR = "$OUTPUT_DIR\dotnet46"
 $OUTPUT_45_DIR = "$OUTPUT_DIR\dotnet45"
@@ -100,7 +101,7 @@ Write-Output 'DEBUG: Printing MSBuild.exe version...'
 & $msbuild /ver
 Write-Output ''
 
-mkdirClean $BUILD_DIR, $SCRATCH_DIR, $OUTPUT_DIR, $OUTPUT_48_DIR, $OUTPUT_46_DIR, $OUTPUT_45_DIR
+mkdirClean $BUILD_DIR, $SCRATCH_DIR, $OUTPUT_DIR, $OUTPUT_20_DIR, $OUTPUT_48_DIR, $OUTPUT_46_DIR, $OUTPUT_45_DIR
 
 #prepare sources and manifest
 
@@ -134,7 +135,7 @@ Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-xmlrpc") -and !$_.Nam
 'dll', 'pdb' | % { "$SCRATCH_DIR\xml-rpc_v45.net\bin\CookComputing.XmlRpcV2." + $_ } |`
   Move-Item -Destination $OUTPUT_45_DIR
 
-#prepare Json.NET 4.5 and 4.8
+#prepare Json.NET 4.5, 4.8, and .NET Standard 2.0
 
 mkdirClean "$SCRATCH_DIR\json.net"
 Expand-Archive -DestinationPath "$SCRATCH_DIR\json.net" -Path "$REPO\Json.NET\Newtonsoft.Json-13.0.1.zip"
@@ -155,6 +156,8 @@ Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-json-net")} |`
   Move-Item -Destination $OUTPUT_48_DIR
 'dll', 'pdb' | % { "$SCRATCH_DIR\json.net\Newtonsoft.Json\bin\Release\net45\Newtonsoft.Json.CH." + $_ } |`
   Move-Item -Destination $OUTPUT_45_DIR
+'dll', 'pdb' | % { "$SCRATCH_DIR\json.net\Newtonsoft.Json\bin\Release\netstandard2.0\Newtonsoft.Json.CH." + $_ } |`
+  Move-Item -Destination $OUTPUT_20_DIR
 
 #prepare log4net 4.6 and 4.8
 
