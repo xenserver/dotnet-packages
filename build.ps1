@@ -72,9 +72,8 @@ $SWITCHES = '/nologo', '/m', '/verbosity:normal', '/p:Configuration=Release', `
             '/p:DebugSymbols=true', '/p:DebugType=pdbonly'
 $RESTORE_SWITCHES= '/restore', '/p:RestoreNoCache=true'
 $FRAME45 = '/p:TargetFrameworkVersion=v4.5'
-$FRAME46 = '/p:TargetFrameworkVersion=v4.6'
 $FRAME48 = '/p:TargetFrameworkVersion=v4.8'
-$VS2019 = '/toolsversion:Current'
+$VS_TOOLS = '/toolsversion:Current'
 
 if ($SnkKey) {
   $SIGN = '/p:SignAssembly=true', "/p:AssemblyOriginatorKeyFile=$SnkKey"
@@ -90,15 +89,8 @@ $OUTPUT_46_DIR = "$OUTPUT_DIR\dotnet46"
 $OUTPUT_45_DIR = "$OUTPUT_DIR\dotnet45"
 $PATCHES = "$REPO\patches"
 
-$msbuild = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe"
-
-if (-not (Test-Path $msbuild)) {
-  Write-Output 'DEBUG: Did not find VS Community edition. Trying Professional'
-  $msbuild = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\MSBuild.exe"
-}
-
 Write-Output 'DEBUG: Printing MSBuild.exe version...'
-& $msbuild /ver
+msbuild /ver
 Write-Output ''
 
 mkdirClean $BUILD_DIR, $SCRATCH_DIR, $OUTPUT_DIR, $OUTPUT_20_DIR, $OUTPUT_48_DIR, $OUTPUT_46_DIR, $OUTPUT_45_DIR
@@ -119,7 +111,7 @@ Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-xmlrpc") -and !$_.Nam
   % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\xml-rpc_v48.net"
 
 
-& $msbuild $SWITCHES $FRAME48 $VS2019 $SIGN "$SCRATCH_DIR\xml-rpc_v48.net\src\xmlrpc.csproj"
+msbuild $SWITCHES $FRAME48 $VS_TOOLS $SIGN "$SCRATCH_DIR\xml-rpc_v48.net\src\xmlrpc.csproj"
 'dll', 'pdb' | % { "$SCRATCH_DIR\xml-rpc_v48.net\bin\CookComputing.XmlRpcV2." + $_ } |`
   Move-Item -Destination $OUTPUT_48_DIR
 
@@ -131,7 +123,7 @@ Expand-Archive -DestinationPath "$SCRATCH_DIR\xml-rpc_v45.net" -Path "$REPO\XML-
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-xmlrpc") -and !$_.Name.Contains("dotnet48") } |`
   % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\xml-rpc_v45.net"
 
-& $msbuild $SWITCHES $FRAME45 $VS2019 $SIGN "$SCRATCH_DIR\xml-rpc_v45.net\src\xmlrpc.csproj"
+msbuild $SWITCHES $FRAME45 $VS_TOOLS $SIGN "$SCRATCH_DIR\xml-rpc_v45.net\src\xmlrpc.csproj"
 'dll', 'pdb' | % { "$SCRATCH_DIR\xml-rpc_v45.net\bin\CookComputing.XmlRpcV2." + $_ } |`
   Move-Item -Destination $OUTPUT_45_DIR
 
@@ -150,7 +142,7 @@ $RESTORE_NUGET_CONFIG_FILE="$SCRATCH_DIR\json.net\NuGet.Config"
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-json-net")} |`
   % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\json.net"
 
-& $msbuild $SWITCHES $RESTORE_SWITCHES -p:RestoreConfigFile=$RESTORE_NUGET_CONFIG_FILE $VS2019 $SIGN "$SCRATCH_DIR\json.net\Newtonsoft.Json\Newtonsoft.Json.csproj"
+msbuild $SWITCHES $RESTORE_SWITCHES -p:RestoreConfigFile=$RESTORE_NUGET_CONFIG_FILE $VS_TOOLS $SIGN "$SCRATCH_DIR\json.net\Newtonsoft.Json\Newtonsoft.Json.csproj"
 
 'dll', 'pdb' | % { "$SCRATCH_DIR\json.net\Newtonsoft.Json\bin\Release\net48\Newtonsoft.Json.CH." + $_ } |`
   Move-Item -Destination $OUTPUT_48_DIR
@@ -168,7 +160,7 @@ Move-Item "$SCRATCH_DIR\log4net\logging-log4net-rel-2.0.15\*" "$SCRATCH_DIR\log4
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-log4net") } | `
   % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\log4net"
 
-& $msbuild /t:restore,build $SWITCHES $VS2019 $SIGN "$SCRATCH_DIR\log4net\src\log4net\log4net.csproj"
+msbuild /t:restore,build $SWITCHES $VS_TOOLS $SIGN "$SCRATCH_DIR\log4net\src\log4net\log4net.csproj"
 
 Move-Item "$SCRATCH_DIR\log4net\build\artifacts\log4net.2.0.15.nupkg" -Destination $OUTPUT_DIR
 
@@ -186,7 +178,7 @@ Expand-Archive -DestinationPath "$SCRATCH_DIR\sharpziplib" -Path "$REPO\SharpZip
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-sharpziplib") } | % { $_.FullName } |`
   applyPatch -Path "$SCRATCH_DIR\sharpziplib"
 
-& $msbuild $SWITCHES $FRAME48 $VS2019 $SIGN "$SCRATCH_DIR\sharpziplib\src\ICSharpCode.SharpZLib.csproj"
+msbuild $SWITCHES $FRAME48 $VS_TOOLS $SIGN "$SCRATCH_DIR\sharpziplib\src\ICSharpCode.SharpZLib.csproj"
 'dll', 'pdb' | % { "$SCRATCH_DIR\sharpziplib\bin\ICSharpCode.SharpZipLib." + $_ } |`
   Move-Item -Destination $OUTPUT_48_DIR
 
@@ -198,7 +190,7 @@ Expand-Archive -DestinationPath "$SCRATCH_DIR\dotnetzip" -Path "$REPO\DotNetZip\
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-dotnetzip") } | % { $_.FullName } |`
   applyPatch -Path "$SCRATCH_DIR\dotnetzip"
 
-& $msbuild $SWITCHES $FRAME48 $VS2019 $SIGN "$SCRATCH_DIR\dotnetzip\DotNetZip-src\DotNetZip\Zip\Zip DLL.csproj"
+msbuild $SWITCHES $FRAME48 $VS_TOOLS $SIGN "$SCRATCH_DIR\dotnetzip\DotNetZip-src\DotNetZip\Zip\Zip DLL.csproj"
 'dll', 'pdb' | % { "$SCRATCH_DIR\dotnetzip\DotNetZip-src\DotNetZip\Zip\bin\Release\Ionic.Zip." + $_ } |`
   Move-Item -Destination $OUTPUT_48_DIR
 
@@ -210,7 +202,7 @@ Expand-Archive -DestinationPath "$SCRATCH_DIR\DiscUtils" -Path "$REPO\DiscUtils\
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-discutils") } |`
   % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\DiscUtils"
 
-& $msbuild $SWITCHES $FRAME48 $VS2019 $SIGN "$SCRATCH_DIR\DiscUtils\LibraryOnly.sln"
+msbuild $SWITCHES $FRAME48 $VS_TOOLS $SIGN "$SCRATCH_DIR\DiscUtils\LibraryOnly.sln"
 'dll', 'pdb' | % { "$SCRATCH_DIR\DiscUtils\src\bin\Release\DiscUtils." + $_ } |`
   Move-Item -Destination $OUTPUT_48_DIR
 
