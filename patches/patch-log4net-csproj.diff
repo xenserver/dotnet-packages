@@ -28,8 +28,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- src/log4net/log4net.csproj	2022-08-03 07:31:38.000000000 +0100
-+++ src/log4net/log4net.csproj	2022-09-28 15:18:08.477331400 +0100
+--- a/src/log4net/log4net.csproj	2022-08-03 07:31:38.000000000 +0100
++++ b/src/log4net/log4net.csproj	2022-09-28 15:18:08.477331400 +0100
 @@ -30,7 +30,7 @@
      <RepositoryUrl>https://github.com/apache/logging-log4net</RepositoryUrl>
      <GeneratePackageOnBuild>false</GeneratePackageOnBuild>

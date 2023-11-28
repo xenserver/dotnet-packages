@@ -59,8 +59,17 @@ function applyPatch {
   )
 
   process {
-    Write-Output "Applying patch file $patch..."
-    patch -b --binary -d $Path -p0 -i $Patch
+    $origLocation = Get-Location
+    Set-Location $Path -Verbose
+
+    try {
+        Write-Host ''
+        Write-Host "INFO: Applying patch file $Patch..."
+        git apply --verbose $Patch
+    }
+    finally {
+        Set-Location $origLocation -Verbose
+    }
 
     if (-not $?) {
         Write-Error "Failed to apply $Patch"
@@ -89,9 +98,9 @@ $OUTPUT_46_DIR = "$OUTPUT_DIR\dotnet46"
 $OUTPUT_45_DIR = "$OUTPUT_DIR\dotnet45"
 $PATCHES = "$REPO\patches"
 
-Write-Output 'DEBUG: Printing MSBuild.exe version...'
+Write-Host 'DEBUG: Printing MSBuild.exe version...'
 msbuild /ver
-Write-Output ''
+Write-Host ''
 
 mkdirClean $BUILD_DIR, $SCRATCH_DIR, $OUTPUT_DIR, $OUTPUT_20_DIR, $OUTPUT_48_DIR, $OUTPUT_46_DIR, $OUTPUT_45_DIR
 

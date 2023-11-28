@@ -28,8 +28,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- src/XmlRpcFaultException.cs	2016-10-06 13:53:22.714261900 +0100
-+++ src/XmlRpcFaultException.cs	2016-10-06 13:54:14.151676300 +0100
+--- a/src/XmlRpcFaultException.cs	2016-10-06 13:53:22.714261900 +0100
++++ b/src/XmlRpcFaultException.cs	2016-10-06 13:54:14.151676300 +0100
 @@ -29,6 +29,7 @@
  #if (!COMPACT_FRAMEWORK)
    using System.Runtime.Serialization;

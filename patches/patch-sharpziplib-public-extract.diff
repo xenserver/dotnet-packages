@@ -28,8 +28,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- src/Tar/TarArchive.cs	2007-09-01 20:46:38.000000000 +0000
-+++ src/Tar/TarArchive.cs	2010-02-12 14:03:19.000000000 +0000
+--- a/src/Tar/TarArchive.cs	2007-09-01 20:46:38.000000000 +0000
++++ b/src/Tar/TarArchive.cs	2010-02-12 14:03:19.000000000 +0000
 @@ -96,7 +96,7 @@
  		/// Initalise a TarArchive for input.
  		/// </summary>

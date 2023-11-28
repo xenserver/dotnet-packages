@@ -28,8 +28,9 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- src/AssemblyInfo.cs	2016-10-06 10:48:28.032546900 +0100
-+++ src/AssemblyInfo.cs	2016-10-06 11:14:09.419959700 +0100
+diff -ru src/AssemblyInfo.cs src/AssemblyInfo.cs
+--- a/src/AssemblyInfo.cs	2016-10-06 10:48:28.032546900 +0100
++++ b/src/AssemblyInfo.cs	2016-10-06 11:14:09.419959700 +0100
 @@ -34,6 +34,7 @@
  [assembly: AssemblyCopyright("Charles Cook (c) 2001-2010")]
  [assembly: AssemblyTrademark("")]

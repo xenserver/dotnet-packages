@@ -28,8 +28,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- src/Tar/TarOutputStream.cs	2007-09-07 12:19:20.000000000 +0100
-+++ src/Tar/TarOutputStream.cs	2011-07-08 13:28:44.804190600 +0100
+--- a/src/Tar/TarOutputStream.cs	2007-09-07 12:19:20.000000000 +0100
++++ b/src/Tar/TarOutputStream.cs	2011-07-08 13:28:44.804190600 +0100
 @@ -266,7 +266,9 @@
  				throw new ArgumentNullException("entry");
  			}

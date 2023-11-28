@@ -28,8 +28,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- src/Tar/TarHeader.cs	2013-12-05 11:10:50.426936900 +0000
-+++ src/Tar/TarHeader.cs	2013-12-05 11:41:33.587355100 +0000
+--- a/src/Tar/TarHeader.cs	2013-12-05 11:10:50.426936900 +0000
++++ b/src/Tar/TarHeader.cs	2013-12-05 11:41:33.587355100 +0000
 @@ -859,7 +859,7 @@
  		/// <param name="buffer">The buffer to add to</param>
  		/// <param name="bufferOffset">The index of the first byte to add</param>
