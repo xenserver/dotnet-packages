@@ -182,18 +182,6 @@ msbuild $SWITCHES $FRAME48 $VS_TOOLS $SIGN "$SCRATCH_DIR\sharpziplib\src\ICSharp
 'dll', 'pdb' | % { "$SCRATCH_DIR\sharpziplib\bin\ICSharpCode.SharpZipLib." + $_ } |`
   Move-Item -Destination $OUTPUT_48_DIR
 
-#prepare dotnetzip
-
-mkdirClean "$SCRATCH_DIR\dotnetzip"
-Expand-Archive -DestinationPath "$SCRATCH_DIR\dotnetzip" -Path "$REPO\DotNetZip\DotNetZip-src-v1.9.1.8.zip"
-
-Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-dotnetzip") } | % { $_.FullName } |`
-  applyPatch -Path "$SCRATCH_DIR\dotnetzip"
-
-msbuild $SWITCHES $FRAME48 $VS_TOOLS $SIGN "$SCRATCH_DIR\dotnetzip\DotNetZip-src\DotNetZip\Zip\Zip DLL.csproj"
-'dll', 'pdb' | % { "$SCRATCH_DIR\dotnetzip\DotNetZip-src\DotNetZip\Zip\bin\Release\Ionic.Zip." + $_ } |`
-  Move-Item -Destination $OUTPUT_48_DIR
-
 #prepare discutils
 
 mkdirClean "$SCRATCH_DIR\DiscUtils"
