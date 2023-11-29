@@ -1,5 +1,4 @@
-# Copyright (c) Citrix Systems, Inc.  
-# All rights reserved.
+# Copyright (c) Cloud Software Group, Inc.
 # 
 # Redistribution and use in source and binary forms,
 # with or without modification, are permitted provided
@@ -105,9 +104,9 @@ diff -ru src/XmlRpcSerializer.cs src/XmlRpcSerializer.cs
 +        {
 +          retVal = Double.NaN;
 +        }
-+    	 else
++        else
 +        {
-+          retVal = Double.Parse(node.FirstChild.Value, 
++          retVal = Double.Parse(node.FirstChild.Value,
 +            CultureInfo.InvariantCulture.NumberFormat);
 +	 }
        }

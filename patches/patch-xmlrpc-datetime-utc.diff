@@ -1,5 +1,4 @@
-# Copyright (c) Citrix Systems, Inc.  
-# All rights reserved.
+# Copyright (c) Cloud Software Group, Inc.
 # 
 # Redistribution and use in source and binary forms,
 # with or without modification, are permitted provided
@@ -34,14 +33,14 @@
          "yyyyMMdd'T'HHmmsszzz", 
          "yyyyMMdd'T'HHmmsszz", 
        };
-+      
++
 +      DateTimeStyles flags;
 +      if(m.Groups["tz"].Equals("Z")){
 +          flags = DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal;
 +      }else{
 +          flags = DateTimeStyles.None;
 +      }
-+      
++
        // Compact Framework doesn't support TryParseExact()
        try
        {

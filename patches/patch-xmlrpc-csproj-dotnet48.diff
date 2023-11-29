@@ -1,5 +1,4 @@
-# Copyright (c) Citrix Systems, Inc.  
-# All rights reserved.
+# Copyright (c) Cloud Software Group, Inc.
 # 
 # Redistribution and use in source and binary forms,
 # with or without modification, are permitted provided
@@ -37,7 +36,7 @@
    <PropertyGroup>
      <ProjectType>Local</ProjectType>
      <ProductVersion>9.0.30729</ProductVersion>
-@@ -26,6 +27,7 @@
+@@ -27,6 +28,7 @@
      </UpgradeBackupLocation>
      <SignAssembly Condition="'$(BuildingInsideVisualStudio)' == ''">false</SignAssembly>
      <OldToolsVersion>2.0</OldToolsVersion>
