@@ -1,5 +1,4 @@
-﻿# Copyright (c) Citrix Systems, Inc.  
-# All rights reserved.
+﻿# Copyright (c) Cloud Software Group, Inc.
 # 
 # Redistribution and use in source and binary forms,
 # with or without modification, are permitted provided
@@ -29,8 +28,8 @@
 # SUCH DAMAGE.
 
 diff -u -r src/Tar/TarHeader.cs src/Tar/TarHeader.cs
---- src/Tar/TarHeader.cs	2007-09-07 12:18:42.000000000 +0100
-+++ src/Tar/TarHeader.cs	2011-06-17 10:24:26.046499600 +0100
+--- a/src/Tar/TarHeader.cs	2007-09-07 12:18:42.000000000 +0100
++++ b/src/Tar/TarHeader.cs	2011-06-17 10:24:26.046499600 +0100
 @@ -268,6 +268,11 @@
  		/// </summary>
  		public const string	GNU_TMAGIC	= "ustar  ";
@@ -51,7 +50,7 @@ diff -u -r src/Tar/TarHeader.cs src/Tar/TarHeader.cs
  			
  			int end = offset + length;
 +            if (header[offset] >> 7 == 1 && offset == SIZE_OFFSET) //make sure offset refer size.
-+            { // size is > 8GB //KHALID changes 
++            { // size is > 8GB //KHALID changes
 +                longEntry = true;
 +            }
  			for (int i = offset; i < end ; ++i) {

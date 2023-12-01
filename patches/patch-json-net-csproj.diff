@@ -1,5 +1,4 @@
-# Copyright (c) Citrix Systems, Inc.
-# All rights reserved.
+# Copyright (c) Cloud Software Group, Inc.
 #
 # Redistribution and use in source and binary forms,
 # with or without modification, are permitted provided
@@ -28,8 +27,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- Newtonsoft.Json/Newtonsoft.Json.csproj
-+++ Newtonsoft.Json/Newtonsoft.Json.csproj
+--- a/Newtonsoft.Json/Newtonsoft.Json.csproj
++++ b/Newtonsoft.Json/Newtonsoft.Json.csproj
 @@ -1,22 +1,22 @@
  ﻿<Project Sdk="Microsoft.NET.Sdk">
    <PropertyGroup>

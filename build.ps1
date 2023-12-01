@@ -1,5 +1,4 @@
-# Copyright (c) Citrix Systems, Inc.
-# All rights reserved.
+# Copyright (c) Cloud Software Group, Inc.
 #
 # Redistribution and use in source and binary forms,
 # with or without modification, are permitted provided
@@ -59,8 +58,17 @@ function applyPatch {
   )
 
   process {
-    Write-Output "Applying patch file $patch..."
-    patch -b --binary -d $Path -p0 -i $Patch
+    $origLocation = Get-Location
+    Set-Location $Path -Verbose
+
+    try {
+        Write-Host ''
+        Write-Host "INFO: Applying patch file $Patch..."
+        git apply --verbose $Patch
+    }
+    finally {
+        Set-Location $origLocation -Verbose
+    }
 
     if (-not $?) {
         Write-Error "Failed to apply $Patch"
@@ -89,9 +97,9 @@ $OUTPUT_46_DIR = "$OUTPUT_DIR\dotnet46"
 $OUTPUT_45_DIR = "$OUTPUT_DIR\dotnet45"
 $PATCHES = "$REPO\patches"
 
-Write-Output 'DEBUG: Printing MSBuild.exe version...'
+Write-Host 'DEBUG: Printing MSBuild.exe version...'
 msbuild /ver
-Write-Output ''
+Write-Host ''
 
 mkdirClean $BUILD_DIR, $SCRATCH_DIR, $OUTPUT_DIR, $OUTPUT_20_DIR, $OUTPUT_48_DIR, $OUTPUT_46_DIR, $OUTPUT_45_DIR
 
@@ -180,18 +188,6 @@ Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-sharpziplib") } | % {
 
 msbuild $SWITCHES $FRAME48 $VS_TOOLS $SIGN "$SCRATCH_DIR\sharpziplib\src\ICSharpCode.SharpZLib.csproj"
 'dll', 'pdb' | % { "$SCRATCH_DIR\sharpziplib\bin\ICSharpCode.SharpZipLib." + $_ } |`
-  Move-Item -Destination $OUTPUT_48_DIR
-
-#prepare dotnetzip
-
-mkdirClean "$SCRATCH_DIR\dotnetzip"
-Expand-Archive -DestinationPath "$SCRATCH_DIR\dotnetzip" -Path "$REPO\DotNetZip\DotNetZip-src-v1.9.1.8.zip"
-
-Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-dotnetzip") } | % { $_.FullName } |`
-  applyPatch -Path "$SCRATCH_DIR\dotnetzip"
-
-msbuild $SWITCHES $FRAME48 $VS_TOOLS $SIGN "$SCRATCH_DIR\dotnetzip\DotNetZip-src\DotNetZip\Zip\Zip DLL.csproj"
-'dll', 'pdb' | % { "$SCRATCH_DIR\dotnetzip\DotNetZip-src\DotNetZip\Zip\bin\Release\Ionic.Zip." + $_ } |`
   Move-Item -Destination $OUTPUT_48_DIR
 
 #prepare discutils

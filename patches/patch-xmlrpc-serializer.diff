@@ -1,5 +1,4 @@
-# Copyright (c) Citrix Systems, Inc.  
-# All rights reserved.
+# Copyright (c) Cloud Software Group, Inc.
 # 
 # Redistribution and use in source and binary forms,
 # with or without modification, are permitted provided
@@ -29,8 +28,8 @@
 # SUCH DAMAGE.
 
 diff -ru src/XmlRpcSerializer.cs src/XmlRpcSerializer.cs
---- src/XmlRpcSerializer.cs	2016-10-20 12:06:57.010643300 +0100
-+++ src/XmlRpcSerializer.cs	2016-10-19 11:47:47.860736900 +0100
+--- a/src/XmlRpcSerializer.cs	2016-10-20 12:06:57.010643300 +0100
++++ b/src/XmlRpcSerializer.cs	2016-10-19 11:47:47.860736900 +0100
 @@ -251,7 +251,7 @@
        {
          using (XmlTextReader xmlRdr = new XmlTextReader(stm))
@@ -105,9 +104,9 @@ diff -ru src/XmlRpcSerializer.cs src/XmlRpcSerializer.cs
 +        {
 +          retVal = Double.NaN;
 +        }
-+    	 else
++        else
 +        {
-+          retVal = Double.Parse(node.FirstChild.Value, 
++          retVal = Double.Parse(node.FirstChild.Value,
 +            CultureInfo.InvariantCulture.NumberFormat);
 +	 }
        }

@@ -1,5 +1,4 @@
-# Copyright (c) Citrix Systems, Inc.
-# All rights reserved.
+# Copyright (c) Cloud Software Group, Inc.
 #
 # Redistribution and use in source and binary forms,
 # with or without modification, are permitted provided
@@ -28,8 +27,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- Newtonsoft.Json/JsonConvert.cs
-+++ Newtonsoft.Json/JsonConvert.cs
+--- a/Newtonsoft.Json/JsonConvert.cs
++++ b/Newtonsoft.Json/JsonConvert.cs
 @@ -97,10 +97,20 @@ public static class JsonConvert
          public static readonly string NaN = "NaN";
  

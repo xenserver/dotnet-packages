@@ -1,5 +1,4 @@
-# Copyright (c) Citrix Systems, Inc.  
-# All rights reserved.
+# Copyright (c) Cloud Software Group, Inc.
 # 
 # Redistribution and use in source and binary forms,
 # with or without modification, are permitted provided
@@ -28,8 +27,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- src/xmlrpc.csproj	2016-10-21 09:38:33.063879500 +0100
-+++ src/xmlrpc.csproj	2016-10-21 09:41:38.620467600 +0100
+--- a/src/xmlrpc.csproj	2016-10-21 09:38:33.063879500 +0100
++++ b/src/xmlrpc.csproj	2016-10-21 09:41:38.620467600 +0100
 @@ -1,4 +1,5 @@
 -﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
 +﻿<?xml version="1.0" encoding="utf-8"?>
@@ -37,7 +36,7 @@
    <PropertyGroup>
      <ProjectType>Local</ProjectType>
      <ProductVersion>9.0.30729</ProductVersion>
-@@ -26,6 +27,7 @@
+@@ -27,6 +28,7 @@
      </UpgradeBackupLocation>
      <SignAssembly Condition="'$(BuildingInsideVisualStudio)' == ''">false</SignAssembly>
      <OldToolsVersion>2.0</OldToolsVersion>

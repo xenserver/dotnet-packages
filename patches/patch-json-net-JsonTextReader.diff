@@ -1,5 +1,4 @@
-# Copyright (c) Citrix Systems, Inc.
-# All rights reserved.
+# Copyright (c) Cloud Software Group, Inc.
 #
 # Redistribution and use in source and binary forms,
 # with or without modification, are permitted provided
@@ -28,8 +27,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- Newtonsoft.Json/JsonTextReader.cs
-+++ Newtonsoft.Json/JsonTextReader.cs
+--- a/Newtonsoft.Json/JsonTextReader.cs
++++ b/Newtonsoft.Json/JsonTextReader.cs
 @@ -637,15 +637,15 @@ public override bool Read()
                                  ParseString(currentChar, readType);
                                  return FinishReadQuotedStringValue(readType);

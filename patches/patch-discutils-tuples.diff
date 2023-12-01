@@ -1,5 +1,4 @@
-# Copyright (c) Citrix Systems, Inc.
-# All rights reserved.
+# Copyright (c) Cloud Software Group, Inc.
 #
 # Redistribution and use in source and binary forms,
 # with or without modification, are permitted provided
@@ -28,8 +27,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- src/Ntfs/ClusterBitmap.cs	2018-01-09 11:56:04.000000000 +0000
-+++ src/Ntfs/ClusterBitmap.cs	2020-09-15 23:43:22.884436000 +0100
+--- a/src/Ntfs/ClusterBitmap.cs	2018-01-09 11:56:04.000000000 +0000
++++ b/src/Ntfs/ClusterBitmap.cs	2020-09-15 23:43:22.884436000 +0100
 @@ -147,7 +147,7 @@
          {
              foreach (var run in runs)
@@ -39,8 +38,8 @@
              }
          }
  
---- src/Ntfs/RawClusterStream.cs	2018-01-09 11:56:06.000000000 +0000
-+++ src/Ntfs/RawClusterStream.cs	2020-09-15 23:44:31.738225600 +0100
+--- a/src/Ntfs/RawClusterStream.cs	2018-01-09 11:56:06.000000000 +0000
++++ b/src/Ntfs/RawClusterStream.cs	2020-09-15 23:44:31.738225600 +0100
 @@ -221,8 +221,8 @@
                      long lcn = runIdx == 0 ? 0 : _cookedRuns[runIdx - 1].StartLcn;
                      foreach (var allocation in alloced)

@@ -1,5 +1,4 @@
-# Copyright (c) Citrix Systems, Inc.  
-# All rights reserved.
+# Copyright (c) Cloud Software Group, Inc.
 # 
 # Redistribution and use in source and binary forms,
 # with or without modification, are permitted provided
@@ -28,8 +27,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- src/Tar/TarInputStream.cs	2013-12-05 11:10:57.041548900 +0000
-+++ src/Tar/TarInputStream.cs	2013-12-05 11:45:05.686314700 +0000
+--- a/src/Tar/TarInputStream.cs	2013-12-05 11:10:57.041548900 +0000
++++ b/src/Tar/TarInputStream.cs	2013-12-05 11:45:05.686314700 +0000
 @@ -582,7 +582,7 @@
  			}
  

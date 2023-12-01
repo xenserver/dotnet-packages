@@ -5,7 +5,6 @@ libraries:
 
 * DiscUtils (v0.11) - a .NET library for reading and writing ISO files
   and Virtual Machine disk files (VHD, VDI, XVA, VMDK, etc);
-* DotNetZip (v1.9.1.8) - a .NET library for handling ZIP files;
 * SharpZipLib (v0.85.4)- a Zip, GZip, Tar and BZip2 library written
   entirely in C# for the .NET platform;
 * XML-RPC.NET (v2.5.0) - a library for implementing XML-RPC Services
@@ -39,8 +38,8 @@ directories. Please see the [LICENSE](LICENSE) file for more information.
 4. Visual Studio build tools for 2019 (toolsversion 16.0).
   Add the location of `msbuild` to the System Path.
 5. The Windows 10.0.18362.0 SDK (included in VS 2019).
-6. `git`, `patch`, `zip` and `unzip` packages. These can be obtained with
-  [Cygwin](https://www.cygwin.com/) or [Chocolatey](https://chocolatey.org).
+6. [git](https://git-scm.com/download/win) for Windows.
+
 ### Build
 
 The libraries can be built (with patches applied) by opening a PowerShell prompt

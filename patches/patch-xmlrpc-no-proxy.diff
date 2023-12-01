@@ -1,5 +1,4 @@
-# Copyright (c) Citrix Systems, Inc.  
-# All rights reserved.
+# Copyright (c) Cloud Software Group, Inc.
 # 
 # Redistribution and use in source and binary forms,
 # with or without modification, are permitted provided
@@ -28,8 +27,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- src/XmlRpcClientProtocol.cs	2016-10-06 10:48:28.362764700 +0100
-+++ src/XmlRpcClientProtocol.cs	2016-10-06 13:34:10.625473700 +0100
+--- a/src/XmlRpcClientProtocol.cs	2016-10-06 10:48:28.362764700 +0100
++++ b/src/XmlRpcClientProtocol.cs	2016-10-06 13:34:10.625473700 +0100
 @@ -407,8 +407,7 @@
  
      public void SetProperties(WebRequest webReq)
