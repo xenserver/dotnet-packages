@@ -79,7 +79,6 @@ function applyPatch {
 $SWITCHES = '/nologo', '/m', '/verbosity:normal', '/p:Configuration=Release', `
             '/p:DebugSymbols=true', '/p:DebugType=pdbonly'
 $RESTORE_SWITCHES= '/restore', '/p:RestoreNoCache=true'
-$FRAME45 = '/p:TargetFrameworkVersion=v4.5'
 $FRAME48 = '/p:TargetFrameworkVersion=v4.8'
 $VS_TOOLS = '/toolsversion:Current'
 
@@ -115,25 +114,13 @@ git archive --format=zip -o "$OUTPUT_DIR\\dotnet-packages-sources.zip" $gitCommi
 mkdirClean "$SCRATCH_DIR\xml-rpc_v48.net"
 Expand-Archive -DestinationPath "$SCRATCH_DIR\xml-rpc_v48.net" -Path "$REPO\XML-RPC.NET\xml-rpc.net.2.5.0.zip"
 
-Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-xmlrpc") -and !$_.Name.Contains("dotnet45") } |`
+Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-xmlrpc") } |`
   % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\xml-rpc_v48.net"
 
 
 msbuild $SWITCHES $FRAME48 $VS_TOOLS $SIGN "$SCRATCH_DIR\xml-rpc_v48.net\src\xmlrpc.csproj"
 'dll', 'pdb' | % { "$SCRATCH_DIR\xml-rpc_v48.net\bin\CookComputing.XmlRpcV2." + $_ } |`
   Move-Item -Destination $OUTPUT_48_DIR
-
-#prepare xml-rpc dotnet 4.5
-
-mkdirClean "$SCRATCH_DIR\xml-rpc_v45.net"
-Expand-Archive -DestinationPath "$SCRATCH_DIR\xml-rpc_v45.net" -Path "$REPO\XML-RPC.NET\xml-rpc.net.2.5.0.zip"
-
-Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-xmlrpc") -and !$_.Name.Contains("dotnet48") } |`
-  % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\xml-rpc_v45.net"
-
-msbuild $SWITCHES $FRAME45 $VS_TOOLS $SIGN "$SCRATCH_DIR\xml-rpc_v45.net\src\xmlrpc.csproj"
-'dll', 'pdb' | % { "$SCRATCH_DIR\xml-rpc_v45.net\bin\CookComputing.XmlRpcV2." + $_ } |`
-  Move-Item -Destination $OUTPUT_45_DIR
 
 #prepare Json.NET 4.5, 4.8, and .NET Standard 2.0
 
