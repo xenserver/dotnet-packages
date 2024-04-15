@@ -2,6 +2,7 @@ Please bump the version numbers in the following files whenever you make any
 changes, otherwise installers may fail to overwrite the old version
 (see CA-50147):
 
+* patch-discutils-version.diff
 * patch-sharpziplib-version-number.diff
 * patch-xmlrpc-version-number
 * patch-json-net-AssemblyInfo.diff
