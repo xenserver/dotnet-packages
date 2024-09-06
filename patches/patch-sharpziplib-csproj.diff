@@ -1,9 +1,9 @@
 # Copyright (c) Cloud Software Group, Inc.
-#
+# 
 # Redistribution and use in source and binary forms,
 # with or without modification, are permitted provided
 # that the following conditions are met:
-#
+# 
 # *   Redistributions of source code must retain the above
 #     copyright notice, this list of conditions and the
 #     following disclaimer.
@@ -11,7 +11,7 @@
 #     copyright notice, this list of conditions and the
 #     following disclaimer in the documentation and/or other
 #     materials provided with the distribution.
-#
+# 
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
 # CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
 # INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -27,32 +27,34 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- a/src/ICSharpCode.SharpZLib.csproj	2007-08-25 06:30:00.000000000 +0100
-+++ b/src/ICSharpCode.SharpZLib.csproj	2020-07-18 15:31:03.078763300 +0100
-@@ -1,4 +1,5 @@
--﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" xmlns:Conversion="urn:Conversion">
-+<?xml version="1.0" encoding="utf-8"?>
+--- a/src/ICSharpCode.SharpZipLib/ICSharpCode.SharpZipLib.csproj
++++ b/src/ICSharpCode.SharpZipLib/ICSharpCode.SharpZipLib.csproj
+@@ -1,7 +1,7 @@
+-﻿<Project Sdk="Microsoft.NET.Sdk">
+-
++﻿<?xml version="1.0" encoding="utf-8"?>
 +<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" xmlns:Conversion="urn:Conversion" ToolsVersion="Current">
    <PropertyGroup>
-     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
-     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-@@ -16,15 +17,16 @@
-     <PreBuildEvent />
-     <PostBuildEvent />
-     <DocumentationFile>..\bin\ICSharpCode.SharpZipLib.xml</DocumentationFile>
-+    <TargetFrameworkProfile />
+-    <TargetFrameworks>netstandard2.0;netstandard2.1;net45</TargetFrameworks>
++    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+     <SignAssembly>True</SignAssembly>
+     <AssemblyOriginatorKeyFile>../../assets/ICSharpCode.SharpZipLib.snk</AssemblyOriginatorKeyFile>
+     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+@@ -29,7 +29,9 @@
+ Please see https://github.com/icsharpcode/SharpZipLib/wiki/Release-1.3.3 for more information.</PackageReleaseNotes>
+     <PackageProjectUrl>https://github.com/icsharpcode/SharpZipLib</PackageProjectUrl> 
    </PropertyGroup>
-   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
--    <DebugSymbols>false</DebugSymbols>
-+    <DebugSymbols>true</DebugSymbols>
-     <Optimize>True</Optimize>
-     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-     <OutputPath>..\bin\</OutputPath>
--    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
--    <DebugType>None</DebugType>
-+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-+    <DebugType>pdbonly</DebugType>
-   </PropertyGroup>
-   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-     <DebugSymbols>true</DebugSymbols>
+-
++  <PropertyGroup>
++	<OutputType>Library</OutputType>
++  </PropertyGroup>
+ 	<ItemGroup>
+ 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+ 	</ItemGroup>
+@@ -40,5 +42,5 @@ Please see https://github.com/icsharpcode/SharpZipLib/wiki/Release-1.3.3 for mor
+       <PackagePath>images</PackagePath>
+     </None>
+ 	 </ItemGroup>
+-
++ <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+ </Project>

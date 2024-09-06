@@ -27,23 +27,14 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- a/src/Tar/TarHeader.cs	2013-12-05 11:10:50.426936900 +0000
-+++ b/src/Tar/TarHeader.cs	2013-12-05 11:41:33.587355100 +0000
-@@ -859,7 +859,7 @@
- 		/// <param name="buffer">The buffer to add to</param>
- 		/// <param name="bufferOffset">The index of the first byte to add</param>
- 		/// <param name="length">The number of characters/bytes to add</param>
--		/// <returns>The next free index in the <paramref name="buf">buffer</paramref></returns>
-+		/// <returns>The next free index in the <paramref name="buffer">buffer</paramref></returns>
- 		public static int GetNameBytes(StringBuilder name, int nameOffset, byte[] buffer, int bufferOffset, int length)
- 		{
- 			if ( name == null ) {
-@@ -881,7 +881,7 @@
- 		/// <param name="buffer">The buffer to add to</param>
- 		/// <param name="bufferOffset">The index of the first byte to add</param>
- 		/// <param name="length">The number of characters/bytes to add</param>
--		/// <returns>The next free index in the <paramref name="buf">buffer</paramref></returns>
-+		/// <returns>The next free index in the <paramref name="buffer">buffer</paramref></returns>
- 		public static int GetNameBytes(string name, int nameOffset, byte[] buffer, int bufferOffset, int length)
- 		{
- 			if ( name == null ) 
+--- a/src/ICSharpCode.SharpZipLib/Tar/TarInputStream.cs	2013-12-05 11:10:57.041548900 +0000
++++ b/src/ICSharpCode.SharpZipLib/Tar/TarInputStream.cs	2013-12-05 11:45:05.686314700 +0000
+@@ -582,7 +582,7 @@
+ 			}
+ 
+ 			/// <summary>
+-			/// Create an entry based on details in <paramref name="headerBuf">header</paramref>
++			/// Create an entry based on details in <paramref name="headerBuffer">header</paramref>
+ 			/// </summary>			
+ 			/// <param name="headerBuffer">The buffer containing entry details.</param>
+ 			/// <returns>A new <see cref="TarEntry"/></returns>

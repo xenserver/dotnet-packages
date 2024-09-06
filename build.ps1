@@ -109,6 +109,18 @@ $gitCommit = git rev-parse HEAD
 git archive --format=zip -o "$OUTPUT_DIR\\dotnet-packages-sources.zip" $gitCommit
 "dotnet-packages.git $gitCommit" | Out-File -FilePath "$OUTPUT_DIR\dotnet-packages-manifest.txt"
 
+#prepare sharpziplib
+
+mkdirClean "$SCRATCH_DIR\sharpziplib"
+Expand-Archive -DestinationPath "$SCRATCH_DIR\sharpziplib" -Path "$REPO\SharpZipLib\SharpZipLib-1.3.3.zip"
+
+Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-sharpziplib") } | % { $_.FullName } |`
+  applyPatch -Path "$SCRATCH_DIR\sharpziplib\SharpZipLib-1.3.3"
+
+msbuild $SWITCHES $FRAME48 $VS_TOOLS $SIGN "$SCRATCH_DIR\sharpziplib\SharpZipLib-1.3.3\ICSharpCode.SharpZipLib.sln"
+'dll', 'pdb' | % { "$SCRATCH_DIR\sharpziplib\bin\ICSharpCode.SharpZipLib." + $_ } |`
+  Move-Item -Destination $OUTPUT_48_DIR
+
 #prepare xml-rpc dotnet 4.8
 
 mkdirClean "$SCRATCH_DIR\xml-rpc_v48.net"
@@ -164,18 +176,6 @@ Move-Item "$SCRATCH_DIR\log4net\build\artifacts\log4net.2.0.15.nupkg" -Destinati
 
 'dll', 'pdb' | % { "$SCRATCH_DIR\log4net\build\Release\net46\log4net." + $_ } |`
   Move-Item -Destination $OUTPUT_46_DIR
-
-#prepare sharpziplib
-
-mkdirClean "$SCRATCH_DIR\sharpziplib"
-Expand-Archive -DestinationPath "$SCRATCH_DIR\sharpziplib" -Path "$REPO\SharpZipLib\SharpZipLib_0854_SourceSamples.zip"
-
-Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-sharpziplib") } | % { $_.FullName } |`
-  applyPatch -Path "$SCRATCH_DIR\sharpziplib"
-
-msbuild $SWITCHES $FRAME48 $VS_TOOLS $SIGN "$SCRATCH_DIR\sharpziplib\src\ICSharpCode.SharpZLib.csproj"
-'dll', 'pdb' | % { "$SCRATCH_DIR\sharpziplib\bin\ICSharpCode.SharpZipLib." + $_ } |`
-  Move-Item -Destination $OUTPUT_48_DIR
 
 #prepare discutils
 
