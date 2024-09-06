@@ -27,8 +27,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- a/src/Tar/TarInputStream.cs	2011-06-17 23:09:32.000000000 +0100
-+++ b/src/Tar/TarInputStream.cs	2011-08-01 22:47:08.000000000 +0100
+--- a/ICSharpCode.SharpZipLib/src/Tar/TarInputStream.cs	2011-06-17 23:09:32.000000000 +0100
++++ b/ICSharpCode.SharpZipLib/src/Tar/TarInputStream.cs	2011-08-01 22:47:08.000000000 +0100
 @@ -215,81 +215,22 @@
  		public override int Read(byte[] buffer, int offset, int count)
  		{

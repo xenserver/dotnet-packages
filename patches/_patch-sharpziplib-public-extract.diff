@@ -27,36 +27,23 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- a/src/Tar/TarOutputStream.cs	2007-09-07 12:19:20.000000000 +0100
-+++ b/src/Tar/TarOutputStream.cs	2011-07-08 13:28:44.804190600 +0100
-@@ -266,7 +266,9 @@
- 				throw new ArgumentNullException("entry");
- 			}
- 
--			if (entry.TarHeader.Name.Length >= TarHeader.NAMELEN) {
-+			int byteCount = Encoding.UTF8.GetByteCount(entry.TarHeader.Name);
-+
-+			if (byteCount >= TarHeader.NAMELEN) {
- 				TarHeader longHeader = new TarHeader();
- 				longHeader.TypeFlag = TarHeader.LF_GNU_LONGNAME;
- 				longHeader.Name = longHeader.Name + "././@LongLink";
-@@ -276,16 +278,16 @@
- 				longHeader.UserName = "";
- 				longHeader.LinkName = "";
- 
--				longHeader.Size = entry.TarHeader.Name.Length;
-+				longHeader.Size = byteCount;
- 
- 				longHeader.WriteHeader(this.blockBuffer);
- 				this.buffer.WriteBlock(this.blockBuffer);  // Add special long filename header block
- 
- 				int nameCharIndex = 0;
- 
--				while (nameCharIndex < entry.TarHeader.Name.Length) {
-+				while (nameCharIndex < byteCount) {
- 					Array.Clear(blockBuffer, 0, blockBuffer.Length);
--					TarHeader.GetAsciiBytes(entry.TarHeader.Name, nameCharIndex, this.blockBuffer, 0, TarBuffer.BlockSize);
-+					TarHeader.GetNameBytes(entry.TarHeader.Name, nameCharIndex, this.blockBuffer, 0, TarBuffer.BlockSize);
- 					nameCharIndex += TarBuffer.BlockSize;
- 					buffer.WriteBlock(blockBuffer);
- 				}
+--- a/ICSharpCode.SharpZipLib/src/Tar/TarArchive.cs	2007-09-01 20:46:38.000000000 +0000
++++ b/ICSharpCode.SharpZipLib/src/Tar/TarArchive.cs	2010-02-12 14:03:19.000000000 +0000
+@@ -96,7 +96,7 @@
+ 		/// Initalise a TarArchive for input.
+ 		/// </summary>
+ 		/// <param name="stream">The <see cref="TarInputStream"/> to use for input.</param>
+-		protected TarArchive(TarInputStream stream)
++		public TarArchive(TarInputStream stream)
+ 		{
+ 			if ( stream == null ) {
+ 				throw new ArgumentNullException("stream");
+@@ -507,7 +507,7 @@
+ 		/// <param name="entry">
+ 		/// The TarEntry returned by tarIn.GetNextEntry().
+ 		/// </param>
+-		void ExtractEntry(string destDir, TarEntry entry)
++		public void ExtractEntry(string destDir, TarEntry entry)
+ 		{
+ 			OnProgressMessageEvent(entry, null);
+ 			

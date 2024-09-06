@@ -5,7 +5,7 @@ libraries:
 
 * DiscUtils (v0.11) - a .NET library for reading and writing ISO files
   and Virtual Machine disk files (VHD, VDI, XVA, VMDK, etc);
-* SharpZipLib (v0.85.4)- a Zip, GZip, Tar and BZip2 library written
+* SharpZipLib (v1.4.2)- a Zip, GZip, Tar and BZip2 library written
   entirely in C# for the .NET platform;
 * XML-RPC.NET (v2.5.0) - a library for implementing XML-RPC Services
   and clients in the .NET environment;
@@ -36,7 +36,10 @@ directories. Please see the [LICENSE](LICENSE) file for more information.
 2. Net Framework 4.5 and 4.8 installed.
 3. Net Standard 2.0 installed.
 4. Visual Studio build tools for 2019 (toolsversion 16.0).
-  Add the location of `msbuild` to the System Path.
+	a. Go to `Edit the system environment variables`
+	b. Go to the `advance` tab -> `Enviroment Variables...`
+	c. Click `Path` variable and `Edit...`
+    d. `Add` the location of `msbuild` e.g. `C:\Program Files\Microsoft Visual Studio\2022\Professional\MSBuild\Current\Bin`
 5. The Windows 10.0.18362.0 SDK (included in VS 2019).
 6. [git](https://git-scm.com/download/win) for Windows.
 
@@ -46,5 +49,5 @@ The libraries can be built (with patches applied) by opening a PowerShell prompt
 in the repo root and running:
 
 ```shell
-.\build.ps1 [-SnkKey <snk-file>] [-NugetSources <package-sources>]
+.\build.ps1 [-SnkKey <snk-file>] [-NugetSource <package-sources>]
 ```

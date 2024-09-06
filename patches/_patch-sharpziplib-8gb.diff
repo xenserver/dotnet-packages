@@ -27,9 +27,9 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
-diff -u -r src/Tar/TarHeader.cs src/Tar/TarHeader.cs
---- a/src/Tar/TarHeader.cs	2007-09-07 12:18:42.000000000 +0100
-+++ b/src/Tar/TarHeader.cs	2011-06-17 10:24:26.046499600 +0100
+diff -u -r src/ICSharpCode.SharpZipLib/TarHeader.cs src/ICSharpCode.SharpZipLib/Tar/TarHeader.cs
+--- a/src/ICSharpCode.SharpZipLib/Tar/TarHeader.cs	2007-09-07 12:18:42.000000000 +0100
++++ b/src/ICSharpCode.SharpZipLib/Tar/TarHeader.cs	2011-06-17 10:24:26.046499600 +0100
 @@ -268,6 +268,11 @@
  		/// </summary>
  		public const string	GNU_TMAGIC	= "ustar  ";
