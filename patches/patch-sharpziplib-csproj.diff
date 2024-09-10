@@ -27,34 +27,14 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
---- a/src/ICSharpCode.SharpZipLib/ICSharpCode.SharpZipLib.csproj
-+++ b/src/ICSharpCode.SharpZipLib/ICSharpCode.SharpZipLib.csproj
+--- a/SharpZipLib-1.3.3/src/ICSharpCode.SharpZipLib/ICSharpCode.SharpZipLib.csproj
++++ b/SharpZipLib-1.3.3/src/ICSharpCode.SharpZipLib/ICSharpCode.SharpZipLib.csproj
 @@ -1,7 +1,7 @@
--﻿<Project Sdk="Microsoft.NET.Sdk">
--
-+﻿<?xml version="1.0" encoding="utf-8"?>
-+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" xmlns:Conversion="urn:Conversion" ToolsVersion="Current">
+ ﻿<Project Sdk="Microsoft.NET.Sdk">
+ 
    <PropertyGroup>
 -    <TargetFrameworks>netstandard2.0;netstandard2.1;net45</TargetFrameworks>
-+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
++    <TargetFrameworks>net48</TargetFrameworks>
      <SignAssembly>True</SignAssembly>
      <AssemblyOriginatorKeyFile>../../assets/ICSharpCode.SharpZipLib.snk</AssemblyOriginatorKeyFile>
      <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-@@ -29,7 +29,9 @@
- Please see https://github.com/icsharpcode/SharpZipLib/wiki/Release-1.3.3 for more information.</PackageReleaseNotes>
-     <PackageProjectUrl>https://github.com/icsharpcode/SharpZipLib</PackageProjectUrl> 
-   </PropertyGroup>
--
-+  <PropertyGroup>
-+	<OutputType>Library</OutputType>
-+  </PropertyGroup>
- 	<ItemGroup>
- 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
- 	</ItemGroup>
-@@ -40,5 +42,5 @@ Please see https://github.com/icsharpcode/SharpZipLib/wiki/Release-1.3.3 for mor
-       <PackagePath>images</PackagePath>
-     </None>
- 	 </ItemGroup>
--
-+ <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
- </Project>
