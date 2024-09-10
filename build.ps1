@@ -76,16 +76,6 @@ function applyPatch {
   }
 }
 
-$SWITCHES = '/nologo', '/m', '/verbosity:normal', '/p:Configuration=Release', `
-            '/p:DebugSymbols=true', '/p:DebugType=pdbonly'
-$RESTORE_SWITCHES= '/restore', '/p:RestoreNoCache=true'
-$FRAME48 = '/p:TargetFrameworkVersion=v4.8'
-$VS_TOOLS = '/toolsversion:Current'
-
-if ($SnkKey) {
-  $SIGN = '/p:SignAssembly=true', "/p:AssemblyOriginatorKeyFile=$SnkKey"
-}
-
 $REPO = Get-Item "$PSScriptRoot" | select -ExpandProperty FullName
 $BUILD_DIR = "$REPO\_build"
 $SCRATCH_DIR = "$BUILD_DIR\scratch"
@@ -102,6 +92,25 @@ Write-Host ''
 
 mkdirClean $BUILD_DIR, $SCRATCH_DIR, $OUTPUT_DIR, $OUTPUT_20_DIR, $OUTPUT_48_DIR, $OUTPUT_46_DIR, $OUTPUT_45_DIR
 
+# prepare NuGet Config
+
+$NUGET_CONFIG_FILE = "NuGet.Config"
+$RESTORE_NUGET_CONFIG_FILE  = "$SCRATCH_DIR\$NUGET_CONFIG_FILE"
+
+Copy-Item "$REPO\$NUGET_CONFIG_FILE" -Destination "$RESTORE_NUGET_CONFIG_FILE"
+((Get-Content -path $RESTORE_NUGET_CONFIG_FILE -Raw) -replace 'https://api.nuget.org/v3/index.json', $NugetSource) |`
+ Set-Content -Path $RESTORE_NUGET_CONFIG_FILE
+
+$SWITCHES = '/nologo', '/m', '/verbosity:normal', '/p:Configuration=Release', `
+            '/p:DebugSymbols=true', '/p:DebugType=pdbonly'
+$RESTORE_SWITCHES= '/restore', '/p:RestoreNoHttpCache=true', "-p:RestoreConfigFile=$RESTORE_NUGET_CONFIG_FILE"
+$FRAME48 = '/p:TargetFrameworkVersion=v4.8'
+$VS_TOOLS = '/toolsversion:Current'
+
+if ($SnkKey) {
+  $SIGN = '/p:SignAssembly=true', "/p:AssemblyOriginatorKeyFile=$SnkKey"
+}
+
 #prepare sources and manifest
 
 Set-Location -Path $REPO
@@ -111,14 +120,14 @@ git archive --format=zip -o "$OUTPUT_DIR\\dotnet-packages-sources.zip" $gitCommi
 
 #prepare sharpziplib
 
-mkdirClean "$SCRATCH_DIR\sharpziplib"
-Expand-Archive -DestinationPath "$SCRATCH_DIR\sharpziplib" -Path "$REPO\SharpZipLib\SharpZipLib-1.3.3.zip"
+mkdirClean "$SCRATCH_DIR\sharpziplib"	
+Expand-Archive -DestinationPath "$SCRATCH_DIR\sharpziplib" -Path "$REPO\SharpZipLib\SharpZipLib-1.3.3.zip"	
 
-Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-sharpziplib") } | % { $_.FullName } |`
-  applyPatch -Path "$SCRATCH_DIR\sharpziplib\SharpZipLib-1.3.3"
+Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-sharpziplib") } | % { $_.FullName } |`	
+  applyPatch -Path "$SCRATCH_DIR\sharpziplib"	
 
-msbuild $SWITCHES $FRAME48 $VS_TOOLS $SIGN "$SCRATCH_DIR\sharpziplib\SharpZipLib-1.3.3\ICSharpCode.SharpZipLib.sln"
-'dll', 'pdb' | % { "$SCRATCH_DIR\sharpziplib\bin\ICSharpCode.SharpZipLib." + $_ } |`
+msbuild $SWITCHES $RESTORE_SWITCHES $VS_TOOLS $SIGN "$SCRATCH_DIR\sharpziplib\SharpZipLib-1.3.3\src\ICSharpCode.SharpZipLib\ICSharpCode.SharpZipLib.csproj"	
+'dll', 'pdb' | % { "$SCRATCH_DIR\sharpziplib\SharpZipLib-1.3.3\src\ICSharpCode.SharpZipLib\bin\Release\net48\ICSharpCode.SharpZipLib." + $_ } |`	
   Move-Item -Destination $OUTPUT_48_DIR
 
 #prepare xml-rpc dotnet 4.8
@@ -141,15 +150,10 @@ Expand-Archive -DestinationPath "$SCRATCH_DIR\json.net" -Path "$REPO\Json.NET\Ne
 Move-Item "$SCRATCH_DIR\json.net\Newtonsoft.Json-13.0.1\Src\Newtonsoft.Json" "$SCRATCH_DIR\json.net"
 Move-Item "$SCRATCH_DIR\json.net\Newtonsoft.Json-13.0.1\Src\NuGet.Config" "$SCRATCH_DIR\json.net"
 
-$RESTORE_NUGET_CONFIG_FILE="$SCRATCH_DIR\json.net\NuGet.Config"
-
-((Get-Content -path $RESTORE_NUGET_CONFIG_FILE -Raw) -replace 'https://api.nuget.org/v3/index.json', $NugetSource) |`
- Set-Content -Path $RESTORE_NUGET_CONFIG_FILE
-
 Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-json-net")} |`
   % { $_.FullName } | applyPatch -Path "$SCRATCH_DIR\json.net"
 
-msbuild $SWITCHES $RESTORE_SWITCHES -p:RestoreConfigFile=$RESTORE_NUGET_CONFIG_FILE $VS_TOOLS $SIGN "$SCRATCH_DIR\json.net\Newtonsoft.Json\Newtonsoft.Json.csproj"
+msbuild $SWITCHES $RESTORE_SWITCHES $VS_TOOLS $SIGN "$SCRATCH_DIR\json.net\Newtonsoft.Json\Newtonsoft.Json.csproj"
 
 'dll', 'pdb' | % { "$SCRATCH_DIR\json.net\Newtonsoft.Json\bin\Release\net48\Newtonsoft.Json.CH." + $_ } |`
   Move-Item -Destination $OUTPUT_48_DIR
