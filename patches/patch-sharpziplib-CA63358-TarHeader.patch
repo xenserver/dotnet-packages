@@ -1,0 +1,121 @@
+# Copyright (c) Cloud Software Group, Inc.
+# 
+# Redistribution and use in source and binary forms,
+# with or without modification, are permitted provided
+# that the following conditions are met:
+# 
+# *   Redistributions of source code must retain the above
+#     copyright notice, this list of conditions and the
+#     following disclaimer.
+# *   Redistributions in binary form must reproduce the above
+#     copyright notice, this list of conditions and the
+#     following disclaimer in the documentation and/or other
+#     materials provided with the distribution.
+# 
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+# CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+# INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+# NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+# SUCH DAMAGE.
+
+--- a/SharpZipLib-1.3.3/src/ICSharpCode.SharpZipLib/Tar/TarHeader.cs	2007-09-07 12:18:42.000000000 +0100
++++ b/SharpZipLib-1.3.3/src/ICSharpCode.SharpZipLib/Tar/TarHeader.cs	2011-06-17 10:24:26.046499600 +0100
+@@ -235,6 +235,11 @@ namespace ICSharpCode.SharpZipLib.Tar
+ 		/// </summary>
+ 		public const string GNU_TMAGIC = "ustar  ";
+ 
++		/// <summary>
++		/// The starting offset of Size field in US tar header. This field is used to parse file size call.
++		/// </summary>
++		public const int SIZE_OFFSET = 0x7c;
++
+ 		private const long timeConversionFactor = 10000000L;           // 1 tick == 100 nanoseconds
+ 		private static readonly DateTime dateTime1970 = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+ 
+@@ -768,10 +773,20 @@ namespace ICSharpCode.SharpZipLib.Tar
+ 
+ 			long result = 0;
+ 			bool stillPadding = true;
++			bool longEntry = false;
+ 
+ 			int end = offset + length;
++			if (header[offset] >> 7 == 1 && offset == SIZE_OFFSET) //make sure offset refer size.
++            { // size is > 8GB //KHALID changes
++                longEntry = true;
++            }
+ 			for (int i = offset; i < end; ++i)
+ 			{
++				if (longEntry)
++				{
++					result = (result << 8) + header[i];
++					continue;
++				}
+ 				if (header[i] == 0)
+ 				{
+ 					break;
+@@ -795,7 +810,7 @@ namespace ICSharpCode.SharpZipLib.Tar
+ 				result = (result << 3) + (header[i] - '0');
+ 			}
+ 
+-			return result;
++			return result & 0x7FFFFFFFFFFFFFFF; //make sure MSB is not set;
+ 		}
+ 
+ 		/// <summary>
+@@ -1146,6 +1161,12 @@ namespace ICSharpCode.SharpZipLib.Tar
+ 			}
+ 
+ 			int localIndex = length - 1;
++			for (int i = 0; i < length; i++)
++			{
++				buffer[offset + i] = 0;
++			}
++
++			bool largeEntries = (value >= 0x200000000); //> 8GB
+ 
+ 			// Either a space or null is valid here.  We use NULL as per GNUTar
+ 			buffer[offset + localIndex] = 0;
+@@ -1155,14 +1176,30 @@ namespace ICSharpCode.SharpZipLib.Tar
+ 			{
+ 				for (long v = value; (localIndex >= 0) && (v > 0); --localIndex)
+ 				{
+-					buffer[offset + localIndex] = (byte)((byte)'0' + (byte)(v & 7));
+-					v >>= 3;
++					if (largeEntries)
++					{
++						buffer[offset + localIndex+1] = (byte)(v & 0xFF);
++						v >>= 8;
++					}
++					else
++					{
++						buffer[offset + localIndex] = (byte)((byte)'0' + (byte)(v & 7));
++						v >>= 3;
++					}
+ 				}
+ 			}
+ 
+-			for (; localIndex >= 0; --localIndex)
++
++			if (largeEntries)
+ 			{
+-				buffer[offset + localIndex] = (byte)'0';
++				buffer[offset] = (byte)(buffer[offset] | 0x80); //set the MSB
++			}
++			else
++			{
++				for (; localIndex >= 0; --localIndex)
++				{
++					buffer[offset + localIndex] = (byte)'0';
++				}
+ 			}
+ 
+ 			return offset + length;
