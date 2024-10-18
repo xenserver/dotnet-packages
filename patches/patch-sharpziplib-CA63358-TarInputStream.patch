@@ -1,0 +1,321 @@
+# Copyright (c) Cloud Software Group, Inc.
+# 
+# Redistribution and use in source and binary forms,
+# with or without modification, are permitted provided
+# that the following conditions are met:
+# 
+# *   Redistributions of source code must retain the above
+#     copyright notice, this list of conditions and the
+#     following disclaimer.
+# *   Redistributions in binary form must reproduce the above
+#     copyright notice, this list of conditions and the
+#     following disclaimer in the documentation and/or other
+#     materials provided with the distribution.
+# 
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+# CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+# INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+# NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+# SUCH DAMAGE.
+
+--- a/SharpZipLib-1.3.3/src/ICSharpCode.SharpZipLib/Tar/TarInputStream.cs	2011-06-17 23:09:32.000000000 +0100
++++ b/SharpZipLib-1.3.3/src/ICSharpCode.SharpZipLib/Tar/TarInputStream.cs	2011-08-01 22:47:08.000000000 +0100
+@@ -229,79 +229,19 @@ namespace ICSharpCode.SharpZipLib.Tar
+ 		public override int Read(byte[] buffer, int offset, int count)
+ 		{
+ 			if (buffer == null)
+-			{
+ 				throw new ArgumentNullException(nameof(buffer));
+-			}
+-
+-			int totalRead = 0;
++
++			if ((this.entryOffset + count) > this.entrySize)
++				count = (int)(this.entrySize - this.entryOffset);
+
+-			if (entryOffset >= entrySize)
+-			{
+-				return 0;
+-			}
++            if (count <= 0)
++                return 0;
+ 
+-			long numToRead = count;
++            int bytesRead = inputStream.Read(buffer, offset, count);
+ 
+-			if ((numToRead + entryOffset) > entrySize)
+-			{
+-				numToRead = entrySize - entryOffset;
+-			}
+-
+-			if (readBuffer != null)
+-			{
+-				int sz = (numToRead > readBuffer.Length) ? readBuffer.Length : (int)numToRead;
+-
+-				Array.Copy(readBuffer, 0, buffer, offset, sz);
+-
+-				if (sz >= readBuffer.Length)
+-				{
+-					readBuffer = null;
+-				}
+-				else
+-				{
+-					int newLen = readBuffer.Length - sz;
+-					byte[] newBuf = new byte[newLen];
+-					Array.Copy(readBuffer, sz, newBuf, 0, newLen);
+-					readBuffer = newBuf;
+-				}
+-
+-				totalRead += sz;
+-				numToRead -= sz;
+-				offset += sz;
+-			}
++            this.entryOffset += bytesRead;
+ 
+-			while (numToRead > 0)
+-			{
+-				byte[] rec = tarBuffer.ReadBlock();
+-				if (rec == null)
+-				{
+-					// Unexpected EOF!
+-					throw new TarException("unexpected EOF with " + numToRead + " bytes unread");
+-				}
+-
+-				var sz = (int)numToRead;
+-				int recLen = rec.Length;
+-
+-				if (recLen > sz)
+-				{
+-					Array.Copy(rec, 0, buffer, offset, sz);
+-					readBuffer = new byte[recLen - sz];
+-					Array.Copy(rec, sz, readBuffer, 0, recLen - sz);
+-				}
+-				else
+-				{
+-					sz = recLen;
+-					Array.Copy(rec, 0, buffer, offset, recLen);
+-				}
+-
+-				totalRead += sz;
+-				numToRead -= sz;
+-				offset += sz;
+-			}
+-
+-			entryOffset += totalRead;
+-
+-			return totalRead;
++            return bytesRead;
+ 		}
+ 
+ 		/// <summary>
+@@ -365,37 +305,6 @@ namespace ICSharpCode.SharpZipLib.Tar
+ 			}
+ 		}
+ 
+-		/// <summary>
+-		/// Skip bytes in the input buffer. This skips bytes in the
+-		/// current entry's data, not the entire archive, and will
+-		/// stop at the end of the current entry's data if the number
+-		/// to skip extends beyond that point.
+-		/// </summary>
+-		/// <param name="skipCount">
+-		/// The number of bytes to skip.
+-		/// </param>
+-		public void Skip(long skipCount)
+-		{
+-			// TODO: REVIEW efficiency of TarInputStream.Skip
+-			// This is horribly inefficient, but it ensures that we
+-			// properly skip over bytes via the TarBuffer...
+-			//
+-			byte[] skipBuf = new byte[8 * 1024];
+-
+-			for (long num = skipCount; num > 0;)
+-			{
+-				int toRead = num > skipBuf.Length ? skipBuf.Length : (int)num;
+-				int numRead = Read(skipBuf, 0, toRead);
+-
+-				if (numRead == -1)
+-				{
+-					break;
+-				}
+-
+-				num -= numRead;
+-			}
+-		}
+-
+ 		/// <summary>
+ 		/// Return a value of true if marking is supported; false otherwise.
+ 		/// </summary>
+@@ -408,6 +317,14 @@ namespace ICSharpCode.SharpZipLib.Tar
+ 			}
+ 		}
+ 
++		/// <summary>
++        /// Get the position within the current entry.
++        /// </summary>
++        public long EntryPosition
++        {
++            get { return this.entryOffset; }
++        }
++
+ 		/// <summary>
+ 		/// Since we do not support marking just yet, we do nothing.
+ 		/// </summary>
+@@ -425,6 +342,29 @@ namespace ICSharpCode.SharpZipLib.Tar
+ 		{
+ 		}
+ 
++		/// <summary>
++        /// Read a tar entry header.
++        /// </summary>
++        protected byte[] ReadHeader()
++        {
++            byte[] headerBuffer = new byte[TarBuffer.BlockSize];
++
++            Array.Clear(headerBuffer, 0, headerBuffer.Length);
++
++            int bytesRead = inputStream.Read(headerBuffer, 0, headerBuffer.Length);
++
++            // Account for an improper archive that does not include terminating records
++            // such as those from Virtual Box.
++            // Fabricate a terminating record.
++            if (bytesRead == 0)
++                return headerBuffer;
++
++            if (bytesRead != headerBuffer.Length)
++                throw new TarException("Header is incomplete.");
++
++            return headerBuffer;
++        }
++
+ 		/// <summary>
+ 		/// Get the next entry in this tar archive. This will skip
+ 		/// over any remaining data in the current entry, if there
+@@ -450,7 +390,7 @@ namespace ICSharpCode.SharpZipLib.Tar
+ 				SkipToNextEntry();
+ 			}
+ 
+-			byte[] headerBuf = tarBuffer.ReadBlock();
++			byte[] headerBuf = ReadHeader();
+ 
+ 			if (headerBuf == null)
+ 			{
+@@ -459,9 +399,6 @@ namespace ICSharpCode.SharpZipLib.Tar
+ 			else if (TarBuffer.IsEndOfArchiveBlock(headerBuf))
+ 			{
+ 				hasHitEOF = true;
+-
+-				// Read the second zero-filled block
+-				tarBuffer.ReadBlock();
+ 			}
+ 			else
+ 			{
+@@ -508,13 +445,13 @@ namespace ICSharpCode.SharpZipLib.Tar
+ 						}
+ 
+ 						SkipToNextEntry();
+-						headerBuf = this.tarBuffer.ReadBlock();
++						headerBuf = ReadHeader();
+ 					}
+ 					else if (header.TypeFlag == TarHeader.LF_GHDR)
+ 					{  // POSIX global extended header
+ 					   // Ignore things we dont understand completely for now
+ 						SkipToNextEntry();
+-						headerBuf = this.tarBuffer.ReadBlock();
++						headerBuf = ReadHeader();
+ 					}
+ 					else if (header.TypeFlag == TarHeader.LF_XHDR)
+ 					{  // POSIX extended header
+@@ -542,13 +479,13 @@ namespace ICSharpCode.SharpZipLib.Tar
+ 						}
+ 
+ 						SkipToNextEntry();
+-						headerBuf = this.tarBuffer.ReadBlock();
++						headerBuf = ReadHeader();
+ 					}
+ 					else if (header.TypeFlag == TarHeader.LF_GNU_VOLHDR)
+ 					{
+ 						// TODO: could show volume name when verbose
+ 						SkipToNextEntry();
+-						headerBuf = this.tarBuffer.ReadBlock();
++						headerBuf = ReadHeader();
+ 					}
+ 					else if (header.TypeFlag != TarHeader.LF_NORMAL &&
+ 							 header.TypeFlag != TarHeader.LF_OLDNORM &&
+@@ -558,7 +495,7 @@ namespace ICSharpCode.SharpZipLib.Tar
+ 					{
+ 						// Ignore things we dont understand completely for now
+ 						SkipToNextEntry();
+-						headerBuf = tarBuffer.ReadBlock();
++						headerBuf = ReadHeader();
+ 					}
+ 
+ 					if (entryFactory == null)
+@@ -619,15 +556,39 @@ namespace ICSharpCode.SharpZipLib.Tar
+ 
+ 		private void SkipToNextEntry()
+ 		{
+-			long numToSkip = entrySize - entryOffset;
++            // Skip the rest of the content.
++            long bytesToSkip = this.entrySize - this.entryOffset;
+ 
+-			if (numToSkip > 0)
+-			{
+-				Skip(numToSkip);
+-			}
++            // Account for the pad out to a block.
++            long bytesInLastBlock = this.entrySize % TarBuffer.BlockSize;
+ 
+-			readBuffer = null;
+-		}
++            if (bytesInLastBlock > 0)
++            {
++                bytesToSkip += TarBuffer.BlockSize - bytesInLastBlock;
++            }
++
++            // Skip by seeking if at all possible.
++            if (inputStream.CanSeek)
++            {
++                inputStream.Seek(bytesToSkip, SeekOrigin.Current);
++                return;
++            }
++
++            // Last resort is to skip by reading.
++            byte[] skipBuf = new byte[8 * 1024];
++
++            while (bytesToSkip > 0)
++            {
++                int bytesToRead = (bytesToSkip > skipBuf.Length) ? skipBuf.Length : (int)bytesToSkip;
++
++                int bytesRead = inputStream.Read(skipBuf, 0, bytesToRead);
++
++                if (bytesRead <= 0)
++                    return;
++
++                bytesToSkip -= bytesRead;
++            }
++        }
+ 
+ 		/// <summary>
+ 		/// This interface is provided, along with the method <see cref="SetEntryFactory"/>, to allow
+@@ -739,11 +700,6 @@ namespace ICSharpCode.SharpZipLib.Tar
+ 		/// </summary>
+ 		protected long entryOffset;
+ 
+-		/// <summary>
+-		/// Buffer used with calls to <code>Read()</code>
+-		/// </summary>
+-		protected byte[] readBuffer;
+-
+ 		/// <summary>
+ 		/// Working buffer
+ 		/// </summary>
