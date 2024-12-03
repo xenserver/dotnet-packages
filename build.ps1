@@ -78,7 +78,7 @@ function applyPatch {
 
 $SWITCHES = '/nologo', '/m', '/verbosity:normal', '/p:Configuration=Release', `
             '/p:DebugSymbols=true', '/p:DebugType=pdbonly'
-$RESTORE_SWITCHES= '/restore', '/p:RestoreNoCache=true'
+$RESTORE_SWITCHES= '/restore', '/p:RestoreNoHttpCache=true'
 $FRAME48 = '/p:TargetFrameworkVersion=v4.8'
 $VS_TOOLS = '/toolsversion:Current'
 
