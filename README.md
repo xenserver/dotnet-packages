@@ -7,6 +7,8 @@ libraries:
   and Virtual Machine disk files (VHD, VDI, XVA, VMDK, etc);
 * SharpZipLib (v0.85.4)- a Zip, GZip, Tar and BZip2 library written
   entirely in C# for the .NET platform;
+* JsonSubTypes (v2.0.1) - a discriminated Json sub-type Converter
+  implementation for .NET
 * XML-RPC.NET (v2.5.0) - a library for implementing XML-RPC Services
   and clients in the .NET environment;
 * log4net (v2.0.15) - a library providing logging services for purposes
@@ -18,8 +20,8 @@ The preferable way to contribute patches is to fork the repository on Github and
 then submit a pull request. If for some reason you can't use Github to submit a
 pull request, then you may send your patch for review to the
 xs-devel@lists.xenserver.org mailing list, with a link to a public git repository
-for review. Please see the [CONTRIB](CONTRIB) file for some general guidelines on submitting
-changes.
+for review. Please see the [CONTRIB](CONTRIB) file for some general guidelines
+on submitting changes.
 
 ## License
 

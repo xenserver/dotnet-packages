@@ -91,6 +91,7 @@ $BUILD_DIR = "$REPO\_build"
 $SCRATCH_DIR = "$BUILD_DIR\scratch"
 $OUTPUT_DIR = "$BUILD_DIR\output"
 $OUTPUT_48_DIR = "$OUTPUT_DIR\dotnet48"
+$OUTPUT_47_DIR = "$OUTPUT_DIR\dotnet47"
 $OUTPUT_46_DIR = "$OUTPUT_DIR\dotnet46"
 $PATCHES = "$REPO\patches"
 
@@ -98,7 +99,7 @@ Write-Host 'DEBUG: Printing MSBuild.exe version...'
 msbuild /ver
 Write-Host ''
 
-mkdirClean $BUILD_DIR, $SCRATCH_DIR, $OUTPUT_DIR, $OUTPUT_48_DIR, $OUTPUT_46_DIR
+mkdirClean $BUILD_DIR, $SCRATCH_DIR, $OUTPUT_DIR, $OUTPUT_48_DIR, $OUTPUT_47_DIR, $OUTPUT_46_DIR
 
 #prepare sources and manifest
 
@@ -162,6 +163,30 @@ Get-ChildItem $PATCHES | where { $_.Name.StartsWith("patch-discutils") } |`
 msbuild $SWITCHES $FRAME48 $VS_TOOLS $SIGN "$SCRATCH_DIR\DiscUtils\LibraryOnly.sln"
 'dll', 'pdb' | % { "$SCRATCH_DIR\DiscUtils\src\bin\Release\DiscUtils." + $_ } |`
   Move-Item -Destination $OUTPUT_48_DIR
+
+#prepare JsonSubTypes
+
+mkdirClean "$SCRATCH_DIR\JsonSubTypes"
+Expand-Archive -DestinationPath "$SCRATCH_DIR\JsonSubTypes" -Path "$REPO\JsonSubTypes\JsonSubTypes-2.0.1.zip"
+
+$RESTORE_NUGET_CONFIG_FILE = "$SCRATCH_DIR\JsonSubTypes\NuGet.Config"
+
+$content=@"
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <packageSources>
+    <clear />
+    <add key="NuGet.org (v3)" value="$NugetSource" />
+  </packageSources>
+</configuration>
+"@
+
+Set-Content $content -Path $RESTORE_NUGET_CONFIG_FILE
+
+msbuild $SWITCHES $RESTORE_SWITCHES -p:RestoreConfigFile=$RESTORE_NUGET_CONFIG_FILE $VS_TOOLS $SIGN "$SCRATCH_DIR\JsonSubTypes\JsonSubTypes-2.0.1\JsonSubTypes\JsonSubTypes.csproj"
+
+'dll', 'pdb' | % { "$SCRATCH_DIR\JsonSubTypes\JsonSubTypes-2.0.1\JsonSubTypes\bin\Release\net47\JsonSubTypes.$_" } |`
+  Move-Item -Destination $OUTPUT_47_DIR
 
 #copy licences
 
