@@ -11,7 +11,6 @@ libraries:
   and clients in the .NET environment;
 * log4net (v2.0.15) - a library providing logging services for purposes
   of application debugging and auditing;
-* Json.NET (v13.0.1) - a Json framework for .NET.
 
 ## Contributions
 
